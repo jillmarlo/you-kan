@@ -6,11 +6,11 @@ import { User } from "../../user-management/models/user.model";
 
 export interface Task {
     name: string;
-    type: TaskType;
+    type: ;
     priority: Priority;
     description: string;
     status: TaskStatus;
-    assignee: User;
+    assignee: User | null;
     creator: User;
     comments: Comment[];
     effort: number;

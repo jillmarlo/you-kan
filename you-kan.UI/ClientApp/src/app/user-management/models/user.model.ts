@@ -1,7 +1,7 @@
 import { Task } from "../../tasks/models/task.model";
 
 export interface User {
-    id: string;
+    id: number;
     name: string;
     tasks: Task[];
 }
