@@ -1,11 +1,11 @@
 import { Component, inject, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { User } from '../../../user-management/models/user.model';
+import { Users } from '../../../user-management/models/user.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Task } from '../../models/task.model';
+import { Cards } from '../../models/task.model';
 import { TaskType } from '../../models/task-type.enum';
 import { Priority } from '../../models/priority.enum';
 import { TaskStatus } from '../../models/task-status.enum';
@@ -20,7 +20,7 @@ import { InputOption } from '../../../shared/input-option.model';
   styleUrl: './task-detail.component.css'
 })
 export class TaskDetailComponent {
-  @Input() task!: Task;
+  @Input() task!: Cards;
   
   constructor() {}
 
@@ -50,8 +50,8 @@ export class TaskDetailComponent {
     priority: new FormControl<number | null>(null , [Validators.required]),
     description: new FormControl<string>(''),
     status: new FormControl<number | null>(null, [Validators.required]),
-    assignee: new FormControl<User | null>(null, [Validators.required ]),
-    creator: new FormControl<User | null>(null, [Validators.required ]),
+    assignee: new FormControl<Users | null>(null, [Validators.required ]),
+    creator: new FormControl<Users | null>(null, [Validators.required ]),
     effort: new FormControl<number | null>(null, [Validators.required ])
  });
 
