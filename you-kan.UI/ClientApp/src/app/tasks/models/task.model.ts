@@ -6,7 +6,7 @@ import { User } from "../../user-management/models/user.model";
 
 export interface Task {
     name: string;
-    type: ;
+    type: TaskType;
     priority: Priority;
     description: string;
     status: TaskStatus;

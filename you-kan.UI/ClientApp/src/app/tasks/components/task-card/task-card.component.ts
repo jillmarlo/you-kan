@@ -2,16 +2,29 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { Task } from '../../models/task.model';
+import { TaskType } from '../../models/task-type.enum';
+import { Priority } from '../../models/priority.enum';
+import { TaskStatus } from '../../models/task-status.enum';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-task-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule],
   templateUrl: './task-card.component.html',
   styleUrl: './task-card.component.css'
 })
 export class TaskCardComponent {
-  @Input() task!: Task;
+  //@Input() task!: Task;
+  testTask = {
+    name: 'Test Task 1',
+    type: TaskType.Feature,
+    priority: Priority.Low,
+    description: 'Description of task 1',
+    status: "Developing",
+    assignee: "Test Dev",
+    effort: 2
+  }
 
   constructor() {}
 
