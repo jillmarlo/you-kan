@@ -6,9 +6,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Task } from '../../models/task.model';
-import { TaskType } from '../../models/task-type.enum';
-import { Priority } from '../../models/priority.enum';
-import { TaskStatus } from '../../models/task-status.enum';
 import { InputOption } from '../../../shared/input-option.model';
 
 
@@ -24,7 +21,7 @@ export class TaskDetailComponent {
   
   constructor() {}
 
-  taskTypeOptions: InputOption[] = [
+  taskTypes: InputOption[] = [
     {value: 0, name: 'Feature'},
     {value: 1, name: 'Bug'},
   ];
