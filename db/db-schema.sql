@@ -1,91 +1,193 @@
-CREATE TABLE Users (
-    user_id INT PRIMARY KEY,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
-    email VARCHAR(255),
-    password_hash VARCHAR(255),
-    created_at TIMESTAMP
-);
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
-CREATE TABLE Boards (
-    board_id INT PRIMARY KEY,
-    board_name VARCHAR(255),
-    board_color_scheme VARCHAR(7),
-    user_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
-);
+-- -----------------------------------------------------
+-- Schema you-kan
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `you-kan` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `you-kan` ;
 
-CREATE TABLE Labels (
-    label_id INT PRIMARY KEY,
-    label_name VARCHAR(255),
-    label_color VARCHAR(7)
-);
+-- -----------------------------------------------------
+-- Table `Users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Users` (
+  `user_id` INT NOT NULL AUTO_INCREMENT,
+  `first_name` VARCHAR(255) NOT NULL,
+  `last_name` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `password_hash` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  PRIMARY KEY (`user_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE Lists (
-    list_id INT PRIMARY KEY,
-    list_name VARCHAR(255),
-    board_id INT,
-    position INT,
-    members VARCHAR(255),
-    FOREIGN KEY (board_id) REFERENCES Boards(board_id)
-);
 
-CREATE TABLE Sprints (
-    sprint_id INT PRIMARY KEY,
-    sprint_name VARCHAR(255),
-    board_id INT,
-    start_date VARCHAR(7),
-    end_date VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (board_id) REFERENCES Boards(board_id)
-);
+-- -----------------------------------------------------
+-- Table `Projects`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Projects` (
+  `project_id` INT NOT NULL AUTO_INCREMENT,
+  `project_name` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `creator_user_id` INT NOT NULL,
+  PRIMARY KEY (`project_id`, `creator_user_id`),
+  INDEX `user_id_idx` (`creator_user_id` ASC) VISIBLE,
+  CONSTRAINT `Projects_ibfk_1`
+    FOREIGN KEY (`creator_user_id`)
+    REFERENCES `you-kan`.`Users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE Cards (
-    card_id INT PRIMARY KEY,
-    card_title VARCHAR(255),
-    card_description VARCHAR(255),
-    list_id INT,
-    sprint_id INT,
-    due_date DATE,
-    card_color_cover VARCHAR(7),
-    member INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (list_id) REFERENCES Lists(list_id),
-    FOREIGN KEY (sprint_id) REFERENCES Sprints(sprint_id)
-);
 
-CREATE TABLE Comments (
-    comment_id INT PRIMARY KEY,
-    card_id INT,
-    card_title VARCHAR(255),
-    sprint_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (card_id) REFERENCES Cards(card_id)
-);
+-- -----------------------------------------------------
+-- Table `Sprints`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Sprints` (
+  `sprint_id` INT NOT NULL AUTO_INCREMENT,
+  `sprint_name` VARCHAR(255) NOT NULL,
+  `project_id` INT NOT NULL,
+  `start_date` DATE NULL,
+  `end_date` DATE NULL,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`sprint_id`, `project_id`),
+  INDEX `board_id` (`project_id` ASC) VISIBLE,
+  CONSTRAINT `Sprints_ibfk_1`
+    FOREIGN KEY (`project_id`)
+    REFERENCES `you-kan`.`Projects` (`project_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE User_Cards (
-    user_id INT,
-    card_id INT,
-    PRIMARY KEY (user_id, card_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (card_id) REFERENCES Cards(card_id)
-);
 
-CREATE TABLE Card_Labels (
-    card_id INT,
-    label_id INT,
-    PRIMARY KEY (card_id, label_id),
-    FOREIGN KEY (card_id) REFERENCES Cards(card_id),
-    FOREIGN KEY (label_id) REFERENCES Labels(label_id)
-);
+-- -----------------------------------------------------
+-- Table `Tasks`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tasks` (
+  `task_id` INT NOT NULL AUTO_INCREMENT,
+  `task_title` VARCHAR(255) NOT NULL,
+  `task_description` VARCHAR(255) NULL DEFAULT NULL,
+  `sprint_id` INT NOT NULL,
+  `priority` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` VARCHAR(255) NOT NULL,
+  `creator_user_id` INT NOT NULL,
+  `task_type` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`task_id`, `creator_user_id`, `sprint_id`),
+  INDEX `creator_user_id` (`creator_user_id` ASC) VISIBLE,
+  INDEX `sprint_id_idx` (`sprint_id` ASC) VISIBLE,
+  CONSTRAINT `Tasks_ibfk_1`
+    FOREIGN KEY (`creator_user_id`)
+    REFERENCES `you-kan`.`Users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Tasks_ibfk_2`
+    FOREIGN KEY (`sprint_id`)
+    REFERENCES `you-kan`.`Sprints` (`sprint_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE User_Boards (
-    user_id INT,
-    board_id INT,
-    role VARCHAR(255),
-    PRIMARY KEY (user_id, board_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (board_id) REFERENCES Boards(board_id)
-);
+
+-- -----------------------------------------------------
+-- Table `Subtasks`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Subtasks` (
+  `subtask_id` INT NOT NULL AUTO_INCREMENT,
+  `subtask_description` VARCHAR(255) NOT NULL,
+  `task_id` INT NOT NULL,
+  PRIMARY KEY (`subtask_id`),
+  INDEX `Subtasks_ibfk_1_idx` (`task_id` ASC) VISIBLE,
+  CONSTRAINT `Subtasks_ibfk_1`
+    FOREIGN KEY (`task_id`)
+    REFERENCES `you-kan`.`Tasks` (`task_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+USE `you-kan` ;
+
+-- -----------------------------------------------------
+-- Table `Comments`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Comments` (
+  `comment_id` INT NOT NULL,
+  `task_id` INT NOT NULL,
+  `comment_text` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`comment_id`),
+  INDEX `task_id_idx` (`task_id` ASC) VISIBLE,
+  INDEX `Comments_ibfk_2` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `Comments_ibfk_1`
+    FOREIGN KEY (`task_id`)
+    REFERENCES `you-kan`.`Tasks` (`task_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Comments_ibfk_2`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `you-kan`.`Users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `Project_Users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Project_Users` (
+  `user_id` INT NOT NULL,
+  `project_id` INT NOT NULL,
+  PRIMARY KEY (`user_id`, `project_id`),
+  INDEX `fk_Users_has_Projects_Projects1_idx` (`project_id` ASC) VISIBLE,
+  INDEX `fk_Users_has_Projects_Users1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Users_has_Projects_Users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `you-kan`.`Users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Users_has_Projects_Projects1`
+    FOREIGN KEY (`project_id`)
+    REFERENCES `you-kan`.`Projects` (`project_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `Task_Assignees`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Task_Assignees` (
+  `user_id` INT NOT NULL,
+  `task_id` INT NOT NULL,
+  PRIMARY KEY (`user_id`, `task_id`),
+  INDEX `fk_Users_has_Tasks_Tasks1_idx` (`task_id` ASC) VISIBLE,
+  INDEX `fk_Users_has_Tasks_Users1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Users_has_Tasks_Users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `you-kan`.`Users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Users_has_Tasks_Tasks1`
+    FOREIGN KEY (`task_id`)
+    REFERENCES `you-kan`.`Tasks` (`task_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

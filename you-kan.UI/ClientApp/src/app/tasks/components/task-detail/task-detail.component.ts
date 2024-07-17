@@ -5,10 +5,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+<<<<<<< HEAD
 import { Cards } from '../../models/task.model';
 import { TaskType } from '../../models/task-type.enum';
 import { Priority } from '../../models/priority.enum';
 import { TaskStatus } from '../../models/task-status.enum';
+=======
+import { Task } from '../../models/task.model';
+>>>>>>> 47ff2e9ac949c3a57392e4a037bbe27f3ba38a1a
 import { InputOption } from '../../../shared/input-option.model';
 
 
@@ -24,7 +28,7 @@ export class TaskDetailComponent {
   
   constructor() {}
 
-  taskTypeOptions: InputOption[] = [
+  taskTypes: InputOption[] = [
     {value: 0, name: 'Feature'},
     {value: 1, name: 'Bug'},
   ];
