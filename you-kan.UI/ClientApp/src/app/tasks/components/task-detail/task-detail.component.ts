@@ -5,7 +5,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+<<<<<<< HEAD
+import { Cards } from '../../models/task.model';
+import { TaskType } from '../../models/task-type.enum';
+import { Priority } from '../../models/priority.enum';
+import { TaskStatus } from '../../models/task-status.enum';
+=======
 import { Task } from '../../models/task.model';
+>>>>>>> 47ff2e9ac949c3a57392e4a037bbe27f3ba38a1a
 import { InputOption } from '../../../shared/input-option.model';
 
 
@@ -17,7 +24,7 @@ import { InputOption } from '../../../shared/input-option.model';
   styleUrl: './task-detail.component.css'
 })
 export class TaskDetailComponent {
-  @Input() task!: Task;
+  @Input() task!: Cards;
   
   constructor() {}
 
@@ -47,8 +54,8 @@ export class TaskDetailComponent {
     priority: new FormControl<number | null>(null , [Validators.required]),
     description: new FormControl<string>(''),
     status: new FormControl<number | null>(null, [Validators.required]),
-    assignee: new FormControl<User | null>(null, [Validators.required ]),
-    creator: new FormControl<User | null>(null, [Validators.required ]),
+    assignee: new FormControl<Users | null>(null, [Validators.required ]),
+    creator: new FormControl<Users | null>(null, [Validators.required ]),
     effort: new FormControl<number | null>(null, [Validators.required ])
  });
 
