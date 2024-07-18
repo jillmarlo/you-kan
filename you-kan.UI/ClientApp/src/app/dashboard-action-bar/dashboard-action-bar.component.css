@@ -1,0 +1,10 @@
+.project-header {
+    padding-left: 25px;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 40px;
+    margin: 15px;
+  }

@@ -1,51 +1,54 @@
-<mat-card>
-    <mat-card-header>
-        <mat-card-title>
-            {{task.card_title}}
-        </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <form [formGroup]="taskForm">
-            <mat-form-field>
-                <mat-label>Name</mat-label>
-                <input matInput formControlName="name" />
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Type</mat-label>
-                <mat-select formControlName="type">
-                    @for (taskType of taskTypes; track taskType) {
-                      <mat-option [value]="taskType.value">{{taskType.name}}</mat-option>
-                    }
-                  </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Priority</mat-label>
-                <mat-select formControlName="priority">
-                    @for (priority of priorities; track priority) {
-                      <mat-option [value]="priority.value">{{priority.name}}</mat-option>
-                    }
-                </mat-select>            
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Description</mat-label>
-                <input matInput formControlName="description" />
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Status</mat-label>
-                <mat-select formControlName="status">
-                    @for (status of statuses; track status) {
-                      <mat-option [value]="status.value">{{status.name}}</mat-option>
-                    }
-                </mat-select> 
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Assignee</mat-label>
-                <input matInput formControlName="assignee" />
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Effort</mat-label>
-                <input matInput formControlName="effort" />
-            </mat-form-field>
-        </form>
-    </mat-card-content>
-</mat-card>
+<h3 mat-dialog-title>Create new task</h3>
+<mat-dialog-content>
+    <form [formGroup]="taskForm">
+        <mat-form-field class="basic-input">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Type</mat-label>
+            <mat-select formControlName="type">
+                @for (taskType of taskTypes; track taskType) {
+                <mat-option [value]="taskType.value">{{taskType.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Priority</mat-label>
+            <mat-select formControlName="priority">
+                @for (priority of priorities; track priority) {
+                <mat-option [value]="priority.value">{{priority.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+                @for (status of statuses; track status) {
+                <mat-option [value]="status.value">{{status.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Assignee</mat-label>
+            <input matInput formControlName="assignee" />
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Effort</mat-label>
+            <input matInput formControlName="effort" />
+        </mat-form-field>
+        <mat-form-field class="desc-input">
+            <mat-label>Description</mat-label>
+            <textarea matInput
+            formControlName="description"
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="3"></textarea>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-button cdkFocusInitial (click)="submit()">Create</button>
+</mat-dialog-actions>
