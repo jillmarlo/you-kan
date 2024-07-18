@@ -1,6 +1,6 @@
-<mat-toolbar class="toolbar">
+<mat-toolbar class="toolbar" color="accent">
     <mat-toolbar-row>
-        <h4>YOU-KAN</h4>
+        <h4>YOU-KAN  - toolbar -</h4>
     </mat-toolbar-row>
 </mat-toolbar>
 <div class="app-container">
@@ -11,14 +11,13 @@
         </mat-sidenav>
 
         <mat-sidenav-content>
-            <div class="project-header"> 
-                <h4>Project XYZ</h4>
-            </div>
+            <app-dashboard-action-bar></app-dashboard-action-bar>
             <div class="column-wrapper">
-                <app-list-column></app-list-column>
-                <app-list-column></app-list-column>
-                <app-list-column></app-list-column>
-                <app-list-column></app-list-column>
+                <app-column></app-column>
+                <app-column></app-column>
+                <app-column></app-column>
+                <app-column></app-column>
+                <app-column></app-column>
             </div>
         </mat-sidenav-content>
     </mat-sidenav-container>

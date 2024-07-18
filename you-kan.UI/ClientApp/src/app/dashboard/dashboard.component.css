@@ -13,9 +13,9 @@
     max-width: 200px;
   }
 
-  .toolbar {
+  /* .toolbar {
     background-color: indigo;
-  }
+  } */
 
   .column-wrapper {
     justify-content: space-evenly;
@@ -23,9 +23,4 @@
     display: flex;
     height: 100vh;   
     gap: 10px; 
-  }
-
-  .project-header {
-    padding-left: 25px;
-    padding-top: 10px;
   }

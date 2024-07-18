@@ -5,13 +5,13 @@ import { Comment } from "./comment.model";
 import { User } from "../../user-management/models/user.model";
 
 export interface Task {
+    id: number;
     name: string;
-    type: TaskType;
-    priority: Priority;
-    description: string;
-    status: TaskStatus;
-    assignee: User | null;
-    creator: User;
-    comments: Comment[];
+    typeId: number;
+    priorityId: number;
+    description: string | null;
+    statusId: number;
+    assigneeId: number;
+    creatorId: number;
     effort: number;
 }
