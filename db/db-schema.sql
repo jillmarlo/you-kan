@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `last_name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password_hash` VARCHAR(255) NOT NULL,
-  `created_at` TIMESTAMP NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `priority` VARCHAR(255) NOT NULL,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `status` VARCHAR(255) NOT NULL,
+  `effort` INT NOT NULL,
   `creator_user_id` INT NOT NULL,
   `task_type` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`task_id`, `creator_user_id`, `sprint_id`),
