@@ -4,7 +4,6 @@
 */
 
 const { sequelize, connectToDB } = require('./db/db-connector');
-const db = require('./models')
 
 const express = require('express');
 const app = express();
