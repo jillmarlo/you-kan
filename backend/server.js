@@ -26,6 +26,10 @@ db.connect(err=>{
     console.log('database connected ...');
 });
 
+// *************************
+// CRUD for USER
+// *************************
+
 // get all data
 app.get('/user',(req,res)=>{
 
@@ -145,9 +149,11 @@ app.delete('/user/:id', (req,res) =>{
     })
 })
 
+// *************************
+// CRUD for Projects
+// *************************
 
-
-// get all data
+// get all data for a single user
 app.get('/project/user/:userId',(req,res)=>{
 
     const userId = req.params.userId;
