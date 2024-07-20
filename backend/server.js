@@ -212,18 +212,34 @@ app.post('/project',(req,res) => {
 
     console.log(req.body, 'createdata');
 
-    const p_name = req.body.project_name
-    const creator_id = req.body.creator_user_id
+    const projectName = req.body.project_name
+    const creatorId = req.body.creator_user_id
 
-    const query1 = `INSERT INTO Projects (project_name, creator_user_id) 
-                    VALUES('${p_name}', '${creator_id}')`;
+    const insertProjectQuery = `INSERT INTO Projects (project_name, creator_user_id) 
+                    VALUES(?, ?)
+                    `;
 
-    db.query(query1, (err, result) => {
-        
-        if(err) { console.log(err); }
-        console.log(result, 'result');
-        res.send({
-            message: 'data inserted'
+    db.query(insertProjectQuery, [projectName, creatorId], (err, result) => {
+        if (err) {
+            return res.status(500).send('Error inserting project');
+        }
+
+        const projectId = result.insertId;
+        console.log(result)
+        console.log(result.insertId)
+
+         // Associate the project with the user
+        const insertUserProjectQuery = `
+        INSERT INTO Project_Users (user_id, project_id)
+        VALUES (?, ?)
+        `;
+
+        db.query(insertUserProjectQuery, [creatorId, projectId], (err) => {
+            if (err) {
+              return res.status(500).send('Error inserting into Project_Users');
+            }
+      
+            res.status(201).send('Project created and associated with user successfully');
         });
     });
 });
@@ -274,21 +290,21 @@ app.delete('/project/:id', (req, res) => {
 
     // Check if the user has permission to delete the project
     const checkPermissionQuery = 'SELECT creator_user_id FROM Projects WHERE project_id = ?';
-    db.query(checkPermissionQuery, [projectId], (err, results) => {
+    db.query(checkPermissionQuery, [projectId], (err, result) => {
         if (err) {
             return res.status(500).send('Server error');
         }
-        if (results.length === 0) {
+        if (result.length === 0) {
             return res.status(404).send('Project not found');
         }
-        const project = results[0];
+        const project = result[0];
         if (project.creator_user_id !== userId) {
             return res.status(403).send('User does not have permission to delete this project');
         }
 
         // Delete the project
         const deleteQuery = 'DELETE FROM Projects WHERE project_id = ?';
-        db.query(deleteQuery, [projectId], (err, results) => {
+        db.query(deleteQuery, [projectId], (err, result) => {
             if (err) {
                 return res.status(500).send('Server error');
             }
@@ -297,6 +313,17 @@ app.delete('/project/:id', (req, res) => {
     });
 });
 
+// Function to add a user to a project
+function addUserToProject(userId, projectId) {
+    const query = 'INSERT INTO UserProjects (user_id, project_id) VALUES (?, ?)';
+    connection.query(query, [userId, projectId], (error, result) => {
+      if (error) {
+        console.error('Error inserting relationship:', error);
+      } else {
+        console.log('Relationship inserted:', result);
+      }
+    });
+  }
 
 app.listen(3000, () => {
     console.log(`Server listening on port 3000...`);
