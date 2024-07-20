@@ -1,5 +1,5 @@
 /*
-    Wraps all data models into one 'db' object and exports it for use by controller
+    Instantiates models and exports for use by controllers
 */
 
 const { sequelize } = require('../db/db-connector');
