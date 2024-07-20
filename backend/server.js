@@ -2,14 +2,12 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql2');
+require('dotenv').config();
 
 const app = express();
 
 app.use(cors());
 app.use(bodyparser.json());
-
-// Load environment variables from .env file
-require('dotenv').config();
 
 // Database connection
 
@@ -29,9 +27,9 @@ db.connect(err=>{
 });
 
 // get all data
-app.get('/project',(req,res)=>{
+app.get('/user',(req,res)=>{
 
-    let query1 = 'select * from Projects';
+    let query1 = 'select * from Users';
 
     db.query(query1,(err, result) => {
         if (err)
@@ -42,7 +40,7 @@ app.get('/project',(req,res)=>{
         if(result.length > 0) 
         {
             res.send({
-                message:'all project data',
+                message:'all user data',
                 data:result
             })
         }
@@ -51,11 +49,11 @@ app.get('/project',(req,res)=>{
 }) ;
 
 // get single data
-app.get('/project/:id',(req,res) =>{
+app.get('/user/:id',(req,res) =>{
 
     let gID = req.params.id;
 
-    let query1 = `select * from Projects where project_id = ${gID}`
+    let query1 = `select * from Users where user_id = ${gID}`
 
     db.query(query1,(err,result)=>{
 
@@ -80,15 +78,17 @@ app.get('/project/:id',(req,res) =>{
 
 // create data
 
-app.post('/project',(req,res) => {
+app.post('/user',(req,res) => {
 
     console.log(req.body, 'createdata');
 
-    let p_name = req.body.project_name
-    let creator_id = req.body.creator_user_id
+    let first_name = req.body.last_name;
+    let last_name = req.body.last_name;
+    let email = req.body.email;
+    let password_hash = req.body.password_hash;
 
-    let query1 = `INSERT INTO Projects (project_name, creator_user_id) 
-                    VALUES('${p_name}', '${creator_id}')`;
+    let query1 = `INSERT INTO Users (first_name, last_name, email, password_hash) 
+                    VALUES('${first_name}', '${last_name}', '${email}', '${password_hash}')`;
 
     db.query(query1, (err, result) => {
         
@@ -100,8 +100,8 @@ app.post('/project',(req,res) => {
     });
 });
 
-// Update single data **************************NEEDS UPDATE
-app.put('/project/:id', (req,res) => {
+// Update single data
+app.put('/user/:id', (req,res) => {
     
     console.log(req.body, 'update data');
 
@@ -125,7 +125,7 @@ app.put('/project/:id', (req,res) => {
     });
 });
 
-// delete single data **************************NEEDS UPDATE
+// delete single data
 
 app.delete('/user/:id', (req,res) =>{
 
@@ -144,6 +144,152 @@ app.delete('/user/:id', (req,res) =>{
         )
     })
 })
+
+
+
+// get all data
+app.get('/project/user/:userId',(req,res)=>{
+
+    const userId = req.params.userId;
+
+    const getProjectsQuery = `
+        SELECT p.*
+        FROM Projects p
+        JOIN Project_Users pu ON p.project_id = pu.project_id
+        WHERE pu.user_id = ?`;
+
+    db.query(getProjectsQuery, [userId], (err, result) => {
+        if (err) {
+            return res.status(500).send('Server eggrror');
+        }
+        res.json(result);
+    });
+
+}) ;
+
+// get single data
+app.get('/project/:id',(req, res) => {
+
+    const projectId = req.params.id;
+    const userId = req.body.creator_user_id; // Assuming the user ID is passed in the request body
+
+    const checkPermissionQuery = 'SELECT creator_user_id FROM Projects WHERE project_id = ?';
+    db.query(checkPermissionQuery, [projectId], (err, result) => {
+        if (err) {
+            return res.status(500).send('Server error');
+        }
+        if (result.length === 0) {
+            return res.status(404).send('Project not found');
+        }
+        const project = result[0];
+        if (project.creator_user_id !== userId) {
+            return res.status(403).send('User does not have permission to view this project');
+        }
+
+        // If the user has permission, retrieve the project details
+        const getProjectQuery = 'SELECT * FROM Projects WHERE project_id = ?';
+        db.query(getProjectQuery, [projectId], (err, result) => {
+            if (err) {
+                return res.status(500).send('Server error');
+            }
+            if (result.length === 0) {
+                return res.status(404).send('Project not found');
+            }
+            res.json(result[0]);
+        });
+    });
+});
+
+// create data
+
+app.post('/project',(req,res) => {
+
+    console.log(req.body, 'createdata');
+
+    const p_name = req.body.project_name
+    const creator_id = req.body.creator_user_id
+
+    const query1 = `INSERT INTO Projects (project_name, creator_user_id) 
+                    VALUES('${p_name}', '${creator_id}')`;
+
+    db.query(query1, (err, result) => {
+        
+        if(err) { console.log(err); }
+        console.log(result, 'result');
+        res.send({
+            message: 'data inserted'
+        });
+    });
+});
+
+// Update single data
+app.put('/project/:id', (req,res) => {
+    
+    console.log(req.body, 'update data');
+
+    const projectId = req.params.id;
+    const userId = parseInt(req.body.creator_user_id); // The ID of the user attempting to update the project
+    const { project_name } = req.body;
+
+    // Check if the user has permission to update the project
+    const checkPermissionQuery = 'SELECT creator_user_id FROM Projects WHERE project_id = ?';
+    db.query(checkPermissionQuery, [projectId], (err, result) => {
+        if (err) {
+            return res.status(500).send('Server error');
+        }
+        if (result.length === 0) {
+            return res.status(404).send('Project not found');
+        }
+        const project = result[0];
+        if (project.creator_user_id !== userId) {
+            return res.status(403).send('User does not have permission to update this project');
+        }
+
+        // Update the project
+        const updateQuery = `
+        UPDATE Projects
+        SET project_name = ?
+        WHERE project_id = ?
+        `;
+        db.query(updateQuery, [project_name, projectId], (err, result) => {
+            if (err) {
+                return res.status(500).send('Server error');
+            }
+            res.send('Project updated successfully');
+        })
+    })
+});
+
+// delete single data **************************NEEDS UPDATE
+
+app.delete('/project/:id', (req, res) => {
+    const projectId = req.params.id;
+    const userId = req.body.creator_user_id; // The ID of the user attempting to delete the project
+
+    // Check if the user has permission to delete the project
+    const checkPermissionQuery = 'SELECT creator_user_id FROM Projects WHERE project_id = ?';
+    db.query(checkPermissionQuery, [projectId], (err, results) => {
+        if (err) {
+            return res.status(500).send('Server error');
+        }
+        if (results.length === 0) {
+            return res.status(404).send('Project not found');
+        }
+        const project = results[0];
+        if (project.creator_user_id !== userId) {
+            return res.status(403).send('User does not have permission to delete this project');
+        }
+
+        // Delete the project
+        const deleteQuery = 'DELETE FROM Projects WHERE project_id = ?';
+        db.query(deleteQuery, [projectId], (err, results) => {
+            if (err) {
+                return res.status(500).send('Server error');
+            }
+            res.send('Project deleted successfully');
+        });
+    });
+});
 
 
 app.listen(3000, () => {
