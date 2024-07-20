@@ -260,7 +260,7 @@ app.put('/project/:id', (req,res) => {
     })
 });
 
-// delete single data **************************NEEDS UPDATE
+// delete single data 
 
 app.delete('/project/:id', (req, res) => {
     const projectId = req.params.id;
