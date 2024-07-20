@@ -225,8 +225,6 @@ app.post('/project',(req,res) => {
         }
 
         const projectId = result.insertId;
-        console.log(result)
-        console.log(result.insertId)
 
          // Associate the project with the user
         const insertUserProjectQuery = `
