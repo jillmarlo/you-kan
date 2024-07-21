@@ -15,16 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './task-card.component.css'
 })
 export class TaskCardComponent {
-  //@Input() task!: Task;
-  testTask = {
-    name: 'Test Task 1',
-    type: TaskType.Feature,
-    priority: Priority.Low,
-    description: 'Description of task 1',
-    status: "Developing",
-    assignee: "Test Dev",
-    effort: 2
-  }
+  //@Input() task!: any;
+
 
   constructor() {}
 

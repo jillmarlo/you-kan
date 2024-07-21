@@ -1,6 +1,14 @@
 <div class="project-header"> 
-    <h4>Project XYZ</h4>
-    <button mat-fab extended (click)="openDialog()">
+  <form [formGroup]="projectInput">
+    <mat-form-field>
+      <mat-select formControlName="project">
+        @for (project of projects; track project) {
+          <mat-option [value]="project.value">{{project.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+</form>
+    <button mat-fab extended (click)="openTaskDetail()">
         <mat-icon>add</mat-icon>
         Task
       </button>
