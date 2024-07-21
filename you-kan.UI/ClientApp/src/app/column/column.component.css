@@ -1,8 +1,4 @@
-.column {
-    display: flex;
-    background-color: rgba(255, 255, 255, 0.05);
-    align-items: stretch;
-    min-height: -webkit-fill-available;
-    max-width: 250px;
-    border-radius: 10px;
+.column-title {
+    font-size: 20px;
+    font-weight: 400;
 }

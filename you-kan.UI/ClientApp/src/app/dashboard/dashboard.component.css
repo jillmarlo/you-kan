@@ -1,26 +1,50 @@
 .app-container {
     display: flex;
-    flex-direction: column;
-    height: 100vh; 
+    flex-grow: 1;
+    height: 100%; 
   }
   
-  .full-height-container {
-    flex: 1; 
-  }
-
   .side-nav-detail {
     border-right-color: beige;
     max-width: 200px;
+    padding-top: 50px;
   }
 
-  /* .toolbar {
-    background-color: indigo;
-  } */
+  .toolbar {
+    background-image: linear-gradient(to left, rgba(255,0,0,0), rgb(64, 4, 117));
+    ; 
+  } 
 
-  .column-wrapper {
-    justify-content: space-evenly;
-    align-items: stretch;
+  .toolbar-actions {
     display: flex;
-    height: 100vh;   
-    gap: 10px; 
+    justify-content: flex-end;
+    width: 100%;
+    gap: 5px;
+  }
+
+  .board-wrapper{
+    display: flex;
+    flex-grow: 1;
+  }
+
+  .status-columns {
+    display: flex;
+    flex-grow: 1;
+    min-height: 100vh;
+    padding: 10px;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-basis: 0;
+    height: 100%;
+
+    background-color: rgba(255, 255, 255, 0.05);
+
+    width: 250px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
   }
