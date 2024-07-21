@@ -10,7 +10,7 @@ const taskRoutes = require('./routes/taskRoutes');
 const { sequelize, connectToDB } = require('./db/db-connector');
 
 // connectToDB();
-// sequelize.sync()
+// sequelize.sync() // creates table if doesn't exist yet
 
 // middleware
 app.use(express.json()) 
