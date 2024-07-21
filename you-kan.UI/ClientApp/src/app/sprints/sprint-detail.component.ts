@@ -15,7 +15,6 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
-import { Project } from '../projects/models/project.model';
 
 
 
@@ -41,7 +40,6 @@ export class SprintDetailComponent {
     name: new FormControl<string>('', [Validators.required]),
     project: new FormControl<number | null>(null, [Validators.required ]),
     startDate: new FormControl(new Date(), [Validators.required]),
-    endDate: new FormControl(new Date(), [Validators.required]),
  });
 
   cancel(): void {
