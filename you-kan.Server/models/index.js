@@ -39,5 +39,3 @@ Project.belongsToMany(User, { through: Project_User, foreignKey: 'project_id' })
 User.belongsToMany(Project, { through: Project_User, foreignKey: 'user_id' })
 
 module.exports = { User, Project, Sprint, Task, Subtask, Comment };
-
-
