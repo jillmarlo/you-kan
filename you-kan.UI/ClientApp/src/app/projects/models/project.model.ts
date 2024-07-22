@@ -1,6 +1,8 @@
+import { User } from '../../user-management/models/user.model';
+
 export interface Project {
-    name: string;
-    description: string;
-    startDate: string | Date;
-    endDate: string | Date;
+    project_id: number;
+    project_name: string;
+    created_at: string | Date;
+    creator_user_id: User;
 }
