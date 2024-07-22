@@ -17,15 +17,16 @@
         <mat-sidenav mode="side" opened class="side-nav-detail">
             <mat-nav-list>
                  <li><a routerLink="/projects">Projects</a></li>
-                 <router-outlet></router-outlet>
                  <li><a routerLink="/users">Users</a></li>
-                 <router-outlet></router-outlet>
               </mat-nav-list>
         </mat-sidenav>
-
         <mat-sidenav-content>
+            <router-outlet></router-outlet>
+            <router-outlet></router-outlet>
             <app-dashboard-action-bar></app-dashboard-action-bar>
             <div class="board-wrapper">
+                <!-- <div ngIf="url=projects"> render project template
+                    const url for conditional??? what the heck angular-->
                 <div cdkDropListGroup class="status-columns">
                     @for (taskList of allTasks; track taskList) {
                         <app-column
