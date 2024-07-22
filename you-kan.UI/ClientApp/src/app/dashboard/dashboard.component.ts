@@ -19,12 +19,15 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Priority } from '../tasks/models/priority.enum';
 import { TaskType } from '../tasks/models/task-type.enum';
+import { RouterOutlet } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { ProjectListComponent } from '../projects/components/project-list/project-list.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [MatSidenavModule, MatToolbarModule, ColumnComponent, TaskCardComponent, DashboardActionBarComponent,
-    MatNavList, MatListModule, CdkDrag, CdkDropList, CdkDropListGroup, MatIconModule, MatButtonModule],
+    MatNavList, MatListModule, CdkDrag, CdkDropList, CdkDropListGroup, MatIconModule, MatButtonModule, RouterOutlet, RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
