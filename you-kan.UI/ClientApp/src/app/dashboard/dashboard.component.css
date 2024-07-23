@@ -1,12 +1,12 @@
 .app-container {
     display: flex;
     flex-grow: 1;
-    height: 100%; 
+    overflow: auto;
   }
   
   .side-nav-detail {
     border-right-color: beige;
-    max-width: 200px;
+    max-width: 175px;
     padding-top: 50px;
   }
 
@@ -25,26 +25,15 @@
   .board-wrapper{
     display: flex;
     flex-grow: 1;
+    width: 100%;
   }
 
   .status-columns {
     display: flex;
     flex-grow: 1;
-    min-height: 100vh;
+    min-height: 90vh;
     padding: 10px;
+    gap: 10px;
   }
 
-  .column {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    flex-basis: 0;
-    height: 100%;
 
-    background-color: rgba(255, 255, 255, 0.05);
-
-    width: 250px;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 10px;
-  }

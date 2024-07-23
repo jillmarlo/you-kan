@@ -1,6 +1,6 @@
 <mat-toolbar class="toolbar" color="primary">
     <mat-toolbar-row>
-        <h4>YOU-KAN  - toolbar -</h4>
+        <h4>YOU-KAN - toolbar -</h4>
         <div class="toolbar-actions">
             <button mat-mini-fab (click)="openUserDetail()">
                 <mat-icon>account_circle</mat-icon>
@@ -16,28 +16,24 @@
         <!-- Left sidenav -->
         <mat-sidenav mode="side" opened class="side-nav-detail">
             <mat-nav-list>
-                  <a mat-list-item href="...">Projects</a>
-                  <a mat-list-item href="...">Users</a>
-              </mat-nav-list>
+                <a mat-list-item href="...">Projects</a>
+                <a mat-list-item href="...">Users</a>
+            </mat-nav-list>
         </mat-sidenav>
 
-        <mat-sidenav-content>
+        <mat-sidenav-content style="width:100%">
             <app-dashboard-action-bar></app-dashboard-action-bar>
             <div class="board-wrapper">
                 <div cdkDropListGroup class="status-columns">
-                    @for (taskList of allTasks; track taskList) {
-                        <app-column
-                        cdkDropList
-                        #todoList="cdkDropList"
-                        [cdkDropListData]="taskList"
-                        [title] = "taskList.status"
-                        (cdkDropListDropped)="drop($event)" 
-                        class="column">
-                        @for (task of taskList.tasks; track task) {
-                            <p>TEST</p>
-                            <app-task-card></app-task-card>
-                        }
-                    </app-column>
+                    @for (column of allTasks; track column.status) {
+                    <div cdkDropList [cdkDropListData]="column.tasks"
+                        (cdkDropListDropped)="onTaskDropped($event, column)">
+                        <app-column [status]="column.status" [tasks]="column.tasks">
+                            @for(task of column.tasks; track task.name) {
+                            <app-task-card cdkDrag [task]="task"></app-task-card>
+                            }
+                        </app-column>
+                    </div>
                     }
                 </div>
             </div>
