@@ -1,8 +1,15 @@
 .project-header {
-    padding-left: 25px;
+    padding-left: 20px;
     padding-top: 10px;
     display: flex;
     align-items: stretch;
-    gap: 40px;
+    gap: 30px;
     margin-top: 15px;
+  }
+
+  .filters {
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
+    width: 50%;
   }

@@ -1,19 +1,40 @@
-<div class="project-header"> 
+<div class="project-header">
   <form [formGroup]="projectInput">
     <mat-form-field>
+      <mat-label>Choose project</mat-label>
       <mat-select formControlName="project">
         @for (project of projects; track project) {
-          <mat-option [value]="project.value">{{project.name}}</mat-option>
+        <mat-option [value]="project.value">{{project.name}}</mat-option>
         }
       </mat-select>
     </mat-form-field>
-</form>
-    <button mat-fab extended (click)="openTaskDetail()">
-        <mat-icon>add</mat-icon>
-        Task
-      </button>
-    <button mat-fab extended (click)="openSprint()">
-      <mat-icon>add</mat-icon>
-      Sprint
-    </button>
+  </form>
+  <button mat-fab extended (click)="openTaskDetail()">
+    <mat-icon>add</mat-icon>
+    Task
+  </button>
+  <button mat-fab extended (click)="openSprint()">
+    <mat-icon>add</mat-icon>
+    Sprint
+  </button>
+  <div class="filters">
+    <form [formGroup]="dashboardFilters">
+      <mat-form-field style="padding-right: 10px">
+        <mat-label>Filter by priority</mat-label>
+        <mat-select formControlName="priority">
+          @for (priority of priorities; track priority) {
+          <mat-option [value]="priority">{{priority}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Filter by assignee</mat-label>
+        <mat-select formControlName="assignee">
+          @for (assignee of assigneeOptions; track assignee) {
+          <mat-option [value]="assignee.value">{{assignee.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
 </div>

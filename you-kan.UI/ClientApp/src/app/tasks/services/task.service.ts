@@ -1,9 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { Task } from '../models/task.model';
-//import { TaskType } from '../models/task-type.enum';
-//import { Priority } from '../models/priority.enum';
-//import { TaskStatus } from '../models/task-status.enum';
-//import { User } from '../../user-management/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
