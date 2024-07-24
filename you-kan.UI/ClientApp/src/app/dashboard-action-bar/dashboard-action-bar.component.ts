@@ -19,11 +19,18 @@ export class DashboardActionBarComponent implements OnInit {
 
   public dialog = inject(MatDialog);
 
-  projects = [{value: 1, name: 'Project XYZ'}, {value: 2, name: 'Project ABC'}];
+projects = [{value: 1, name: 'Project XYZ'}, {value: 2, name: 'Project ABC'}];
+priorities = ['low', 'medium', 'high', 'critical'];
+assigneeOptions = [{value: 1, name: 'Developer 1'}, {value:2, name: 'Developer 2'}, {value: 3, name:'Developer 3'}];
 
   projectInput = new FormGroup({
     project: new FormControl<number | null>(null, [Validators.required]),
  });
+
+ dashboardFilters = new FormGroup({
+  priority: new FormControl<string>(''),
+  assignee: new FormControl<number | null>(null)
+});
 
  ngOnInit(): void {
   this.projectInput.get('project')?.setValue(1);
@@ -39,7 +46,7 @@ export class DashboardActionBarComponent implements OnInit {
   }
 
   openTaskDetail(): void {
-    const dialogRef = this.dialog.open(TaskDetailComponent);
+    const dialogRef = this.dialog.open(TaskDetailComponent, { height: '600px', width: '600px' });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');

@@ -29,22 +29,6 @@ import { Task } from '../tasks/models/task.model';
 })
 export class DashboardComponent {
 
-  //statuses: string[] = ['Backlog', 'Committed', 'Developing', 'Testing', 'Done'];
-
-  // drop(event: CdkDragDrop<any[] | string[] | any>) {
-  //   if (event.previousContainer === event.container) {
-  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  //   } else {
-  //     transferArrayItem(
-  //       event.previousContainer.data,
-  //       event.container.data,
-  //       event.previousIndex,
-  //       event.currentIndex,
-  //     );
-  //   }
-  // }
-
-
   onTaskDropped(event: CdkDragDrop<Task[]>, column: any) {
     if (event.previousContainer === event.container) {
       moveItemInArray(column.tasks, event.previousIndex, event.currentIndex);
