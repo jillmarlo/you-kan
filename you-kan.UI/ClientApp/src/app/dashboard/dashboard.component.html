@@ -16,9 +16,11 @@
         <!-- Left sidenav -->
         <mat-sidenav mode="side" opened class="side-nav-detail">
             <mat-nav-list>
-                <a mat-list-item href="...">Projects</a>
-                <a mat-list-item href="...">Users</a>
-            </mat-nav-list>
+                 <li><a routerLink="/projects">Projects</a></li>
+                 <router-outlet></router-outlet>
+                 <li><a routerLink="/users">Users</a></li>
+                 <router-outlet></router-outlet>
+              </mat-nav-list>
         </mat-sidenav>
 
         <mat-sidenav-content style="width:100%">

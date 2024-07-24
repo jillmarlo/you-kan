@@ -18,12 +18,15 @@ import {
         CdkDropListGroup
 } from '@angular/cdk/drag-drop';
 import { Task } from '../tasks/models/task.model';
+import { RouterOutlet } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { ProjectListComponent } from '../projects/components/project-list/project-list.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [MatSidenavModule, MatToolbarModule, ColumnComponent, TaskCardComponent, DashboardActionBarComponent,
-    MatNavList, MatListModule, CdkDrag, CdkDropList, CdkDropListGroup, MatIconModule, MatButtonModule],
+    MatNavList, MatListModule, CdkDrag, CdkDropList, CdkDropListGroup, MatIconModule, MatButtonModule, RouterOutlet, RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -83,7 +86,5 @@ export class DashboardComponent {
 
   allTasks: any[] = [{status: 'Backlog', tasks: this.backlogTasks}, {status: 'Committed', tasks: this.committedTasks}
     , {status: 'Developing', tasks: this.developingTasks}, {status: 'Testing', tasks: this.testingTasks}, {status: 'Done', tasks: this.doneTasks}]
-
-
-
+    
 }

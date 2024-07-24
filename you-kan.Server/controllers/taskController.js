@@ -1,49 +1,85 @@
-const { Task } = require('../models');
+const { Task, Sprint, Task_Assignee } = require('../models');
 
-// TODO: handle 404 by catching sequelize validation error
+const executeSequelizeOperation = async (model, operation, options) => {
+    try {
+        const result = await model[operation](...options);
+        return { status: 200, data: result };
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof Sequelize.ValidationError || error instanceof Sequelize.DatabaseError) {
+            return { status: 400, data: null };
+        } else {
+            return { status: 500, data: null };
+        }
+    }
+};
+
 const getTasks = async (req, res) => {
     const { project_id, user_id, sprint_id, status, priority, sort } = req.query;
 
+    const include = [];
+    if (project_id) {
+        include.push({
+            model: Sprint,
+            where: { project_id }
+        });
+    }
+
+    if (user_id) {
+        include.push({
+            model: Task_Assignee,
+            where: { user_id }
+        });
+    }
+
     const where = {}
-    if (project_id) where.project_id = project_id;
-    if (user_id) where.user_id = user_id;
     if (sprint_id) where.sprint_id = sprint_id;
     if (status) where.status = status;
-    if (priority) where.priorty = priority;
+    if (priority) where.priority = priority;
 
-    order = []
+    const order = []
     if (sort) {
         order.push(sort.split(':')) // assumes only 1 sort query param for now
     }
 
-    const tasks = await Task.findAll({
-        where,
-        order
-    });
+    const queryOptions = { where, include, order };
+    const { responseStatus, data } = await executeSequelizeOperation(Task, 'findAll', queryOptions);
 
-    res.status(200).json(tasks);
+    if (responseStatus == 200) res.status(responseStatus).json(data)
+    else res.status(responseStatus);
 }
 
 const getTaskById = async (req, res) => {
-    const { id } = req.query;
-    const task = await Task.findOne({ where: {task_id: id} });
+    const { responseStatus, data } = await executeSequelizeOperation(Task, 'findByPk', req.params.task_id);
 
-    res.status(200).json(task)
+    if (responseStatus == 200) res.status(responseStatus).json(data)
+    else res.status(responseStatus);
 }
 
 const createTask = async (req, res) => {
-    const taskBody = {...req.body, created_at: new Date().toISOString()};
-    const newTask = await Task.create(taskBody);
+    const taskBody = { ...req.body, created_at: new Date().toISOString() };
+    const { responseStatus, data } = await executeSequelizeOperation(Task, 'create', taskBody);
 
-    res.status(200).json(newTask);
+    if (responseStatus == 200) res.status(201).json(data);
+    else res.status(responseStatus);
 }
 
 const deleteTask = async (req, res) => {
+    const queryOptions = { where: { task_id: req.params.task_id } };
+    const { responseStatus, data } = await executeSequelizeOperation(Task, 'destroy', queryOptions);
 
+    if (responseStatus == 200) res.status(204).json(data);
+    else res.status(responseStatus);
 }
 
 const updateTask = async (req, res) => {
+    const queryOptions = { where: { task_id: req.params.task_id } };
+    const taskBody = req.body;
 
-}
+    const { status: responseStatus, data: [rowsUpdated, [updatedTask]] } = await executeSequelizeOperation(Task, 'update', taskBody, queryOptions);
+    if (responseStatus == 200) res.status(204).json(data);
+    else res.status(responseStatus);
+};
 
 module.exports = { getTasks, getTaskById, createTask, deleteTask, updateTask }
