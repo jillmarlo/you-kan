@@ -35,23 +35,11 @@ Task.belongsTo(Sprint, { foreignKey: 'sprint_id' });
 User.belongsToMany(Task, { through: Task_Assignee, foreignKey: 'user_id' })
 Task.belongsToMany(User, { through: Task_Assignee, foreignKey: 'task_id' })
 
-User.associate = (models) => {
-    User.belongsToMany(models.Project, {
-      through: models.ProjectUser,
-      foreignKey: 'user_id',
-      otherKey: 'project_id'
-    });
-  };
 
-Project.associate = (models) => {
-    Project.belongsTo(models.User, { foreignKey: 'creator_user_id' });
+User.belongsToMany(Project, { through: ProjectUser, foreignKey: 'user_id', otherKey: 'project_id'});
 
-    Project.belongsToMany(models.User, {
-      through: models.ProjectUser,
-      foreignKey: 'project_id',
-      otherKey: 'user_id'
-    });
-  };
+Project.belongsTo(User, { foreignKey: 'creator_user_id' });
+Project.belongsToMany(User, { through: ProjectUser, foreignKey: 'project_id', otherKey: 'user_id'});
 
 // Project.belongsToMany(User, { through: Project_User, foreignKey: 'project_id' })
 // User.belongsToMany(Project, { through: Project_User, foreignKey: 'user_id' })
