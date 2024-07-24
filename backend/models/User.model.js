@@ -1,4 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db/db-connector');
+
 const User = sequelize.define('User', {
   user_id: {
     type: DataTypes.INTEGER,
@@ -30,5 +32,12 @@ const User = sequelize.define('User', {
   tableName: 'Users',
 });
 
-return User;
-}
+User.associate = (models) => {
+    User.belongsToMany(models.Project, {
+      through: models.ProjectUser,
+      foreignKey: 'user_id',
+      otherKey: 'project_id'
+    });
+  };
+
+module.exports = User;

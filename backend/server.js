@@ -1,7 +1,3 @@
-/*
-    Sets up main server application (middleware, routes)
-    Connects to database and starts node.js server
-*/
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -33,16 +29,18 @@ sequelize.sync()
   .then(() => console.log('Models synchronized...'))
   .catch(err => console.log('Error: ' + err));
 
-const taskRoutes = require('./routes/taskRoutes');
+// const taskRoutes = require('./routes/taskRoutes');
 const projectRoutes = require('./routes/projectRoutes')
 const userRoutes = require('./routes/userRoutes')
 
+console.log('userRoutes type:', typeof userRoutes); // Should be 'function'
+
 // routes
-app.use('/api/tasks', taskRoutes);
+// app.use('/api/tasks', taskRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/users', userRoutes);
 
-const PORT = 8000;
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+
+app.listen(8000, () => {
+  console.log('Server listening on port 8000...');
 });

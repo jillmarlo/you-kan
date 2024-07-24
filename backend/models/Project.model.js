@@ -1,4 +1,7 @@
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db/db-connector');
+const User = require('./User.model');
+
 const Project = sequelize.define('Project', {
   project_id: {
     type: DataTypes.INTEGER,
@@ -22,5 +25,14 @@ const Project = sequelize.define('Project', {
   tableName: 'Projects',
 });
 
-return Project
-};
+Project.belongsTo(User, { foreignKey: 'creator_user_id' });
+
+Project.associate = (models) => {
+    Project.belongsToMany(models.User, {
+      through: models.ProjectUser,
+      foreignKey: 'project_id',
+      otherKey: 'user_id'
+    });
+  };
+
+module.exports = Project;
