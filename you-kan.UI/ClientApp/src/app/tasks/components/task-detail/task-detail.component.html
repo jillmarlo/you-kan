@@ -1,3 +1,4 @@
+<div>
 <h3 mat-dialog-title>Create New Task</h3>
 <mat-dialog-content>
     <form [formGroup]="taskForm">
@@ -9,7 +10,7 @@
             <mat-label>Type</mat-label>
             <mat-select formControlName="type">
                 @for (taskType of taskTypes; track taskType) {
-                <mat-option [value]="taskType.value">{{taskType.name}}</mat-option>
+                <mat-option [value]="taskType">{{taskType}}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
@@ -17,15 +18,15 @@
             <mat-label>Priority</mat-label>
             <mat-select formControlName="priority">
                 @for (priority of priorities; track priority) {
-                <mat-option [value]="priority.value">{{priority.name}}</mat-option>
+                <mat-option [value]="priority">{{priority}}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
         <mat-form-field class="basic-input">
             <mat-label>Status</mat-label>
             <mat-select formControlName="status">
-                @for (status of statuses; track status) {
-                <mat-option [value]="status.value">{{status.name}}</mat-option>
+                @for (status of taskStatuses; track status) {
+                <mat-option [value]="status">{{status}}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
@@ -35,7 +36,13 @@
         </mat-form-field>
         <mat-form-field class="basic-input">
             <mat-label>Effort</mat-label>
-            <input matInput formControlName="effort" />
+            <mat-select formControlName="effort">
+                <mat-option>1</mat-option>
+                <mat-option>2</mat-option>
+                <mat-option>3</mat-option>
+                <mat-option>4</mat-option>
+                <mat-option>5</mat-option>
+        </mat-select>
         </mat-form-field>
         <mat-form-field class="desc-input">
             <mat-label>Description</mat-label>

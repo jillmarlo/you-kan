@@ -1,16 +1,12 @@
-import { Priority } from "./priority.enum";
-import { TaskStatus } from "./task-status.enum";
-import { TaskType } from "./task-type.enum";
-import { Comment } from "./comment.model";
 import { User } from "../../user-management/models/user.model";
 
 export interface Task {
     id: number;
     name: string;
-    typeId: number;
-    priorityId: number;
+    type: string;
+    priority: string;
     description: string | null;
-    statusId: number;
+    status: string;
     assigneeId: number;
     creatorId: number;
     effort: number;

@@ -17,8 +17,7 @@ import {
         CdkDropList,
         CdkDropListGroup
 } from '@angular/cdk/drag-drop';
-import { Priority } from '../tasks/models/priority.enum';
-import { TaskType } from '../tasks/models/task-type.enum';
+import { Task } from '../tasks/models/task.model';
 import { RouterOutlet } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { ProjectListComponent } from '../projects/components/project-list/project-list.component';
@@ -33,17 +32,15 @@ import { ProjectListComponent } from '../projects/components/project-list/projec
 })
 export class DashboardComponent {
 
-  //statuses: string[] = ['Backlog', 'Committed', 'Developing', 'Testing', 'Done'];
-
-  drop(event: CdkDragDrop<any[] | string[] | any>) {
+  onTaskDropped(event: CdkDragDrop<Task[]>, column: any) {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      moveItemInArray(column.tasks, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
         event.previousIndex,
-        event.currentIndex,
+        event.currentIndex
       );
     }
   }
@@ -56,25 +53,30 @@ export class DashboardComponent {
 
 
   //mock data for now
-  testTask1 = {
+  testTask1 : Task = {
+    id: 1,
     name: 'Test Task 1',
-    type: TaskType.Feature,
-    priority: Priority.Low,
+    type: 'Bug',
+    priority: 'Low',
     description: 'Description of task 1',
-    status: "Developing",
-    assignee: "Test Dev",
+    status: 'Testing',
+    assigneeId: 3,
+    creatorId: 5,
     effort: 2
   }
 
   testTask2 = {
+    id: 2,
     name: 'Test Task 2',
-    type: TaskType.Feature,
-    priority: Priority.Low,
+    type: 'Feature',
+    priority: "Low",
     description: 'Description of task 2',
-    status: "Developing",
-    assignee: "Test Dev2",
+    status: 'Developing',
+    assigneeId: 7,
+    creatorId: 4,
     effort: 3
   }
+
 
   backlogTasks = [];
   committedTasks = [];
@@ -82,9 +84,7 @@ export class DashboardComponent {
   testingTasks = [this.testTask2];
   doneTasks = [];
 
-  allTasks: any[] = [{status: 'backlog', tasks: this.backlogTasks}, {status: 'committed', tasks: this.committedTasks}
-    , {status: 'developing', tasks: this.developingTasks}, {status: 'testing', tasks: this.testingTasks}, {status: 'done', tasks: this.doneTasks}]
-
-
-
+  allTasks: any[] = [{status: 'Backlog', tasks: this.backlogTasks}, {status: 'Committed', tasks: this.committedTasks}
+    , {status: 'Developing', tasks: this.developingTasks}, {status: 'Testing', tasks: this.testingTasks}, {status: 'Done', tasks: this.doneTasks}]
+    
 }

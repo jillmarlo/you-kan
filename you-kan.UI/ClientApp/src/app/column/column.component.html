@@ -1,3 +1,8 @@
-<div class="column-title">
-    <p>{{ title | uppercase }}</p>
+<div class="column" cdkDropList [cdkDropListData]="tasks" (cdkDropListDropped)="drop($event)">
+    <div class="column-title">
+        <p>{{ status }}</p>
+    </div>
+    <div>
+        <ng-content></ng-content>
+    </div>
 </div>
