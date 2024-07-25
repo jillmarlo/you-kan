@@ -36,11 +36,13 @@ sequelize.sync()
 const taskRoutes = require('./routes/taskRoutes');
 const projectRoutes = require('./routes/projectRoutes')
 const userRoutes = require('./routes/userRoutes')
+const sprintRoutes = require('./routes/sprintRoutes')
 
 // routes
 app.use('/api/tasks', taskRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/sprints', sprintRoutes);
 
 const PORT = 8000;
 app.listen(PORT, () => {

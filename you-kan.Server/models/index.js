@@ -28,8 +28,10 @@ Subtask.belongsTo(Task, { foreignKey: 'task_id' });
 Sprint.hasMany(Task, { foreignKey: 'sprint_id' });
 Task.belongsTo(Sprint, { foreignKey: 'sprint_id' });
 
-// Project.hasMany(Sprint, { foreignKey: 'project_id' });
-// Sprint.belongsTo(Project, { foreignKey: 'project_id' });
+Sprint.belongsTo(Project, { foreignKey: 'project_id' });
+Sprint.hasMany(Task, { foreignKey: 'sprint_id' });
+
+Project.belongsTo(User, { foreignKey: 'creator_user_id' });
 
 // Many to many relationships
 User.belongsToMany(Task, { through: Task_Assignee, foreignKey: 'user_id' })
@@ -37,11 +39,6 @@ Task.belongsToMany(User, { through: Task_Assignee, foreignKey: 'task_id' })
 
 
 User.belongsToMany(Project, { through: ProjectUser, foreignKey: 'user_id', otherKey: 'project_id'});
-
-Project.belongsTo(User, { foreignKey: 'creator_user_id' });
 Project.belongsToMany(User, { through: ProjectUser, foreignKey: 'project_id', otherKey: 'user_id'});
-
-// Project.belongsToMany(User, { through: Project_User, foreignKey: 'project_id' })
-// User.belongsToMany(Project, { through: Project_User, foreignKey: 'user_id' })
 
 module.exports = { User, Project, Sprint, Task, Subtask, Comment, ProjectUser};
