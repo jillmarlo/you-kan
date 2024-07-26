@@ -13,9 +13,9 @@ CREATE SCHEMA IF NOT EXISTS `you-kan` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 USE `you-kan` ;
 
 -- -----------------------------------------------------
--- Table `you-kan`.`Users`
+-- Table `Users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `you-kan`.`Users` (
+CREATE TABLE IF NOT EXISTS `Users` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(255) NOT NULL,
   `last_name` VARCHAR(255) NOT NULL,
@@ -29,9 +29,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `you-kan`.`Projects`
+-- Table `Projects`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `you-kan`.`Projects` (
+CREATE TABLE IF NOT EXISTS `Projects` (
   `project_id` INT NOT NULL AUTO_INCREMENT,
   `project_name` VARCHAR(255) NOT NULL,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `you-kan`.`Projects` (
   INDEX `user_id_idx` (`creator_user_id` ASC) VISIBLE,
   CONSTRAINT `Projects_ibfk_1`
     FOREIGN KEY (`creator_user_id`)
-    REFERENCES `you-kan`.`Users` (`user_id`)
+    REFERENCES `Users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -49,9 +49,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `you-kan`.`Sprints`
+-- Table `Sprints`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `you-kan`.`Sprints` (
+CREATE TABLE IF NOT EXISTS `Sprints` (
   `sprint_id` INT NOT NULL AUTO_INCREMENT,
   `sprint_name` VARCHAR(255) NOT NULL,
   `project_id` INT NOT NULL,
@@ -62,16 +62,16 @@ CREATE TABLE IF NOT EXISTS `you-kan`.`Sprints` (
   INDEX `board_id` (`project_id` ASC) VISIBLE,
   CONSTRAINT `Sprints_ibfk_1`
     FOREIGN KEY (`project_id`)
-    REFERENCES `you-kan`.`Projects` (`project_id`))
+    REFERENCES `Projects` (`project_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `you-kan`.`Tasks`
+-- Table `Tasks`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `you-kan`.`Tasks` (
+CREATE TABLE IF NOT EXISTS `Tasks` (
   `task_id` INT NOT NULL AUTO_INCREMENT,
   `task_title` VARCHAR(255) NOT NULL,
   `task_description` VARCHAR(255) NULL DEFAULT NULL,
@@ -90,17 +90,17 @@ CREATE TABLE IF NOT EXISTS `you-kan`.`Tasks` (
   UNIQUE INDEX `sprint_id_UNIQUE` (`sprint_id` ASC) VISIBLE,
   CONSTRAINT `Tasks_ibfk_1`
     FOREIGN KEY (`creator_user_id`)
-    REFERENCES `you-kan`.`Users` (`user_id`)
+    REFERENCES `Users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `Tasks_ibfk_2`
     FOREIGN KEY (`sprint_id`)
-    REFERENCES `you-kan`.`Sprints` (`sprint_id`)
+    REFERENCES `Sprints` (`sprint_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `Tasks_ibfk_3`
     FOREIGN KEY (`project_id`)
-    REFERENCES `you-kan`.`Projects` (`project_id`)
+    REFERENCES `Projects` (`project_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -111,7 +111,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `mydb`.`Subtasks`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `you-kan`.`Subtasks` (
+CREATE TABLE IF NOT EXISTS `Subtasks` (
   `subtask_id` INT NOT NULL AUTO_INCREMENT,
   `subtask_description` VARCHAR(255) NOT NULL,
   `task_id` INT NOT NULL,
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `you-kan`.`Subtasks` (
   INDEX `Subtasks_ibfk_1_idx` (`task_id` ASC) VISIBLE,
   CONSTRAINT `Subtasks_ibfk_1`
     FOREIGN KEY (`task_id`)
-    REFERENCES `you-kan`.`Tasks` (`task_id`)
+    REFERENCES `Tasks` (`task_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -127,9 +127,9 @@ ENGINE = InnoDB;
 USE `you-kan` ;
 
 -- -----------------------------------------------------
--- Table `you-kan`.`Comments`
+-- Table `Comments`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `you-kan`.`Comments` (
+CREATE TABLE IF NOT EXISTS `Comments` (
   `comment_id` INT NOT NULL,
   `task_id` INT NOT NULL,
   `comment_text` VARCHAR(255) NOT NULL,
@@ -140,12 +140,12 @@ CREATE TABLE IF NOT EXISTS `you-kan`.`Comments` (
   INDEX `Comments_ibfk_2` (`user_id` ASC) VISIBLE,
   CONSTRAINT `Comments_ibfk_1`
     FOREIGN KEY (`task_id`)
-    REFERENCES `you-kan`.`Tasks` (`task_id`)
+    REFERENCES `Tasks` (`task_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `Comments_ibfk_2`
     FOREIGN KEY (`user_id`)
-    REFERENCES `you-kan`.`Users` (`user_id`)
+    REFERENCES `Users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -154,9 +154,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `you-kan`.`Project_Users`
+-- Table `Project_Users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `you-kan`.`Project_Users` (
+CREATE TABLE IF NOT EXISTS `Project_Users` (
   `user_id` INT NOT NULL,
   `project_id` INT NOT NULL,
   PRIMARY KEY (`user_id`, `project_id`),
@@ -164,12 +164,12 @@ CREATE TABLE IF NOT EXISTS `you-kan`.`Project_Users` (
   INDEX `fk_Users_has_Projects_Users1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_Users_has_Projects_Users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `you-kan`.`Users` (`user_id`)
+    REFERENCES `Users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Users_has_Projects_Projects1`
     FOREIGN KEY (`project_id`)
-    REFERENCES `you-kan`.`Projects` (`project_id`)
+    REFERENCES `Projects` (`project_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -178,9 +178,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `you-kan`.`Task_Assignees`
+-- Table `Task_Assignees`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `you-kan`.`Task_Assignees` (
+CREATE TABLE IF NOT EXISTS `Task_Assignees` (
   `user_id` INT NOT NULL,
   `task_id` INT NOT NULL,
   PRIMARY KEY (`user_id`, `task_id`),
@@ -188,12 +188,12 @@ CREATE TABLE IF NOT EXISTS `you-kan`.`Task_Assignees` (
   INDEX `fk_Users_has_Tasks_Users1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_Users_has_Tasks_Users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `you-kan`.`Users` (`user_id`)
+    REFERENCES `Users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Users_has_Tasks_Tasks1`
     FOREIGN KEY (`task_id`)
-    REFERENCES `you-kan`.`Tasks` (`task_id`)
+    REFERENCES `Tasks` (`task_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
