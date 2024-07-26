@@ -3,22 +3,18 @@
 */
 
 const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
+require('dotenv').config();
 
-// TODO: Add database credentials to an .env file 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
+  {
     host: process.env.DB_HOST,
     dialect: 'mysql',
-    logging: false,
-});
+    port: process.env.DB_PORT,
+    logging: console.log
+  }
+);
 
-const connectToDB = async () => {
-    try {
-        await sequelize.authenticate();
-        console.log("Connected to MySQL DB");
-    } catch(err) {
-        console.log("Error connecting to MySQL DB");
-    }
-}
-
-module.exports = {sequelize, connectToDB};
+module.exports = sequelize;
