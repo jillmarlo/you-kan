@@ -2,9 +2,9 @@
   <form [formGroup]="projectInput">
     <mat-form-field>
       <mat-label>Choose project</mat-label>
-      <mat-select formControlName="project">
+      <mat-select formControlName="project" (selectionChange)="onProjectChange($event)">
         @for (project of projects; track project) {
-        <mat-option [value]="project.value">{{project.name}}</mat-option>
+        <mat-option [value]="project.id">{{project.name}}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -19,9 +19,19 @@
   </button>
   <div class="filters">
     <form [formGroup]="dashboardFilters">
+      <mat-form-field style="padding-right: 10px"> 
+        <mat-label>Filter by sprint</mat-label>
+        <mat-select formControlName="sprint">
+          <mat-option [value]=null>---</mat-option>
+          @for (sprint of sprints; track sprint.id) {
+          <mat-option [value]="sprint.id">{{sprint.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
       <mat-form-field style="padding-right: 10px">
         <mat-label>Filter by priority</mat-label>
         <mat-select formControlName="priority">
+          <mat-option [value]=null>---</mat-option>
           @for (priority of priorities; track priority) {
           <mat-option [value]="priority">{{priority}}</mat-option>
           }
@@ -30,8 +40,9 @@
       <mat-form-field>
         <mat-label>Filter by assignee</mat-label>
         <mat-select formControlName="assignee">
-          @for (assignee of assigneeOptions; track assignee) {
-          <mat-option [value]="assignee.value">{{assignee.name}}</mat-option>
+          <mat-option [value]=null>---</mat-option>
+          @for (assignee of assignees; track assignee.id) {
+          <mat-option [value]="assignee.id">{{assignee.name}}</mat-option>
           }
         </mat-select>
       </mat-form-field>

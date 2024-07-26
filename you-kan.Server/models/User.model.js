@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt');
+const saltRounds = 10; // Adjust this value to increase/decrease hashing time
+
 module.exports = (sequelize, DataTypes) => {
 const User = sequelize.define('User', {
   user_id: {
@@ -28,6 +31,12 @@ const User = sequelize.define('User', {
 }, {
   timestamps: false,
   tableName: 'Users',
+});
+
+// Hash password before saving to database
+User.beforeCreate(async (user) => {
+  const salt = await bcrypt.genSalt(saltRounds);
+  user.password_hash = await bcrypt.hash(user.password_hash, salt);
 });
 
 return User;

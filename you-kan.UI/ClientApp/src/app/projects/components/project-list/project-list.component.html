@@ -1,1 +1,17 @@
-<p>project-list works!</p>
+<h2>Projects</h2>
+<ul class="projects">
+  <li *ngFor="let project of projects">
+    <button [class.selected]="project === selectedproject" type="button" (click)="onSelect(project)">
+      <span class="badge">{{project.id}}</span>
+      <span class="name">{{project.name}}</span>
+    </button>
+  </li>
+</ul>
+
+<div *ngIf="selectedproject">
+  <h2>{{selectedproject.name}} Details</h2>
+  <div>id: {{selectedproject.id}}</div>
+  <div>description: {{selectedproject.description}}</div>
+  <div>start date: {{selectedproject.startDate}}</div>
+  <div>end date: {{selectedproject.endDate}}</div>
+</div>

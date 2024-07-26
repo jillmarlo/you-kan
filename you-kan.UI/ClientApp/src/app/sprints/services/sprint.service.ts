@@ -12,27 +12,27 @@ export class SprintService {
 
   constructor() {}
 
-    // get all tasks
+    // get all sprints
     getSprints(): Observable<Sprint[]> {
       return this.http.get<Sprint[]>(this.apiRoot);
     }
   
-    // get task by taskId
+    // get task by sprintId
     getSprint(id: number): Observable<Sprint> {
       return this.http.get<Sprint>(`${this.apiRoot}/${id}`);
     }
   
-    // create a new task
+    // create a new sprint
     createSprint(sprint: Sprint): Observable<Sprint> {
       return this.http.post<Sprint>(this.apiRoot, sprint);
     }
   
-    // update an existing task
+    // update an existing sprint
     updateSprint(updateSprint: Sprint): Observable<Sprint> {
       return this.http.put<Sprint>(`${this.apiRoot}/${updateSprint.sprint_id}`, updateSprint);
     }
   
-    // remove a task
+    // remove a sprint
     deleteSprint(id: number): Observable<void> {
       return this.http.delete<void>(`${this.apiRoot}/${id}`);
     }
