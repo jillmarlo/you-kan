@@ -10,4 +10,5 @@ export interface Task {
     assigneeId: number;
     creatorId: number;
     effort: number;
+    sprintId: number;
 }
