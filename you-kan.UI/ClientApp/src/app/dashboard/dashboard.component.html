@@ -16,6 +16,7 @@
         <!-- Left sidenav -->
         <mat-sidenav mode="side" opened class="side-nav-detail">
             <mat-nav-list>
+                 <li><a routerLink="/">Dashboard</a></li>
                  <li><a routerLink="/projects">Projects</a></li>
                  <li><a routerLink="/users">Users</a></li>
               </mat-nav-list>
@@ -23,13 +24,11 @@
 
         <!-- Main page content -->
         <mat-sidenav-content style="width:100%">
-            <app-dashboard-action-bar 
+        <!-- <router-outlet></router-outlet> --><app-dashboard-action-bar
             (projectChanged)="handleProjectChange($event)" 
             (dashboardFiltersChanged)="handleFiltersChange($event)"
             (taskCreated)="handleTaskCreated($event)"></app-dashboard-action-bar>
-            <div class="board-wrapper">
-                <!-- <div ngIf="url=projects"> render project template
-                    const url for conditional??? what the heck angular-->
+        <div class="board-wrapper">
                 <div cdkDropListGroup class="status-columns">
                     @for (statusList of allTasksByStatus(); track statusList.status) {
                     <div cdkDropList [cdkDropListData]="statusList.tasks"
