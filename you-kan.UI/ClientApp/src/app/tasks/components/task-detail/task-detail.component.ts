@@ -25,8 +25,6 @@ export class TaskDetailComponent {
   readonly taskService = inject(TaskService);
  // readonly data = inject<DialogData>(MAT_DIALOG_DATA);
 
-  @Input() task!: Task;
-
   constructor() {}
 
   taskForm = new FormGroup({
@@ -35,8 +33,9 @@ export class TaskDetailComponent {
     priority: new FormControl<string | null>(null , [Validators.required]),
     description: new FormControl<string>(''),
     status: new FormControl<string | null>(null, [Validators.required]),
-    assignee: new FormControl<number | null>(null, [Validators.required ]),
-    effort: new FormControl<number | null>(null, [Validators.required ])
+    assigneeId: new FormControl<number | null>(null),
+    effort: new FormControl<number | null>(null),
+    sprintId: new FormControl<number | null>(null)
  });
 
   cancel(): void {
@@ -44,16 +43,9 @@ export class TaskDetailComponent {
   }
 
   submit(): void {
-    // if (this.taskForm.valid) {
-    //   const task: Task = {
-    //     name: this.taskForm.get('name').value,
-    //     typeId: this.taskForm.get('type').value,
-    //     priorityId: this.taskForm.get('priority').value,
-    //     description: this.taskForm.get('description').value,
-    //     statusId: this.taskForm.get('status').value,
-    //     assigneeId: this.taskForm.get('assignee').value,
-    //     creatorId: this.taskForm.get('creator').value,
-    //   };
+    if (this.taskForm.valid) {
+      this.dialogRef.close(this.taskForm.value); // Pass the form values to the parent
+    }
 
     //   this.taskService.createTask(task).subscribe((task) => {
     //     console.log('Added task:', task);
@@ -66,5 +58,8 @@ export class TaskDetailComponent {
   priorities: string[] = ['Low','Medium','High','Critical'];
 
   taskStatuses: string[] = ['Backlog','Uncommitted','Developing','Testing','Complete'];
+
+  assignees = [{ id: 1, name: 'Developer 1' }, { id: 2, name: 'Developer 2' }, { id: 3, name: 'Developer 3' }];
+  sprints = [{ id: 1, name: '7/1/24 - 7/12/24' }, { id: 2, name: '7/15/24 - 7/26/24' }, { id: 3, name: '7/29/24 - 8/9/24' }];
 
 }

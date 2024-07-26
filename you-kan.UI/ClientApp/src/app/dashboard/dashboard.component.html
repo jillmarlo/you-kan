@@ -25,7 +25,10 @@
 
         <!-- Main page content -->
         <mat-sidenav-content style="width:100%">
-            <app-dashboard-action-bar (projectChanged)="handleProjectChange($event)" (dashboardFiltersChanged)="handleFiltersChange($event)"></app-dashboard-action-bar>
+            <app-dashboard-action-bar 
+            (projectChanged)="handleProjectChange($event)" 
+            (dashboardFiltersChanged)="handleFiltersChange($event)"
+            (taskCreated)="handleTaskCreated($event)"></app-dashboard-action-bar>
             <div class="board-wrapper">
                 <div cdkDropListGroup class="status-columns">
                     @for (statusList of allTasksByStatus(); track statusList.status) {

@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { TaskDetailComponent } from '../tasks/components/task-detail/task-detail.component';
 import { SprintDetailComponent } from '../sprints/sprint-detail.component';
+import { Task } from '../tasks/models/task.model';
 
 @Component({
   selector: 'app-dashboard-action-bar',
@@ -18,6 +19,7 @@ import { SprintDetailComponent } from '../sprints/sprint-detail.component';
 export class DashboardActionBarComponent implements OnInit {
   @Output() projectChanged = new EventEmitter<number>();
   @Output() dashboardFiltersChanged = new EventEmitter<any>();
+  @Output() taskCreated = new EventEmitter<Task>();
 
   public dialog = inject(MatDialog);
 
@@ -48,6 +50,7 @@ export class DashboardActionBarComponent implements OnInit {
 
   onProjectChange(event: any) {
     this.projectChanged.emit(event.value);
+    this.dashboardFilters.reset();
   }
 
 
@@ -64,9 +67,16 @@ export class DashboardActionBarComponent implements OnInit {
     const dialogRef = this.dialog.open(TaskDetailComponent, { height: '600px', width: '600px' });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
+      if (result) {
+        debugger;
+        const newTask: Task = {
+          id: null, name: result.name, type: result.type, priority: result.priority,
+          description: result.description, status: result.status, assigneeId: result.assignee ?? null,
+          creatorId: 1, effort: result.effort ?? null, sprintId: result.sprintId ?? null
+        }
+        this.taskCreated.emit(newTask);
       }
     });
   }
+
 }

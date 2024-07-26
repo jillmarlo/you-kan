@@ -25,6 +25,7 @@ import { ProjectListComponent } from '../projects/components/project-list/projec
 export class DashboardComponent implements OnInit {
   //Signals that manage the state of the dashboard; could be moved to a service if desired
   allTasks!: Task[];
+  filterFormValues!: { sprint: number, priority: string, assignee: string };
   allTasksSignal = signal<Task[]>([]);
   backlogTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Backlog"));
   committedTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Committed"));
@@ -77,7 +78,7 @@ export class DashboardComponent implements OnInit {
 
   //updates tasks on dashboard to filter by sprint, assignee, priority
   handleFiltersChange($event: any) {
-    debugger;
+    this.filterFormValues = $event;
     let allTasksFiltered: Task[] = this.allTasks;
 
     if ($event.sprint !== null) {
@@ -98,12 +99,19 @@ export class DashboardComponent implements OnInit {
     this.allTasksSignal.set(allTasksFiltered);
   }
 
+  handleTaskCreated($event: Task) {
+    const newTask = $event as Task;
+    let newTaskArray = [...this.allTasks, newTask];
+
+    this.allTasksSignal.set(newTaskArray);
+  }
+
   //to implement
   openUserDetail() { }
 
   //to implemet
   logout() { }
-
+  
 
   //mock data for now
   testTask1: Task = {
