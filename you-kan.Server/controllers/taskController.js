@@ -1,19 +1,5 @@
 const { Task, Sprint, Task_Assignee } = require('../models');
-
-const executeSequelizeOperation = async (model, operation, options) => {
-    try {
-        const result = await model[operation](...options);
-        return { status: 200, data: result };
-    } catch (error) {
-        console.error(error);
-
-        if (error instanceof Sequelize.ValidationError || error instanceof Sequelize.DatabaseError) {
-            return { status: 400, data: null };
-        } else {
-            return { status: 500, data: null };
-        }
-    }
-};
+const { Sequelize } = require('sequelize');
 
 const getTasks = async (req, res) => {
     const { project_id, user_id, sprint_id, status, priority, sort } = req.query;
@@ -33,53 +19,104 @@ const getTasks = async (req, res) => {
         });
     }
 
-    const where = {}
+    const where = {};
     if (sprint_id) where.sprint_id = sprint_id;
     if (status) where.status = status;
     if (priority) where.priority = priority;
 
-    const order = []
+    const order = [];
     if (sort) {
         order.push(sort.split(':')) // assumes only 1 sort query param for now
     }
 
     const queryOptions = { where, include, order };
-    const { responseStatus, data } = await executeSequelizeOperation(Task, 'findAll', queryOptions);
 
-    if (responseStatus == 200) res.status(responseStatus).json(data)
-    else res.status(responseStatus);
+    let task;
+    try {
+        task = await Task.findAll(queryOptions);
+    } catch {
+        return res.sendStatus(500);
+    }
+
+    if (!task) {
+        return res.sendStatus(404);
+    } else {
+        res.status(200).json(task);
+    }
 }
 
 const getTaskById = async (req, res) => {
-    const { responseStatus, data } = await executeSequelizeOperation(Task, 'findByPk', req.params.task_id);
+    let task;
+    try {
+        task = await Task.findByPk(req.params.id);
+    } catch {
+        return res.sendStatus(500);
+    }
 
-    if (responseStatus == 200) res.status(responseStatus).json(data)
-    else res.status(responseStatus);
+    if (!task) {
+        return res.sendStatus(404);
+    } else {
+        res.status(200).json(task);
+    }
 }
 
 const createTask = async (req, res) => {
     const taskBody = { ...req.body, created_at: new Date().toISOString() };
-    const { responseStatus, data } = await executeSequelizeOperation(Task, 'create', taskBody);
 
-    if (responseStatus == 200) res.status(201).json(data);
-    else res.status(responseStatus);
+    let newTask;
+    try {
+        newTask = await Task.create(taskBody);
+    } catch {
+        return res.sendStatus(500);
+    }
+
+    if (!newTask) {
+        return res.sendStatus(404);
+    } else {
+        res.status(201).json(newTask);
+    }
 }
 
 const deleteTask = async (req, res) => {
-    const queryOptions = { where: { task_id: req.params.task_id } };
-    const { responseStatus, data } = await executeSequelizeOperation(Task, 'destroy', queryOptions);
+    const queryOptions = { where: { task_id: req.params.id } };
 
-    if (responseStatus == 200) res.status(204).json(data);
-    else res.status(responseStatus);
+    let rowsDeleted;
+    try {
+        rowsDeleted = await Task.destroy(queryOptions);
+    } catch {
+        return res.sendStatus(500);
+    }
+
+    if (rowsDeleted == 0) {
+        return res.sendStatus(404);
+    } else {
+        return res.sendStatus(204);
+    }
 }
 
 const updateTask = async (req, res) => {
-    const queryOptions = { where: { task_id: req.params.task_id } };
+    const task_id = req.params.id;
     const taskBody = req.body;
 
-    const { status: responseStatus, data: [rowsUpdated, [updatedTask]] } = await executeSequelizeOperation(Task, 'update', taskBody, queryOptions);
-    if (responseStatus == 200) res.status(204).json(data);
-    else res.status(responseStatus);
-};
+    let task;
+    try {
+        task = await Task.findByPk(task_id);
+    } catch {
+        return res.sendStatus(500);
+    }
+
+    if (!task) {
+        return res.sendStatus(404);
+    }
+
+    let updatedTask;
+    try {
+        updatedTask = await task.update(taskBody);
+    } catch (error) {
+        return res.sendStatus(500);
+    }
+
+    return res.status(200).json(updatedTask);
+}
 
 module.exports = { getTasks, getTaskById, createTask, deleteTask, updateTask }
