@@ -71,24 +71,31 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `task_id` INT NOT NULL AUTO_INCREMENT,
   `task_title` VARCHAR(255) NOT NULL,
   `task_description` VARCHAR(255) NULL DEFAULT NULL,
-  `sprint_id` INT NOT NULL,
+  `sprint_id` INT NULL,
   `priority` VARCHAR(255) NOT NULL,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `status` VARCHAR(255) NOT NULL,
-  `effort` INT NOT NULL,
   `creator_user_id` INT NOT NULL,
   `task_type` VARCHAR(255) NOT NULL,
+  `effort` INT NOT NULL,
+  `project_id` INT NOT NULL,
   PRIMARY KEY (`task_id`, `creator_user_id`, `sprint_id`),
   INDEX `creator_user_id` (`creator_user_id` ASC) VISIBLE,
   INDEX `sprint_id_idx` (`sprint_id` ASC) VISIBLE,
+  INDEX `Tasks_ibfk_3_idx` (`project_id` ASC) VISIBLE,
   CONSTRAINT `Tasks_ibfk_1`
     FOREIGN KEY (`creator_user_id`)
-    REFERENCES `you-kan`.`Users` (`user_id`)
+    REFERENCES `youkan`.`Users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `Tasks_ibfk_2`
     FOREIGN KEY (`sprint_id`)
-    REFERENCES `you-kan`.`Sprints` (`sprint_id`)
+    REFERENCES `youkan`.`Sprints` (`sprint_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Tasks_ibfk_3`
+    FOREIGN KEY (`project_id`)
+    REFERENCES `youkan`.`Projects` (`project_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
