@@ -16,20 +16,19 @@
         <!-- Left sidenav -->
         <mat-sidenav mode="side" opened class="side-nav-detail">
             <mat-nav-list>
+                 <li><a routerLink="/">Dashboard</a></li>
                  <li><a routerLink="/projects">Projects</a></li>
-                 <router-outlet></router-outlet>
                  <li><a routerLink="/users">Users</a></li>
-                 <router-outlet></router-outlet>
               </mat-nav-list>
         </mat-sidenav>
 
         <!-- Main page content -->
         <mat-sidenav-content style="width:100%">
-            <app-dashboard-action-bar 
+        <!-- <router-outlet></router-outlet> --><app-dashboard-action-bar
             (projectChanged)="handleProjectChange($event)" 
             (dashboardFiltersChanged)="handleFiltersChange($event)"
             (taskCreated)="handleTaskCreated($event)"></app-dashboard-action-bar>
-            <div class="board-wrapper">
+        <div class="board-wrapper">
                 <div cdkDropListGroup class="status-columns">
                     @for (statusList of allTasksByStatus(); track statusList.status) {
                     <div cdkDropList [cdkDropListData]="statusList.tasks"
