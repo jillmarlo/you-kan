@@ -1,6 +1,12 @@
+-- MySQL Workbench Forward Engineering
+
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema you-kan
+-- -----------------------------------------------------
 
 -- -----------------------------------------------------
 -- Schema you-kan
@@ -9,15 +15,15 @@ CREATE SCHEMA IF NOT EXISTS `you-kan` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 USE `you-kan` ;
 
 -- -----------------------------------------------------
--- Table `Users`
+-- Table `you-kan`.`Users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Users` (
+CREATE TABLE IF NOT EXISTS `you-kan`.`Users` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(255) NOT NULL,
   `last_name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password_hash` VARCHAR(255) NOT NULL,
-  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` TIMESTAMP NOT NULL,
   PRIMARY KEY (`user_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -25,9 +31,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `Projects`
+-- Table `you-kan`.`Projects`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Projects` (
+CREATE TABLE IF NOT EXISTS `you-kan`.`Projects` (
   `project_id` INT NOT NULL AUTO_INCREMENT,
   `project_name` VARCHAR(255) NOT NULL,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
@@ -45,9 +51,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `Sprints`
+-- Table `you-kan`.`Sprints`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Sprints` (
+CREATE TABLE IF NOT EXISTS `you-kan`.`Sprints` (
   `sprint_id` INT NOT NULL AUTO_INCREMENT,
   `sprint_name` VARCHAR(255) NOT NULL,
   `project_id` INT NOT NULL,
@@ -65,9 +71,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `Tasks`
+-- Table `you-kan`.`Tasks`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Tasks` (
+CREATE TABLE IF NOT EXISTS `you-kan`.`Tasks` (
   `task_id` INT NOT NULL AUTO_INCREMENT,
   `task_title` VARCHAR(255) NOT NULL,
   `task_description` VARCHAR(255) NULL DEFAULT NULL,
@@ -79,23 +85,24 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `task_type` VARCHAR(255) NOT NULL,
   `effort` INT NOT NULL,
   `project_id` INT NOT NULL,
-  PRIMARY KEY (`task_id`, `creator_user_id`, `sprint_id`),
+  PRIMARY KEY (`task_id`, `project_id`),
   INDEX `creator_user_id` (`creator_user_id` ASC) VISIBLE,
-  INDEX `sprint_id_idx` (`sprint_id` ASC) VISIBLE,
   INDEX `Tasks_ibfk_3_idx` (`project_id` ASC) VISIBLE,
+  INDEX `Tasks_ibfk_2_idx` (`sprint_id` ASC) VISIBLE,
+  UNIQUE INDEX `sprint_id_UNIQUE` (`sprint_id` ASC) VISIBLE,
   CONSTRAINT `Tasks_ibfk_1`
     FOREIGN KEY (`creator_user_id`)
-    REFERENCES `youkan`.`Users` (`user_id`)
+    REFERENCES `you-kan`.`Users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `Tasks_ibfk_2`
     FOREIGN KEY (`sprint_id`)
-    REFERENCES `youkan`.`Sprints` (`sprint_id`)
+    REFERENCES `you-kan`.`Sprints` (`sprint_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `Tasks_ibfk_3`
     FOREIGN KEY (`project_id`)
-    REFERENCES `youkan`.`Projects` (`project_id`)
+    REFERENCES `you-kan`.`Projects` (`project_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -104,9 +111,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `Subtasks`
+-- Table `mydb`.`Subtasks`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Subtasks` (
+CREATE TABLE IF NOT EXISTS `you-kan`.`Subtasks` (
   `subtask_id` INT NOT NULL AUTO_INCREMENT,
   `subtask_description` VARCHAR(255) NOT NULL,
   `task_id` INT NOT NULL,
@@ -122,9 +129,9 @@ ENGINE = InnoDB;
 USE `you-kan` ;
 
 -- -----------------------------------------------------
--- Table `Comments`
+-- Table `you-kan`.`Comments`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Comments` (
+CREATE TABLE IF NOT EXISTS `you-kan`.`Comments` (
   `comment_id` INT NOT NULL,
   `task_id` INT NOT NULL,
   `comment_text` VARCHAR(255) NOT NULL,
@@ -149,9 +156,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `Project_Users`
+-- Table `you-kan`.`Project_Users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Project_Users` (
+CREATE TABLE IF NOT EXISTS `you-kan`.`Project_Users` (
   `user_id` INT NOT NULL,
   `project_id` INT NOT NULL,
   PRIMARY KEY (`user_id`, `project_id`),
@@ -173,9 +180,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `Task_Assignees`
+-- Table `you-kan`.`Task_Assignees`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Task_Assignees` (
+CREATE TABLE IF NOT EXISTS `you-kan`.`Task_Assignees` (
   `user_id` INT NOT NULL,
   `task_id` INT NOT NULL,
   PRIMARY KEY (`user_id`, `task_id`),
