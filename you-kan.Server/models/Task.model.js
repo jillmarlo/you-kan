@@ -38,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      project_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       task_type: {
         type: DataTypes.STRING,
         allowNull: false,

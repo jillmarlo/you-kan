@@ -5,13 +5,6 @@ const getTasks = async (req, res) => {
     const { project_id, user_id, sprint_id, status, priority, sort } = req.query;
 
     const include = [];
-    if (project_id) {
-        include.push({
-            model: Sprint,
-            where: { project_id }
-        });
-    }
-
     if (user_id) {
         include.push({
             model: Task_Assignee,
@@ -20,10 +13,11 @@ const getTasks = async (req, res) => {
     }
 
     const where = {};
+    if (project_id) where.project_id = project_id;
     if (sprint_id) where.sprint_id = sprint_id;
     if (status) where.status = status;
     if (priority) where.priority = priority;
-
+    
     const order = [];
     if (sort) {
         order.push(sort.split(':')) // assumes only 1 sort query param for now

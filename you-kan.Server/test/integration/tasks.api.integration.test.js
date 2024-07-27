@@ -41,6 +41,7 @@ describe('Task API', () => {
         it('should create a new task', async () => {
             const res = await request(app).post('/api/tasks').send({
                 task_title: 'Task 1',
+                project_id: project.project_id,
                 sprint_id: sprint.sprint_id,
                 priority: 'High',
                 status: 'Open',
