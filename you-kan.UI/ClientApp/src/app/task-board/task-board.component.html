@@ -1,0 +1,16 @@
+<app-taskboard-action-bar (projectChanged)="handleProjectChange($event)"
+    (taskboardFiltersChanged)="handleFiltersChange($event)"
+    (taskCreated)="handleTaskCreated($event)"></app-taskboard-action-bar>
+<div class="taskboard-wrapper">
+    <div cdkDropListGroup class="status-columns">
+        @for (statusList of allTasksByStatus(); track statusList.status) {
+        <div cdkDropList [cdkDropListData]="statusList.tasks" (cdkDropListDropped)="onTaskDropped($event, statusList)">
+            <app-column [status]="statusList.status" [tasks]="statusList.tasks">
+                @for(task of statusList.tasks; track task.name) {
+                <app-task-card cdkDrag [task]="task"></app-task-card>
+                }
+            </app-column>
+        </div>
+        }
+    </div>
+</div>

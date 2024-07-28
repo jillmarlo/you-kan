@@ -22,18 +22,5 @@
     gap: 5px;
   }
 
-  .board-wrapper{
-    display: flex;
-    flex-grow: 1;
-    width: 100%;
-  }
-
-  .status-columns {
-    display: flex;
-    flex-grow: 1;
-    min-height: 90vh;
-    padding: 10px;
-    gap: 10px;
-  }
 
 
