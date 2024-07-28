@@ -10,15 +10,15 @@ import { SprintDetailComponent } from '../sprints/sprint-detail.component';
 import { Task } from '../tasks/models/task.model';
 
 @Component({
-  selector: 'app-dashboard-action-bar',
+  selector: 'app-taskboard-action-bar',
   standalone: true,
   imports: [MatButtonModule, MatIconModule, MatFormFieldModule, MatSelectModule, ReactiveFormsModule],
-  templateUrl: './dashboard-action-bar.component.html',
-  styleUrl: './dashboard-action-bar.component.css'
+  templateUrl: './taskboard-action-bar.component.html',
+  styleUrl: './taskboard-action-bar.component.css'
 })
-export class DashboardActionBarComponent implements OnInit {
+export class TaskboardActionBarComponent implements OnInit {
   @Output() projectChanged = new EventEmitter<number>();
-  @Output() dashboardFiltersChanged = new EventEmitter<any>();
+  @Output() taskboardFiltersChanged = new EventEmitter<any>();
   @Output() taskCreated = new EventEmitter<Task>();
 
   public dialog = inject(MatDialog);
@@ -32,7 +32,7 @@ export class DashboardActionBarComponent implements OnInit {
     project: new FormControl<number | null>(null, [Validators.required]),
   });
 
-  dashboardFilters = new FormGroup({
+  taskboardFilters = new FormGroup({
     sprint: new FormControl<number | null>(null),
     priority: new FormControl<string | null>(null),
     assignee: new FormControl<number | null>(null)
@@ -43,14 +43,14 @@ export class DashboardActionBarComponent implements OnInit {
     //TODO: Get project, sprint, assignee options and assign them to dropdowns
     this.projectInput.get('project')?.setValue(1);
 
-    this.dashboardFilters.valueChanges.subscribe(values =>
-      this.dashboardFiltersChanged.emit(values)
+    this.taskboardFilters.valueChanges.subscribe(values =>
+      this.taskboardFiltersChanged.emit(values)
     )
   }
 
   onProjectChange(event: any) {
     this.projectChanged.emit(event.value);
-    this.dashboardFilters.reset();
+    this.taskboardFilters.reset();
   }
 
 

@@ -16,32 +16,15 @@
         <!-- Left sidenav -->
         <mat-sidenav mode="side" opened class="side-nav-detail">
             <mat-nav-list>
-                 <li><a routerLink="/">Dashboard</a></li>
-                 <li><a routerLink="/projects">Projects</a></li>
-                 <li><a routerLink="/users">Users</a></li>
-              </mat-nav-list>
+                <li><a routerLink="/task-board" mat-button>Task Board</a></li>
+                <li><a routerLink="/projects" mat-button>Projects</a></li>
+                <li><a routerLink="/users" mat-button>Users</a></li>
+            </mat-nav-list>
         </mat-sidenav>
 
         <!-- Main page content -->
         <mat-sidenav-content style="width:100%">
-        <!-- <router-outlet></router-outlet> --><app-dashboard-action-bar
-            (projectChanged)="handleProjectChange($event)" 
-            (dashboardFiltersChanged)="handleFiltersChange($event)"
-            (taskCreated)="handleTaskCreated($event)"></app-dashboard-action-bar>
-        <div class="board-wrapper">
-                <div cdkDropListGroup class="status-columns">
-                    @for (statusList of allTasksByStatus(); track statusList.status) {
-                    <div cdkDropList [cdkDropListData]="statusList.tasks"
-                        (cdkDropListDropped)="onTaskDropped($event, statusList)">
-                        <app-column [status]="statusList.status" [tasks]="statusList.tasks">
-                            @for(task of statusList.tasks; track task.name) {
-                            <app-task-card cdkDrag [task]="task"></app-task-card>
-                            }
-                        </app-column>
-                    </div>
-                    }
-                </div>
-            </div>
+            <router-outlet></router-outlet>
         </mat-sidenav-content>
 
     </mat-sidenav-container>
