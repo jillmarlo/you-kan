@@ -1,4 +1,11 @@
-<table mat-table [dataSource]="dataSource" class="user-table">
+<h3>Users</h3>
+<div class="table-toolbar">
+    <button  class="new-user-button" mat-fab extended (click)="addUser()">
+      <mat-icon>add</mat-icon>
+      User
+    </button>
+  </div>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 user-table">
     <!-- ID Column -->
     <ng-container matColumnDef="user_id">
       <th mat-header-cell *matHeaderCellDef>ID</th>
@@ -35,28 +42,23 @@
         <td mat-cell *matCellDef="let user">{{user.created_at}}</td>
     </ng-container>
   
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr
-        mat-row
-        (click)="clickedRows.add(row)"
-        [class.demo-row-is-clicked]="clickedRows.has(row)"
-        *matRowDef="let row; columns: displayedColumns;"
-    ></tr>
-  </table>
-  
-  <div>
-    <h3>
-      Users
-    </h3>
-  </div>
-  
-  @if (!clickedRows.size) {
-    <div>Active System Users</div>
-  }
-  
-  <ul>
-    @for (clickedRow of clickedRows; track clickedRow) {
-      <li>Clicked on {{clickedRow.first_name}}</li>
-    }
-  </ul>
+   <!-- Actions Column -->
+   <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button color="primary" (click)="editUser(element)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteUser(element)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns;"
+  ></tr>
+</table>
   

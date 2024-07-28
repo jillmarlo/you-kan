@@ -1,17 +1,31 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+}
+
 .user-table {
   width: 100%;
 }
 
-.mat-mdc-row .mat-mdc-cell {
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
-  cursor: pointer;
+.mat-column-actions {
+  width: 120px;
+  text-align: center;
 }
 
-.mat-mdc-row:hover .mat-mdc-cell {
-  border-color: currentColor;
+th {
+  font-size: 16px;
 }
 
-.demo-row-is-clicked {
-  font-weight: bold;
+.table-toolbar {
+  width: 100%;
+  height: 100px;
+}
+
+.new-user-button {
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
