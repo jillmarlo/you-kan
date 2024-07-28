@@ -33,13 +33,13 @@ export class TaskBoardComponent implements OnInit{
   })
 
   ngOnInit(): void {
+    //this will be fetched via http 
     this.allTasks = [this.testTask1, this.testTask2, this.testTask3, this.testTask4];
     this.allTasksSignal.set(this.allTasks);
   }
 
   //Handles dropping tasks into new columns, updates task status for dropped task
   onTaskDropped(event: CdkDragDrop<Task[]>, statusList: any) {
-    debugger;
     if (event.previousContainer === event.container) {
       moveItemInArray(statusList.tasks, event.previousIndex, event.currentIndex);
     } else {

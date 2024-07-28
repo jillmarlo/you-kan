@@ -1,6 +1,7 @@
 .project-header {
     padding-left: 20px;
     padding-top: 10px;
+    padding-right: 20px;
     display: flex;
     align-items: stretch;
     gap: 30px;
@@ -11,5 +12,5 @@
     display: flex;
     justify-content: flex-end;
     align-items: end;
-    width: 50%;
+    width: 100%;
   }
