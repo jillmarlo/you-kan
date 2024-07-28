@@ -64,11 +64,11 @@ export class TaskboardActionBarComponent implements OnInit {
   }
 
   openTaskDetail(): void {
-    const dialogRef = this.dialog.open(TaskDetailComponent, { height: '600px', width: '600px' });
+    const dialogRef = this.dialog.open(TaskDetailComponent,
+       { width: '60vw', maxWidth: '60vw', height: '600px', maxHeight: '600px' });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        debugger;
         const newTask: Task = {
           id: null, name: result.name, type: result.type, priority: result.priority,
           description: result.description, status: result.status, assigneeId: result.assignee ?? null,
