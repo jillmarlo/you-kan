@@ -10,11 +10,3 @@ export const routes: Routes = [
     { path: 'users', component: UsersComponent },
     { path: 'projects', component: ProjectListComponent },
 ];
-
-@NgModule({
-    imports: [RouterModule.forRoot(routes)], 
-    exports: [RouterModule],
-    providers: []
-})
-
-export class Routing { }
