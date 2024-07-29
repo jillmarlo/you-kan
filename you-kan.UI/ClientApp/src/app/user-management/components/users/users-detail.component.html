@@ -1,0 +1,31 @@
+<h3 mat-dialog-title>Create New User</h3>
+<mat-dialog-content>
+    <form [formGroup]="userForm">
+        <mat-form-field class="basic-input">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="first-name" />
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="last-name" />
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" />
+        </mat-form-field>
+        <mat-form-field class="created-date">
+            <mat-label>Created Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="start-date" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-button cdkFocusInitial (click)="submit()">Create</button>
+</mat-dialog-actions> 
