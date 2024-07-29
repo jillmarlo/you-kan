@@ -22,13 +22,13 @@ export class ProjectService {
     }
   
     // create a new project
-    createProject(sprint: Project): Observable<Project> {
-      return this.http.post<Project>(this.apiRoot, sprint);
+    createProject(project: Project): Observable<Project> {
+      return this.http.post<Project>(this.apiRoot, project);
     }
   
     // update an existing project
-    updateProject(updateSprint: Project): Observable<Project> {
-      return this.http.put<Project>(`${this.apiRoot}/${updateSprint.project_id}`, updateSprint);
+    updateProject(updateProject: Project): Observable<Project> {
+      return this.http.put<Project>(`${this.apiRoot}/${updateProject.id}`, updateProject);
     }
   
     // remove a project
