@@ -55,7 +55,7 @@ export class TaskBoardComponent implements OnInit{
       //TODO - Make an HTTP request to save new status in db
 
       const updatedTasks = this.allTasksSignal().map(item =>
-        item.id === task.id ? { ...item, status: task.status } : item
+        item.task_id === task.task_id ? { ...item, status: task.status } : item
       );
 
       this.allTasksSignal.set(updatedTasks);
@@ -76,7 +76,7 @@ export class TaskBoardComponent implements OnInit{
 
     if ($event.sprint !== null) {
       allTasksFiltered = allTasksFiltered.filter(task =>
-        task.sprintId === $event.sprint
+        task.sprint_id === $event.sprint
       )
     }
     if ($event.priority !== null) {
@@ -86,7 +86,7 @@ export class TaskBoardComponent implements OnInit{
     }
     if ($event.assignee !== null) {
       allTasksFiltered = allTasksFiltered.filter(task =>
-        task.assigneeId === $event.assignee
+        task.assignee_id === $event.assignee
       )
     }
     this.allTasksSignal.set(allTasksFiltered);
@@ -101,55 +101,62 @@ export class TaskBoardComponent implements OnInit{
 
   //mock data for now
   testTask1: Task = {
-    id: 1,
-    name: 'Test Task 1',
-    type: 'Bug',
+    task_id: 1,
+    task_title: 'Test Task 1',
+    task_type: 'Bug',
     priority: 'Low',
-    description: 'Description of task 1',
+    task_description: 'Description of task 1',
     status: 'Testing',
-    assigneeId: 1,
-    creatorId: 5,
+    creator_user_id: 5,
     effort: 2,
-    sprintId: 1
+    sprint_id: 1,
+    created_at: new Date(),
+    assignee_id: 2,
+    project_id: 1
   }
 
   testTask2: Task = {
-    id: 2,
-    name: 'Test Task 2',
-    type: 'Feature',
+    task_id: 2,
+    task_title: 'Test Task 2',
+    task_type: 'Feature',
     priority: "Low",
-    description: 'Description of task 2',
+    task_description: 'Description of task 2',
     status: 'Developing',
-    assigneeId: 3,
-    creatorId: 4,
+    assignee_id: 3,
+    creator_user_id: 4,
     effort: 3,
-    sprintId: 1
+    sprint_id: 1,
+    created_at: new Date(),
+    project_id: 1
   }
 
   testTask3: Task = {
-    id: 3,
-    name: 'Test Task 3',
-    type: 'Feature',
+    task_id: 3,
+    task_title: 'Test Task 3',
+    task_type: 'Feature',
     priority: "High",
-    description: 'Description of task 3',
+    task_description: 'Description of task 3',
     status: 'Developing',
-    assigneeId: 1,
-    creatorId: 2,
+    assignee_id: 1,
+    creator_user_id: 2,
     effort: 1,
-    sprintId: 1
+    sprint_id: 1,
+    created_at: new Date(),
+    project_id: 1
   }
 
   testTask4: Task = {
-    id: 4,
-    name: 'Test Task 4',
-    type: 'Feature',
+    task_id: 4,
+    task_title: 'Test Task 4',
+    task_type: 'Feature',
     priority: "Medium",
-    description: 'Description of task 4',
+    task_description: 'Description of task 4',
     status: 'Committed',
-    assigneeId: 2,
-    creatorId: 2,
+    assignee_id: 2,
+    creator_user_id: 2,
     effort: 3,
-    sprintId: 2
+    sprint_id: 2,
+    created_at: new Date(),
+    project_id: 1
   }
-
 }

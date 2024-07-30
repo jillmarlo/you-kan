@@ -28,7 +28,7 @@ export class ProjectService {
   
     // update an existing project
     updateProject(updateProject: Project): Observable<Project> {
-      return this.http.put<Project>(`${this.apiRoot}/${updateProject.id}`, updateProject);
+      return this.http.put<Project>(`${this.apiRoot}/${updateProject.project_id}`, updateProject);
     }
   
     // remove a project

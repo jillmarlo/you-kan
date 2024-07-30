@@ -1,14 +1,16 @@
 import { User } from "../../user-management/models/user.model";
 
 export interface Task {
-    id: number | null;
-    name: string;
-    type: string;
+    task_id: number | null;
+    task_title: string;
+    task_description: string;
+    task_type: string;
     priority: string;
-    description: string | null;
     status: string;
-    assigneeId: number | null;
-    creatorId: number;
+    creator_user_id: number;
     effort: number | null;
-    sprintId: number | null;
+    sprint_id: number | null;
+    project_id: number | null;
+    assignee_id: number | null;
+    comments? : Comment[] | null;
 }

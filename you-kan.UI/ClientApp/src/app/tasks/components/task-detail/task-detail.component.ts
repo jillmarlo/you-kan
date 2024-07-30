@@ -33,7 +33,6 @@ export class TaskDetailComponent {
     priority: new FormControl<string | null>(null , [Validators.required]),
     description: new FormControl<string>(''),
     status: new FormControl<string | null>(null, [Validators.required]),
-    assigneeId: new FormControl<number | null>(null),
     effort: new FormControl<number | null>(null),
     sprintId: new FormControl<number | null>(null)
  });

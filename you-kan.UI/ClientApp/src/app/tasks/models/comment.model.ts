@@ -3,8 +3,7 @@ import { Task } from "./task.model";
 
 export interface Comment {
     comment_id: number;
-    task_id: Task;
+    task_id: number;
     comment_text: string;
-    created_at: string | Date;
-    user_id: User;
+    user_id: number;
 }

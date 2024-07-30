@@ -1,5 +1,4 @@
-import { Routes, RouterModule } from '@angular/router';
-import { NgModule, Component } from '@angular/core';
+import { Routes } from '@angular/router';
 import { ProjectListComponent } from './projects/components/project-list/project-list.component';
 import { UsersComponent } from './user-management/components/users/users.component';
 import { TaskBoardComponent } from './task-board/task-board.component';
