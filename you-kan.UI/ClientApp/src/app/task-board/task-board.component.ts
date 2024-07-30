@@ -110,7 +110,6 @@ export class TaskBoardComponent implements OnInit{
     creator_user_id: 5,
     effort: 2,
     sprint_id: 1,
-    created_at: new Date(),
     assignee_id: 2,
     project_id: 1
   }
@@ -126,7 +125,6 @@ export class TaskBoardComponent implements OnInit{
     creator_user_id: 4,
     effort: 3,
     sprint_id: 1,
-    created_at: new Date(),
     project_id: 1
   }
 
@@ -141,7 +139,6 @@ export class TaskBoardComponent implements OnInit{
     creator_user_id: 2,
     effort: 1,
     sprint_id: 1,
-    created_at: new Date(),
     project_id: 1
   }
 
@@ -156,7 +153,6 @@ export class TaskBoardComponent implements OnInit{
     creator_user_id: 2,
     effort: 3,
     sprint_id: 2,
-    created_at: new Date(),
     project_id: 1
   }
 }
