@@ -6,15 +6,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
+import { MatListModule } from '@angular/material/list';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../../user-management/models/user.model';
+import { Sprint } from '../../../sprints/models/sprint.model';
 
 @Component({
   selector: 'app-project-detail',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatChipsModule,
-    MatButtonModule, MatInputModule, MatCardModule, MatSelectModule, MatIconModule],
+    MatButtonModule, MatInputModule, MatCardModule, MatSelectModule, MatIconModule, MatListModule],
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.css'
 })
@@ -32,12 +34,10 @@ export class ProjectDetailComponent {
     { user_id: 3, first_name: 'Hannibal', last_name: 'Lecter', email: 'hlecter@test.com', password_hash: 'wgraham123', created_at: 'Date here' }
   ];
 
+
   constructor(private fb: FormBuilder) {
     this.projectForm = this.fb.group({
-      name: ['', Validators.required],
-      description: [''],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      project_name: ['', Validators.required],
     });
   }
 

@@ -6,7 +6,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { TaskDetailComponent } from '../tasks/components/task-detail/task-detail.component';
-import { SprintDetailComponent } from '../sprints/sprint-detail.component';
 import { Task } from '../tasks/models/task.model';
 import { Project } from '../projects/models/project.model';
 
@@ -54,16 +53,6 @@ export class TaskboardActionBarComponent implements OnInit {
   onProjectChange(event: any) {
     this.projectChanged.emit(event.value);
     this.taskboardFilters.reset();
-  }
-
-
-  openSprint(): void {
-    const sprintRef = this.dialog.open(SprintDetailComponent);
-
-    sprintRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-      }
-    });
   }
 
   openTaskDetail(): void {
