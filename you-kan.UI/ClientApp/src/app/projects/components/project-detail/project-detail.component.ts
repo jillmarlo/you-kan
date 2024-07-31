@@ -70,6 +70,10 @@ export class ProjectDetailComponent {
     }
   }
 
+  editSprint(sprint: Sprint) {
+
+  }
+
   onCancel() {
     this.cancel.emit();
   }
