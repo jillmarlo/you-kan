@@ -24,7 +24,9 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/assets",
+              "src/assets/images/youkanlogo.png"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/magenta-violet.css",
