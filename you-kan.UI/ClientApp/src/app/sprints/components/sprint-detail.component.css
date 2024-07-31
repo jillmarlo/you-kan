@@ -1,3 +1,8 @@
+::ng-deep .monday-class {
+    background: lightblue;
+    border-radius: 100%;
+  }
+
 .basic-input {
     padding:5px;
 }

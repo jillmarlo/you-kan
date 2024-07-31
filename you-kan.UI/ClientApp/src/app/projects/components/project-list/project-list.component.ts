@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Project } from '../../models/project.model';
 import { User } from '../../../user-management/models/user.model';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule } from '@angular/forms';
 import { ProjectDetailComponent } from '../project-detail/project-detail.component';
 import { ProjectService } from '../../services/project.service';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -32,7 +32,8 @@ import { Sprint } from '../../../sprints/models/sprint.model';
 })
 export class ProjectListComponent implements OnInit {
   // Test data - will make http request to fetch projects
-  projectService = inject(ProjectService)
+  private fb = inject(FormBuilder);
+  projectService = inject(ProjectService);
   dataSource: Project[] = [];
   displayedColumns: string[] = ['name', 'actions'];
   selectedProject: any = null;

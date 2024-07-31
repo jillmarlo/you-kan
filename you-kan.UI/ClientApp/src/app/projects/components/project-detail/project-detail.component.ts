@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../../user-management/models/user.model';
 import { Sprint } from '../../../sprints/models/sprint.model';
+import { SprintDetailComponent } from '../../../sprints/components/sprint-detail.component';
+import { MatDialog } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-project-detail',
@@ -21,6 +24,8 @@ import { Sprint } from '../../../sprints/models/sprint.model';
   styleUrl: './project-detail.component.css'
 })
 export class ProjectDetailComponent {
+  private dialog = inject(MatDialog);
+
   @Input() project: any;
   @Output() save = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
@@ -70,8 +75,35 @@ export class ProjectDetailComponent {
     }
   }
 
-  editSprint(sprint: Sprint) {
+  addSprint() {
+    const dialogRef = this.dialog.open(SprintDetailComponent, {
+      width: '300px',
+      data: { projectId: this.project.project_id }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.project.sprints.push({
+          ...result
+        });
+      }
+    });
+  }
+
+  editSprint(editSprint: Sprint) {
+    const dialogRef = this.dialog.open(SprintDetailComponent, {
+      width: '300px',
+      data: { projectId: this.project.project_id, sprint: editSprint }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const index = this.project.sprints.findIndex((s: { id: number | undefined; }) => s.id === editSprint.sprint_id);
+        if (index !== -1) {
+          this.project.sprints[index] = { ...editSprint, ...result };
+        }
+      }
+    });
   }
 
   onCancel() {
