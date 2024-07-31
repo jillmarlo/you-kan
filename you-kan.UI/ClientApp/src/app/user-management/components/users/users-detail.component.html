@@ -17,12 +17,6 @@
             <mat-label>Password</mat-label>
             <input matInput formControlName="password" />
         </mat-form-field>
-        <mat-form-field class="created-date">
-            <mat-label>Created Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="start-date" />
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions>
