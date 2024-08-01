@@ -4,7 +4,7 @@
       <mat-label>Choose project</mat-label>
       <mat-select formControlName="project" (selectionChange)="onProjectChange($event)">
         @for (project of projects; track project) {
-        <mat-option [value]="project.id">{{project.name}}</mat-option>
+        <mat-option [value]="project.project_id">{{project.project_name}}</mat-option>
         }
       </mat-select>
     </mat-form-field>

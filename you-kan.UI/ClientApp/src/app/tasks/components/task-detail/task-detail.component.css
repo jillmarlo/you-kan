@@ -7,6 +7,11 @@
     width: 430px;
 }
 
+.comment-input{
+    padding: 5px;
+    width: 550px;
+}
+
 .dialog {
     height: 700px;
     width: 700px;

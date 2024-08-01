@@ -1,9 +1,10 @@
+import { Sprint } from '../../sprints/models/sprint.model';
 import { User } from '../../user-management/models/user.model';
 
 export interface Project {
-    id: number;
-    name: string;
-    description: string;
-    startDate: string | Date;
-    endDate: string | Date;
+    project_id: number;
+    project_name: string;
+    creator_user_id: number;
+    users?: User[];
+    sprints?: Sprint[];
 }
