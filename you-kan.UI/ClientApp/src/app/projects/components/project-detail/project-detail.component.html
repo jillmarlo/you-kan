@@ -11,7 +11,7 @@
                 </mat-form-field>
 
                 <mat-form-field>
-                    <mat-label>Add Assignee</mat-label>
+                    <mat-label>Add User</mat-label>
                     <mat-select (selectionChange)="addUser($event.value)">
                         <mat-option *ngFor="let user of availableUsers" [value]="user">
                             {{user.first_name}} {{user.last_name}}
@@ -20,7 +20,7 @@
                 </mat-form-field>
             </form>
             <mat-chip-listbox>
-                <mat-label>Assignees:</mat-label>
+                <mat-label>Users:</mat-label>
                 <mat-chip *ngFor="let user of selectedUsers" (removed)="removeUser(user)">
                     <mat-icon matChipAvatar>person</mat-icon>
                     {{user.first_name}}
@@ -32,9 +32,7 @@
         </div>
 
         <div>
-            <div>
-                <p style="font-size:x-large;">Sprints:</p>
-            </div>
+                <p style="font-size:large;">Sprints:</p>
             <mat-list>
                 @for (sprint of project.sprints; track sprint.sprint_id) {
                 <mat-list-item>
