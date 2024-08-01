@@ -26,7 +26,7 @@ export class UsersComponent {
     { user_id: 3, first_name: 'Hannibal', last_name: 'Lecter', email: 'hlecter@test.com', password_hash: 'wgraham123', created_at: 'Date here'}
   ];
 
-  displayedColumns: string[] = ['user_id', 'first_name', 'last_name', 'email', 'password_hash', 'created_at', 'actions'];
+  displayedColumns: string[] = ['first_name', 'last_name', 'email', 'actions'];
   dataSource = this.userData;
 
   editUser(user: any) {
