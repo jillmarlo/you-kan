@@ -79,7 +79,6 @@ const registerUser = async (req, res) => {
         return next(err);
         }
         res.status(201).json({ message: 'Registration successful', user: newUser });
-        res.redirect('/projects');
     });
 
     } catch (error) {

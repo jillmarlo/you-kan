@@ -40,9 +40,15 @@ const app = express();
 
 app.locals.pluralize = require('pluralize');
 
+// CORS Configuration
+const corsOptions = {
+  origin: 'http://localhost:4200', // The origin of your Angular app
+  credentials: true // Allow cookies and credentials to be included
+};
+
 // middleware
 app.use(logger('dev'));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(express.json()) 
 app.use(express.urlencoded({ extended: false }));
