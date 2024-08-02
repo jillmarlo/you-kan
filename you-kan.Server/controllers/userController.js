@@ -1,55 +1,5 @@
 const { User } = require('../models');
-const bcrypt = require('bcrypt');
-
-// CRUD for USER
-const registerUser = async (req, res) => {
-  const { first_name, last_name, email, password } = req.body;
-
-  try {
-    // Check if user already exists
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' });
-    }
-
-    // Create new user with hashed password
-    const newUser = await User.create({
-      first_name,
-      last_name,
-      email,
-      password_hash: password // This will be hashed by the model's beforeCreate hook
-    });
-
-    res.status(201).json(newUser);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
-  }
-};
-
-const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Find user by email
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid email or password' });
-    }
-
-    // Compare password with stored hash
-    const isMatch = await bcrypt.compare(password, user.password_hash);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid email or password' });
-    }
-
-    // Successfully logged in
-    res.json({ message: 'Login successful', user });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
-  }
-};
+// const bcrypt = require('bcrypt');
 
 const getUsers = async (req, res) => {
     try {
@@ -117,4 +67,4 @@ const getUsers = async (req, res) => {
     }
   };
 
-  module.exports = { registerUser, loginUser, getUsers, getUserById, createUser, updateUser, deleteUser };
+  module.exports = { getUsers, getUserById, createUser, updateUser, deleteUser };

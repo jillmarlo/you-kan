@@ -3,8 +3,8 @@ const { registerUser, loginUser, getUsers, getUserById, createUser, deleteUser, 
 
 const router = express.Router();
 
-router.post('/register', registerUser);
-router.post('/login', loginUser);
+// router.post('/register', registerUser);
+// router.post('/login', loginUser);
 router.get('/', getUsers);
 router.get('/:id', getUserById);
 router.post('/', createUser)
