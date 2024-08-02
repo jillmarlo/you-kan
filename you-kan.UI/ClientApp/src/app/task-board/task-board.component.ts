@@ -107,7 +107,6 @@ export class TaskBoardComponent implements OnInit{
     priority: 'Low',
     task_description: 'Description of task 1',
     status: 'Testing',
-    creator_user_id: 5,
     effort: 2,
     sprint_id: 1,
     assignee_id: 2,
@@ -122,7 +121,6 @@ export class TaskBoardComponent implements OnInit{
     task_description: 'Description of task 2',
     status: 'Developing',
     assignee_id: 3,
-    creator_user_id: 4,
     effort: 3,
     sprint_id: 1,
     project_id: 1
@@ -136,7 +134,6 @@ export class TaskBoardComponent implements OnInit{
     task_description: 'Description of task 3',
     status: 'Developing',
     assignee_id: 1,
-    creator_user_id: 2,
     effort: 1,
     sprint_id: 1,
     project_id: 1
@@ -150,7 +147,6 @@ export class TaskBoardComponent implements OnInit{
     task_description: 'Description of task 4',
     status: 'Committed',
     assignee_id: 2,
-    creator_user_id: 2,
     effort: 3,
     sprint_id: 2,
     project_id: 1

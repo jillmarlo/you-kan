@@ -9,11 +9,10 @@
             <mat-form-field>
                 <mat-label>Start Date</mat-label>
                 <input matInput [matDatepicker]="startPicker" formControlName="start_date"
-                    (dateChange)="updateEndDate()">
+                    [matDatepickerFilter]="mondayFilter">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>
             </mat-form-field>
-
             <mat-form-field>
                 <mat-label>End Date</mat-label>
                 <input matInput [matDatepicker]="endPicker" formControlName="end_date">
@@ -24,6 +23,6 @@
     </mat-dialog-content>
     <mat-dialog-actions>
         <button mat-button (click)="onCancel()">Cancel</button>
-        <button mat-button cdkFocusInitial (click)="onSubmit()" [disabled]="sprintForm.invalid">
+        <button mat-button (click)="onSubmit()" [disabled]="sprintForm.invalid">
             {{ data.sprint ? 'Update' : 'Create' }}</button>
     </mat-dialog-actions>

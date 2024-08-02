@@ -26,3 +26,9 @@
     padding-top: 10px;
     align-self: flex-end;
 }
+
+.sprints-header {
+    display: flex;
+    flex-direction: row;
+    gap: 20px
+}

@@ -8,7 +8,6 @@ export interface Task {
     task_type: string;
     priority: string;
     status: string;
-    creator_user_id?: number;
     effort: number | null;
     sprint_id?: number | null;
     project_id: number | null;

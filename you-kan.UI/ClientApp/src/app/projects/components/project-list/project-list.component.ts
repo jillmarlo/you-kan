@@ -55,9 +55,9 @@ export class ProjectListComponent implements OnInit {
   usersProject1: User[] = [{ user_id: 1, first_name: 'John', last_name: 'Smith', email: 'jsmith@test.com', password_hash: 'testing123', created_at: 'Date here' }]
 
   testProjects: Project[] = [
-    { project_id: 1, project_name: 'Project 1', creator_user_id: 1, sprints: this.sprintsProject1, users: this.usersProject1 },
-    { project_id: 2, project_name: 'Project 2', creator_user_id: 1, sprints: this.sprintsProject2 },
-    { project_id: 3, project_name: 'Project 3', creator_user_id: 1 },
+    { project_id: 1, project_name: 'Project 1', sprints: this.sprintsProject1, users: this.usersProject1 },
+    { project_id: 2, project_name: 'Project 2', sprints: this.sprintsProject2 },
+    { project_id: 3, project_name: 'Project 3' },
   ];
 
 
