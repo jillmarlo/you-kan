@@ -7,9 +7,11 @@ import { Project } from '../../models/project.model';
 import { User } from '../../../user-management/models/user.model';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { ProjectDetailComponent } from '../project-detail/project-detail.component';
+import { NewProjectFormComponent } from '../new-project-form/new-project-form.component';
 import { ProjectService } from '../../services/project.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Sprint } from '../../../sprints/models/sprint.model';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-project-list',
@@ -34,6 +36,8 @@ export class ProjectListComponent implements OnInit {
   // Test data - will make http request to fetch projects
   private fb = inject(FormBuilder);
   projectService = inject(ProjectService);
+  private dialog = inject(MatDialog);
+
   dataSource: Project[] = [];
   displayedColumns: string[] = ['name', 'actions'];
   selectedProject: any = null;
@@ -48,12 +52,12 @@ export class ProjectListComponent implements OnInit {
     { sprint_id: 4, sprint_name: 'Research tech stack', project_id: 2, start_date: new Date(2024, 6, 15), end_date: new Date(2024, 6, 26) },
   ];
 
-  usersProject1: User[] = [ { user_id: 1, first_name: 'John', last_name: 'Smith', email: 'jsmith@test.com', password_hash: 'testing123', created_at: 'Date here' }]
+  usersProject1: User[] = [{ user_id: 1, first_name: 'John', last_name: 'Smith', email: 'jsmith@test.com', password_hash: 'testing123', created_at: 'Date here' }]
 
   testProjects: Project[] = [
-    { project_id: 1, project_name: 'Project 1', creator_user_id: 1, sprints: this.sprintsProject1, users: this.usersProject1 },
-    { project_id: 2, project_name: 'Project 2', creator_user_id: 1, sprints: this.sprintsProject2 },
-    { project_id: 3, project_name: 'Project 3', creator_user_id: 1 },
+    { project_id: 1, project_name: 'Project 1', sprints: this.sprintsProject1, users: this.usersProject1 },
+    { project_id: 2, project_name: 'Project 2', sprints: this.sprintsProject2 },
+    { project_id: 3, project_name: 'Project 3' },
   ];
 
 
@@ -72,10 +76,11 @@ export class ProjectListComponent implements OnInit {
   }
 
   saveProject(updatedProject: any) {
+    debugger;
     const index = this.dataSource.findIndex(p => p.project_id === updatedProject.project_id);
     if (index !== -1) {
       this.dataSource[index] = updatedProject;
-      this.dataSource = [...this.dataSource]; // Trigger change detection
+      this.dataSource = [...this.dataSource]; 
     }
     this.selectedProject = null;
   }
@@ -96,7 +101,17 @@ export class ProjectListComponent implements OnInit {
   }
 
   addProject() {
+    const dialogRef = this.dialog.open(NewProjectFormComponent, {
+      width: '300px',
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        //http request to save project and get id back
+        let newProj = { project_id: this.dataSource.length + 1, project_name: result.project_name, creator_user_id: 1 } as Project;
+        this.dataSource = [...this.dataSource, newProj];
+      }
+    });
   }
 
 }

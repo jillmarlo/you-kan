@@ -1,0 +1,15 @@
+<div>
+    <h2 mat-dialog-title>Add New Project</h2>
+    <mat-dialog-content>
+        <form [formGroup]="projectForm">
+            <mat-form-field class="basic-input">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="project_name" />
+            </mat-form-field>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-button (click)="onSubmit()" [disabled]="projectForm.invalid">
+            Create</button>
+    </mat-dialog-actions>

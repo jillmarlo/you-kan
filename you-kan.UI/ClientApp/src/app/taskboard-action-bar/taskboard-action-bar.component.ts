@@ -24,7 +24,7 @@ export class TaskboardActionBarComponent implements OnInit {
 
   public dialog = inject(MatDialog);
 
-  projects: Project[] = [{ project_id: 1, project_name: 'Project XYZ', creator_user_id: 1},{ project_id: 2, project_name: 'Project XYZ', creator_user_id: 1}];
+  projects: Project[] = [{ project_id: 1, project_name: 'Project XYZ'},{ project_id: 2, project_name: 'Project XYZ'}];
   priorities = ['Low', 'Medium', 'High', 'Critical'];
   assignees = [{ id: 1, name: 'Developer 1' }, { id: 2, name: 'Developer 2' }, { id: 3, name: 'Developer 3' }];
   sprints = [{ id: 1, name: '7/1/24 - 7/12/24' }, { id: 2, name: '7/15/24 - 7/26/24' }, { id: 3, name: '7/29/24 - 8/9/24' }];
@@ -64,7 +64,7 @@ export class TaskboardActionBarComponent implements OnInit {
         const newTask: Task = {
           task_id: null, task_title: result.name, task_type: result.type, priority: result.priority,
           task_description: result.description, status: result.status, assignee_id: result.assignee_id ?? null,
-          creator_user_id: 1, effort: result.effort ?? null, sprint_id: result.sprintId ?? null,
+          effort: result.effort, sprint_id: result.sprintId ?? null,
           project_id: this.currentProject.project_id
         }
         this.taskCreated.emit(newTask);
