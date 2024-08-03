@@ -6,6 +6,8 @@
 const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env' 
 console.log(envFile);
 
+console.log(envFile);
+
 const { Sequelize } = require('sequelize');
 require('dotenv').config({ path: envFile });
 

@@ -3,7 +3,7 @@ export interface NewTaskForm {
     description: string,
     type: string;
     priority: string;
-    assigneeId: number | null;
+    assignee: number | null;
     status: string;
     effort: number | null;
 }
