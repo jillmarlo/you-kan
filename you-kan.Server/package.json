@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
     "start": "nodemon"
   },
   "keywords": [],
@@ -23,8 +23,5 @@
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
     "supertest": "^7.0.0"
-  },
-  "jest": {
-    "maxWorkers": 1
   }
 }
