@@ -4,6 +4,7 @@
 
 // load configs for test database if test environment, otherwise default to regular .env file
 const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env' 
+console.log(envFile);
 
 const { Sequelize } = require('sequelize');
 require('dotenv').config({ path: envFile });
