@@ -1,5 +1,5 @@
-const request = require('supertest');
-const app = require('../../server');
+const supertest = require('supertest');
+const app = require('../../app.js');
 const sequelize = require('../../db/db-connector.js');
 const { User, Project, Sprint } = require('../../models');
 
@@ -11,7 +11,12 @@ describe('Task API', () => {
 
     beforeAll(async () => {
         await sequelize.authenticate();
-        await sequelize.sync({ force: true }); // force DB to be clear before each test
+        await sequelize.sync({ force: true });
+        server = app.listen(0, () => {
+            console.log('Test server running on random port');
+        });
+        
+        request = supertest(server)
 
         // dummy user, project, and sprint records
         // TODO: might be better to put these in a separate file so they're reusable
@@ -33,13 +38,16 @@ describe('Task API', () => {
         });
     });
 
-    afterAll(async () => {
-        await sequelize.close();
+    afterAll((done) => {
+        server.close(async () => {
+            await sequelize.close();
+            done();
+        });
     });
 
     describe('POST /api/tasks', () => {
         it('should create a new task', async () => {
-            const res = await request(app).post('/api/tasks').send({
+            const res = await request.post('/api/tasks').send({
                 task_title: 'Task 1',
                 project_id: project.project_id,
                 sprint_id: sprint.sprint_id,
@@ -57,21 +65,21 @@ describe('Task API', () => {
 
     describe('GET /api/tasks', () => {
         it('should fetch all tasks', async () => {
-            const res = await request(app).get('/api/tasks');
+            const res = await request.get('/api/tasks');
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
             expect(res.body[0].task_title).toBe('Task 1');
         });
 
         it('should fetch tasks with status of "Open"', async () => {
-            const res = await request(app).get('/api/tasks?status=Open');
+            const res = await request.get('/api/tasks?status=Open');
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
             expect(res.body[0].status).toBe('Open');
         });
 
         it('should fetch tasks with priority iof "High"', async () => {
-            const res = await request(app).get('/api/tasks?priority=High');
+            const res = await request.get('/api/tasks?priority=High');
             expect(res.status).toBe(200);
             expect(res.body).toHaveLength(1);
             expect(res.body[0].priority).toBe('High');
@@ -80,19 +88,18 @@ describe('Task API', () => {
 
     describe('PUT /api/tasks/:task_id', () => {
         it('should update an existing task', async () => {
-            const res = await request(app).put(`/api/tasks/${task.task_id}`).send({
+            const res = await request.put(`/api/tasks/${task.task_id}`).send({
                 task_title: 'Updated Task 1',
                 priority: 'Medium',
             });
             expect(res.body && typeof res.body === 'object').toBe(true);
             expect(res.status).toBe(200);
-            console.log(res.body);
             expect(res.body.task_title).toBe('Updated Task 1');
             expect(res.body.priority).toBe('Medium');
         });
         it('should not update a non-existing task', async () => {
             const NON_EXISTING_TASK_ID = 7;
-            const res = await request(app).put(`/api/tasks/${NON_EXISTING_TASK_ID}`).send({
+            const res = await request.put(`/api/tasks/${NON_EXISTING_TASK_ID}`).send({
                 task_title: `Updated Task ${NON_EXISTING_TASK_ID}`,
                 priority: 'Medium',
             });
@@ -102,12 +109,12 @@ describe('Task API', () => {
 
     describe('DELETE /api/tasks/:task_id', () => {
         it('should delete an existing task', async () => {
-            const res = await request(app).delete(`/api/tasks/${task.task_id}`);
+            const res = await request.delete(`/api/tasks/${task.task_id}`);
             expect(res.status).toBe(204);
         });
 
         it('should not find the deleted task', async () => {
-            const res = await request(app).get(`/api/tasks/${task.task_id}`);
+            const res = await request.get(`/api/tasks/${task.task_id}`);
             expect(res.status).toBe(404);
         });
     });
