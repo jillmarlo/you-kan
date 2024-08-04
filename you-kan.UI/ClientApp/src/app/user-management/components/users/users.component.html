@@ -1,10 +1,4 @@
 <h3>Users</h3>
-<div class="table-toolbar">
-    <button  class="new-user-button" mat-fab extended (click)="openUser()">
-      <mat-icon>add</mat-icon>
-      User
-    </button>
-  </div>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 user-table">
     <!-- First Name Column -->
     <ng-container matColumnDef="first_name">
@@ -37,10 +31,14 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
   <tr
       mat-row
-      *matRowDef="let row; columns: displayedColumns;"
+      *matRowDef="let row; columns: displayColumns;"
   ></tr>
 </table>
+
+<app-users-detail *ngIf="selectedUser" [@detailExpand] [user]="selectedUser" (save)="saveUpdate($event)"
+  (cancel)="cancelEdit()">
+</app-users-detail>
   
