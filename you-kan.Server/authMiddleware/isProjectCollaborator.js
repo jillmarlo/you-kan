@@ -8,8 +8,8 @@ const isProjectCollaborator = (getProjectId) => {
         try {
             const userProject = await ProjectUser.findOne({
                 where: {
-                    userId,
-                    projectId
+                    user_id: userId,
+                    project_id: projectId
                 }
             });
 
@@ -17,7 +17,7 @@ const isProjectCollaborator = (getProjectId) => {
                 return next();
             }
 
-            return res.status(403).send({ error: 'User must be a collaborator of this project' });
+            return res.status(403).send({ error: 'User must be a collaborator of this project to access it.' });
 
         } catch {
             return res.sendStatus(500);
