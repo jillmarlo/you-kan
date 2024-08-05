@@ -1,19 +1,19 @@
 <div>
-    <h3 mat-dialog-title>Create New Task</h3>
+    <h3 mat-dialog-title>{{data.task ? 'Edit' : 'Add'}} Task: {{data.task ? data.task.task_title : ''}}</h3>
     <mat-dialog-content>
         <form [formGroup]="taskForm">
             <mat-form-field class="basic-input">
                 <mat-label>Name</mat-label>
-                <input matInput formControlName="name" />
+                <input matInput formControlName="task_title" />
             </mat-form-field>
             <mat-form-field class="desc-input">
                 <mat-label>Description</mat-label>
-                <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                    cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3"></textarea>
+                <textarea matInput formControlName="task_description" cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3"></textarea>
             </mat-form-field>
             <mat-form-field class="basic-input">
                 <mat-label>Type</mat-label>
-                <mat-select formControlName="type">
+                <mat-select formControlName="task_type">
                     @for (taskType of taskTypes; track taskType) {
                     <mat-option [value]="taskType">{{taskType}}</mat-option>
                     }
@@ -21,10 +21,10 @@
             </mat-form-field>
             <mat-form-field class="basic-input">
                 <mat-label>Sprint</mat-label>
-                <mat-select formControlName="sprint">
+                <mat-select formControlName="sprint_id">
                     <mat-option [value]="null">---</mat-option>
-                    @for (sprint of sprints; track sprint.id ) {
-                    <mat-option [value]="sprint.id">{{sprint.name}}</mat-option>
+                    @for (sprint of sprintsProject1; track sprint.sprint_id ) {
+                    <mat-option [value]="sprint.sprint_id">{{sprint.sprint_name}}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
@@ -46,10 +46,10 @@
             </mat-form-field>
             <mat-form-field class="basic-input">
                 <mat-label>Assignee</mat-label>
-                <mat-select formControlName="assignee">
+                <mat-select formControlName="assignee_id">
                     <mat-option [value]="null">---</mat-option>
-                    @for (assignee of assignees; track assignee.id ) {
-                    <mat-option [value]="assignee.id">{{assignee.name}}</mat-option>
+                    @for (assignee of availableUsers; track assignee.user_id ) {
+                    <mat-option [value]="assignee.user_id">{{assignee.first_name}} {{assignee.last_name}}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
@@ -65,8 +65,29 @@
                 </mat-select>
             </mat-form-field>
         </form>
+
+        <p style="font-size: large; padding-top: 30px">Comments:</p>
+        <form [formGroup]="newCommentForm">
+            <mat-form-field class="comment-input">
+                <mat-label>add a comment</mat-label>
+                <textarea matInput formControlName="newComment" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2"></textarea>
+            </mat-form-field>
+            <button mat-button type="submit" (click)="addComment()">Add</button>
+        </form>
+        <mat-list>
+            @for (comment of data.task?.comments; track comment.comment_id) {
+            <mat-list-item>
+                {{ comment.comment_text }}
+                <button mat-icon-button matListItemMeta (click)="deleteComment(comment)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </mat-list-item>
+            }
+        </mat-list>
     </mat-dialog-content>
     <mat-dialog-actions>
         <button mat-button (click)="cancel()">Cancel</button>
-        <button mat-button cdkFocusInitial (click)="submit()">Create</button>
+        <button mat-button cdkFocusInitial (click)="submit()">{{data.task ? 'Update' : 'Create'}}</button>
     </mat-dialog-actions>
+</div>

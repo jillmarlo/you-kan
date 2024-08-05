@@ -1,1 +1,27 @@
-<p>sign-up works!</p>
+<h3 mat-dialog-title>Sign Up</h3>
+<p>** Please note that your email will be your username going forward!</p>
+<mat-dialog-content>
+    <form [formGroup]="userForm">
+        <mat-form-field class="basic-input">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="first-name" />
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="last-name" />
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+        </mat-form-field>
+        <mat-form-field class="basic-input">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" />
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-button cdkFocusInitial (click)="submit()">Sign Up</button>
+</mat-dialog-actions> 
+
