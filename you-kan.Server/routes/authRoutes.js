@@ -8,7 +8,7 @@ router.post('/register', registerUser);
 router.post('/login/password', loginUser);
 router.post('/logout', logoutUser);
 
-// Route to get CSRF token for debugging
+// Route to get CSRF token
 router.get('/csrf-token', (req, res) => {
     res.json({ csrfToken: req.csrfToken() });
   });

@@ -94,7 +94,15 @@ const logoutUser = (req, res) => {
             console.error(err);
             return res.status(500).json({ error: 'Logout failed' });
         }
-        res.status(200).json({ message: 'Logout successful' });
+        // Destroy the session
+        req.session.destroy((err) => {
+          if (err) {
+            return res.status(500).json({ error: 'Session destruction failed' });
+          }
+          
+          res.clearCookie('connect.sid'); // Clear session cookie
+          res.json({ message: 'Logout successful' });
+        });
     });
 };
 
