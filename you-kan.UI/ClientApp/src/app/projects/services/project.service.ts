@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Project } from '../models/project.model';
 
@@ -7,7 +7,7 @@ import { Project } from '../models/project.model';
 export class ProjectService {
 
   protected http = inject(HttpClient);
-  private apiRoot = '';
+  private apiRoot = 'http://localhost:8000/api/projects';
 
   constructor() {}
 
@@ -16,6 +16,11 @@ export class ProjectService {
       return this.http.get<Project[]>(this.apiRoot);
     }
   
+    // get all projects by user 
+    getProjectsForUser(): Observable<Project[]> {
+      return this.http.get<Project[]>('http://localhost:8000/api/projects/user?user_id=1');
+    }
+
     // get project by projectId
     getProject(id: number): Observable<Project> {
       return this.http.get<Project>(`${this.apiRoot}/${id}`);
@@ -33,6 +38,7 @@ export class ProjectService {
   
     // remove a project
     deleteProject(id: number): Observable<void> {
-      return this.http.delete<void>(`${this.apiRoot}/${id}`);
+      const params = new HttpParams().set('user_id', 1);
+      return this.http.delete<void>(`${this.apiRoot}/${id}`, {params});
     }
 }

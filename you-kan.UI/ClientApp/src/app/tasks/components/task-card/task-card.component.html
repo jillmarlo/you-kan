@@ -7,6 +7,9 @@
         <p>Effort: {{ task.effort }}</p>
     </mat-card-content>
     <mat-card-actions>
+      <button mat-icon-button (click)="deleteTask(task)">
+        <mat-icon>delete</mat-icon>
+    </button>
       <button mat-button (click)="editDetail(task)">Details</button>
     </mat-card-actions>
   </mat-card>

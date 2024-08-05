@@ -3,7 +3,7 @@ const { Project, ProjectUser } = require('../models');
 // CRUD for PROJECTS
 const getProject = async (req, res) => {
     try {
-      const targetUserId = req.params.userId;
+      //const targetUserId = req.params.userId;
       const requesterUserId = req.query.user_id; // Assuming user ID is passed in query parameters, example" http://localhost:8000/project/user/2?user_id=10
   
   
@@ -14,7 +14,7 @@ const getProject = async (req, res) => {
   
       // Check if the requester is allowed to view projects of the target user
       const project = await Project.findOne({
-        where: { creator_user_id: targetUserId }
+        where: { creator_user_id: requesterUserId }
       });
   
       if (!project) {
@@ -25,9 +25,9 @@ const getProject = async (req, res) => {
         return res.status(403).json({ error: 'User does not have permission to view these projects' });
       }
   
-      // Fetch projects where creator_user_id matches targetUserId
+      // Fetch projects where creator_user_id match requester id
       const projects = await Project.findAll({
-        where: { creator_user_id: targetUserId }
+        where: { creator_user_id: requesterUserId }
       });
   
       res.json(projects);

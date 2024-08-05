@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { User } from '../../../user-management/models/user.model';
@@ -29,6 +29,9 @@ export class TaskDetailComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<TaskDetailComponent>);
   readonly taskService = inject(TaskService);
   public data: { projectId: number, task?: Task } = inject(MAT_DIALOG_DATA);
+
+  @Output() taskDeleted = new EventEmitter();
+
   taskForm: FormGroup;
   newCommentForm: FormGroup;
   taskUnderEdit!: Task;
@@ -51,7 +54,6 @@ export class TaskDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
     if (this.data.task) {
       this.taskUnderEdit = this.data.task;
 
@@ -90,6 +92,11 @@ export class TaskDetailComponent implements OnInit {
     // }
   }
 
+  deleteTask(): void {
+    this.dialogRef.close(this.taskUnderEdit.task_id);
+  }
+  
+
   //Comments will be handled separately from Tasks as the Task endpoints don't accommodate complex objects
   addComment() {
     debugger;
@@ -121,6 +128,8 @@ export class TaskDetailComponent implements OnInit {
     {comment_id: 2, task_id: 1, comment_text: 'test comment 2', user_id: 2, }]
  
   taskTypes: string[] = ['Feature','Bug'];
+
+  taskEfforts: number[] = [1,2,3,4,5]
 
   priorities: string[] = ['Low','Medium','High','Critical'];
 

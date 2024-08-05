@@ -3,7 +3,7 @@ const { getProject, getProjectById, createProject, deleteProject, updateProject 
 
 const router = express.Router();
 
-router.get('/user/:userId', getProject);
+router.get('/user', getProject);
 router.get('/:id', getProjectById);
 router.post('/', createProject)
 router.put('/:id', updateProject)

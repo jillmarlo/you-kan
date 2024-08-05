@@ -91,13 +91,11 @@ export class ProjectListComponent implements OnInit {
 
   //http delete is commented until back end hooked up
   deleteProject(project: any) {
-    // this.projectService.delete(project.id).subscribe(() => {
-    //   this.dataSource = this.dataSource.filter(p => p.id !== project.id);
-    //   this.dataSource = [...this.dataSource];
-    // })
-
-    this.dataSource = this.dataSource.filter(p => p.project_id !== project.project_id);
-    this.dataSource = [...this.dataSource];
+    debugger;
+    this.projectService.deleteProject(project.project_id).subscribe(() => {
+      this.dataSource = this.dataSource.filter(p => p.project_id !== project.project_id);
+      this.dataSource = [...this.dataSource];
+    })
   }
 
   addProject() {

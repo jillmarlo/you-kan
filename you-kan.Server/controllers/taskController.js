@@ -50,18 +50,21 @@ const getTaskById = async (req, res) => {
     if (!task) {
         return res.sendStatus(404);
     } else {
-        res.status(200).json(task);
+        return res.status(200).json(task);
     }
 }
 
 const createTask = async (req, res) => {
-    const taskBody = { ...req.body, created_at: new Date().toISOString() };
+    const taskBody = { ...req.body, created_at: new Date().toISOString(), creator_user_id: 1 };
+    console.log(req.body);
 
     let newTask;
     try {
         newTask = await Task.create(taskBody);
-    } catch {
-        return res.sendStatus(500);
+    } catch(error) {
+        console.error('Error creating task:', error);
+
+        return res.sendStatus(500).json({ error: error.message });
     }
 
     if (!newTask) {
