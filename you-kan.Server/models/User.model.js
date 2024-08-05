@@ -30,7 +30,7 @@ const User = sequelize.define('User', {
   },
 }, {
   timestamps: false,
-  tableName: 'Users',
+  tableName: 'Users'
 });
 
 // Hash password before saving to database

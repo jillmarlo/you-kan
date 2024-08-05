@@ -1,14 +1,13 @@
 const express = require('express');
-const { registerUser, loginUser, getUsers, getUserById, createUser, deleteUser, updateUser } = require('../controllers/userController')
+const { getUsers, getUserById, deleteUser, updateUser } = require('../controllers/userController')
+const ensureLogIn = require('connect-ensure-login').ensureLoggedIn;
 
 const router = express.Router();
+const ensureLoggedIn = ensureLogIn();
 
-// router.post('/register', registerUser);
-// router.post('/login', loginUser);
-router.get('/', getUsers);
-router.get('/:id', getUserById);
-router.post('/', createUser)
-router.put('/:id', updateUser)
-router.delete('/:id', deleteUser)
+router.get('/', ensureLoggedIn, getUsers); // most likely dont need route, nice to have for checking loggedin
+router.get('/:id', ensureLoggedIn, getUserById);// most likely dont need route, nice to have for checking loggedin
+router.put('/admin', ensureLoggedIn, updateUser);
+router.delete('/admin', ensureLoggedIn, deleteUser);
 
 module.exports = router;

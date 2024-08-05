@@ -42,7 +42,7 @@ app.locals.pluralize = require('pluralize');
 
 // CORS Configuration
 const corsOptions = {
-  origin: 'http://localhost:4200', // The origin of your Angular app
+  origin: 'http://localhost:4200', // The origin of Angular app
   credentials: true // Allow cookies and credentials to be included
 };
 
@@ -95,22 +95,6 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/sprints', sprintRoutes);
 app.use('/', authRoutes);
-
-// // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
-
-// // error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
 
 const PORT = 8000;
 app.listen(PORT, () => {
