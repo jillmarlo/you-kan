@@ -8,18 +8,13 @@ import { Observable } from 'rxjs';
 export class SprintService {
 
   protected http = inject(HttpClient);
-  private apiRoot = '';
+  private apiRoot = 'http://localhost:8000/api/sprints';
 
   constructor() {}
 
-    // get all sprints
-    getSprints(): Observable<Sprint[]> {
-      return this.http.get<Sprint[]>(this.apiRoot);
-    }
-  
-    // get task by sprintId
-    getSprint(id: number): Observable<Sprint> {
-      return this.http.get<Sprint>(`${this.apiRoot}/${id}`);
+    // get sprints by project id
+    getSprints(projectId: number): Observable<Sprint[]> {
+      return this.http.get<Sprint[]>(`${this.apiRoot}/project/${projectId}`);
     }
   
     // create a new sprint

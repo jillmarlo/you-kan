@@ -3,11 +3,11 @@ const { Sprint, Project, User } = require('../models');
 const getSprint = async (req, res) => {
     try {
         const targetProjectId = req.params.projectId; 
-        const requesterProjectId = req.query.project_id; // Assuming project ID is passed in query, example: "http://localhost:8000/api/sprints/project/3?project_id=3"
+        //const requesterProjectId = req.query.project_id; // Assuming project ID is passed in query, example: "http://localhost:8000/api/sprints/project/3?project_id=3"
 
         // Validate that the requesterProjectId is provided
-        if (!requesterProjectId) {
-            return res.status(400).json({ error: 'User ID is required' });
+        if (!targetProjectId) {
+            return res.status(400).json({ error: 'Project ID is required' });
         }
 
         // Check if the requester is allowed to view sprints of the target project
@@ -19,7 +19,7 @@ const getSprint = async (req, res) => {
             return res.status(404).json({ error: 'No sprint found' });
         }
 
-        if (sprint.project_id !== parseInt(requesterProjectId, 10)) {
+        if (sprint.project_id !== parseInt(targetProjectId, 10)) {
             return res.status(403).json({ error: 'User does not have permission to view these sprints' });
         }
 

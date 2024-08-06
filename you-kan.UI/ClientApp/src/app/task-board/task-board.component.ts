@@ -9,23 +9,23 @@ import { TaskService } from '../tasks/services/task.service';
 @Component({
   selector: 'app-task-board',
   standalone: true,
-  imports: [ ColumnComponent, TaskCardComponent, TaskboardActionBarComponent, CdkDrag, CdkDropList, CdkDropListGroup,],
+  imports: [ColumnComponent, TaskCardComponent, TaskboardActionBarComponent, CdkDrag, CdkDropList, CdkDropListGroup,],
   templateUrl: './task-board.component.html',
   styleUrl: './task-board.component.css',
 })
 
-export class TaskBoardComponent implements OnInit{
+export class TaskBoardComponent implements OnInit {
   taskService = inject(TaskService);
-  
+
   //Signals that manage the state of the taskboard; could be moved to a service if desired
-  allTasks!: Task[];
-   filterFormValues!: { sprint: number, priority: string, assignee: string };
-   allTasksSignal = signal<Task[]>([]);
-   backlogTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Backlog"));
-   committedTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Committed"));
-   developingTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Developing"));
-   testingTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Testing"));
-   doneTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Done"));
+  allTasksForProject!: Task[];
+  filterFormValues!: { sprint: number, priority: string, assignee: string };
+  allTasksSignal = signal<Task[]>([]);
+  backlogTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Backlog"));
+  committedTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Committed"));
+  developingTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Developing"));
+  testingTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Testing"));
+  doneTasks = computed(() => this.allTasksSignal().filter(t => t.status == "Done"));
 
   allTasksByStatus = computed(() => {
     return [{ status: "Backlog", tasks: this.backlogTasks() }, { status: "Committed", tasks: this.committedTasks() },
@@ -35,8 +35,7 @@ export class TaskBoardComponent implements OnInit{
 
   ngOnInit(): void {
     //this will be fetched via http 
-    this.allTasks = [];
-    //this.allTasksSignal.set(this.allTasks);
+    this.allTasksForProject = [];
   }
 
   //Handles dropping tasks into new columns, updates task status for dropped task
@@ -59,24 +58,22 @@ export class TaskBoardComponent implements OnInit{
       //   item.task_id === task.task_id ? { ...item, status: task.status } : item
       // );
 
-     // this.allTasksSignal.set(updatedTasks);
+      // this.allTasksSignal.set(updatedTasks);
     }
   }
 
-  //Changing the project on the taskboard isn't a filter, it will fetch a new list of tasks for that project
-  //TODO - make http request, for now will just reset the board
+  //Changing the project on the taskboard isn't a filter, it will fetch a new list
   handleProjectChange($event: number) {
 
     if ($event == null) {
-      this.allTasks = [];
+      this.allTasksForProject = [];
     }
-
     let allTasksNewReference: Task[] = [];
 
     this.taskService.getTasksForProject($event).subscribe(
       (data: Task[]) => {
-        this.allTasks = data;
-        allTasksNewReference = this.allTasks;
+        this.allTasksForProject = data;
+        allTasksNewReference = this.allTasksForProject;
         this.allTasksSignal.set(allTasksNewReference);
       }
     )
@@ -84,60 +81,53 @@ export class TaskBoardComponent implements OnInit{
 
   //updates tasks on taskboard to filter by sprint, assignee, priority
   handleFiltersChange($event: any) {
-    // this.filterFormValues = $event;
-    // let allTasksFiltered: Task[] = this.allTasks;
+    this.filterFormValues = $event;
+    let allTasksFiltered: Task[] = this.allTasksForProject;
 
-    // if ($event.sprint !== null) {
-    //   allTasksFiltered = allTasksFiltered.filter(task =>
-    //     task.sprint_id === $event.sprint
-    //   )
-    // }
-    // if ($event.priority !== null) {
-    //   allTasksFiltered = allTasksFiltered.filter(task =>
-    //     task.priority === $event.priority
-    //   )
-    // }
-    // if ($event.assignee !== null) {
-    //   allTasksFiltered = allTasksFiltered.filter(task =>
-    //     task.assignee_id === $event.assignee
-    //   )
-    // }
-    // this.allTasksSignal.set(allTasksFiltered);
+    if ($event.sprint !== null) {
+      allTasksFiltered = allTasksFiltered.filter(task =>
+        task.sprint_id === $event.sprint
+      )
+    }
+    if ($event.priority !== null) {
+      allTasksFiltered = allTasksFiltered.filter(task =>
+        task.priority === $event.priority
+      )
+    }
+    if ($event.assignee !== null) {
+      allTasksFiltered = allTasksFiltered.filter(task =>
+        task.assignee_id === $event.assignee
+      )
+    }
+    this.allTasksSignal.set(allTasksFiltered);
   }
-  
 
   handleTaskCreated($event: Task) {
     const newTask = $event as Task;
-    let allTasksNewReference: Task[] = [];
-
     this.taskService.createTask(newTask).subscribe(
       (data: Task) => {
         newTask.task_id = data.task_id;
-        allTasksNewReference = [...this.allTasks, newTask];
-        this.allTasksSignal.set(allTasksNewReference);
-      }
-    )
+        this.allTasksForProject = [...this.allTasksForProject, newTask];
+        this.allTasksSignal.update(tasks => [...tasks, newTask])
+      })
   }
 
   deleteTask(task: any) {
     this.taskService.deleteTask(task.task_id).subscribe(() => {
-      let newArray = this.allTasks.filter((t) => t.task_id !== task.task_id);
-      this.allTasks = newArray;
+      let newArray = this.allTasksForProject.filter((t) => t.task_id !== task.task_id);
+      this.allTasksForProject = newArray;
       this.allTasksSignal.set(newArray);
     })
   }
 
   updateTask(task: any) {
-    debugger;
     this.taskService.updateTask(task).subscribe((data: any) => {
-      let updatedArray = this.allTasks
+      let updatedArray = this.allTasksForProject
         .filter((t) => t.task_id !== task.task_id)
         .concat(task);
-
-      this.allTasks = updatedArray;
+      this.allTasksForProject = updatedArray;
       this.allTasksSignal.set(updatedArray);
     })
   }
-
 
 }

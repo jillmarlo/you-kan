@@ -33,7 +33,6 @@ import { MatDialog } from '@angular/material/dialog';
   ]
 })
 export class ProjectListComponent implements OnInit {
-  // Test data - will make http request to fetch projects
   private fb = inject(FormBuilder);
   projectService = inject(ProjectService);
   private dialog = inject(MatDialog);
@@ -42,32 +41,11 @@ export class ProjectListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'actions'];
   selectedProject: any = null;
 
-  sprintsProject1: Sprint[] = [
-    { sprint_id: 1, sprint_name: 'Gather requirements', project_id: 1, start_date: new Date(2024, 6, 1), end_date: new Date(2024, 6, 12) },
-    { sprint_id: 2, sprint_name: 'Project diagrams', project_id: 1, start_date: new Date(2024, 6, 15), end_date: new Date(2024, 6, 26) },
-  ];
 
-  sprintsProject2: Sprint[] = [
-    { sprint_id: 3, sprint_name: 'Spec docs', project_id: 2, start_date: new Date(2024, 6, 1), end_date: new Date(2024, 6, 12) },
-    { sprint_id: 4, sprint_name: 'Research tech stack', project_id: 2, start_date: new Date(2024, 6, 15), end_date: new Date(2024, 6, 26) },
-  ];
-
-  usersProject1: User[] = [{ user_id: 1, first_name: 'John', last_name: 'Smith', email: 'jsmith@test.com', password_hash: 'testing123', created_at: 'Date here' }]
-
-  testProjects: Project[] = [
-    { project_id: 1, project_name: 'Project 1', sprints: this.sprintsProject1, users: this.usersProject1 },
-    { project_id: 2, project_name: 'Project 2', sprints: this.sprintsProject2 },
-    { project_id: 3, project_name: 'Project 3' },
-  ];
-
-
-
-  //when the back end is hooked up this will be a fetch, now using test data
   ngOnInit(): void {
-    this.dataSource = this.testProjects;
-    // this.projectService.getProjects().subscribe((projects) =>
-    //   this.dataSource = projects
-    // )
+     this.projectService.getProjects().subscribe((projects) =>
+      this.dataSource = projects
+     )
   }
 
   editProject(project: any) {

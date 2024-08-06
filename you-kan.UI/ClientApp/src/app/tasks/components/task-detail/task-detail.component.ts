@@ -30,6 +30,12 @@ export class TaskDetailComponent implements OnInit {
   readonly taskService = inject(TaskService);
   public data: { projectId: number, task?: Task } = inject(MAT_DIALOG_DATA);
 
+  //ideally these would be in a reference table and we would use Ids insted of magic strings
+  taskTypes: string[] = ['Feature','Bug'];
+  taskEfforts: number[] = [1,2,3,4,5]
+  priorities: string[] = ['Low','Medium','High','Critical'];
+  taskStatuses: string[] = ['Backlog','Committed','Developing','Testing','Complete'];
+
   @Output() taskDeleted = new EventEmitter();
 
   taskForm: FormGroup;
@@ -52,6 +58,7 @@ export class TaskDetailComponent implements OnInit {
       newComment: ['']
     });
   }
+
 
   ngOnInit() {
     if (this.data.task) {
@@ -127,13 +134,7 @@ export class TaskDetailComponent implements OnInit {
   commentsTask1: Comment[] = [{comment_id: 1, task_id: 1, comment_text: 'test comment 1', user_id: 1, },
     {comment_id: 2, task_id: 1, comment_text: 'test comment 2', user_id: 2, }]
  
-  taskTypes: string[] = ['Feature','Bug'];
 
-  taskEfforts: number[] = [1,2,3,4,5]
-
-  priorities: string[] = ['Low','Medium','High','Critical'];
-
-  taskStatuses: string[] = ['Backlog','Uncommitted','Developing','Testing','Complete'];
 
   availableUsers: User[] = [
     { user_id: 1, first_name: 'John', last_name: 'Smith', email: 'jsmith@test.com' },
