@@ -19,7 +19,9 @@ export const routes: Routes = [
     // { path: 'login', component: LoginComponent},
     { path: 'sign-up', component: SignUpComponent},
 
-    // Testing for registering, logging in, and for all routes with ensureLoggedin in backend
+    /* Testing for registering, logging in, and for all routes with ensureLoggedin in backend.
+        Can use this to refactor to standards. 
+    */ 
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
     { path: 'logout', component: LogoutComponent }
