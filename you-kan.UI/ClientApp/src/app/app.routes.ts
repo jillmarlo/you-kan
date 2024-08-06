@@ -3,7 +3,7 @@ import { ProjectListComponent } from './projects/components/project-list/project
 import { UsersComponent } from './user-management/components/users/users.component';
 import { TaskBoardComponent } from './task-board/task-board.component';
 
-import { LoginComponent } from './user-management/components/login/login.component';
+// import { LoginComponent } from './user-management/components/login/login.component';
 import { SignUpComponent } from './user-management/components/sign-up/sign-up.component';
 
 // Testing 
@@ -19,7 +19,7 @@ export const routes: Routes = [
     // { path: 'login', component: LoginComponent},
     { path: 'sign-up', component: SignUpComponent},
 
-    // Testing
+    // Testing for registering, logging in, and for all routes with ensureLoggedin in backend
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
     { path: 'logout', component: LogoutComponent }
