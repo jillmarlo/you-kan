@@ -10,7 +10,6 @@ router.post('/logout', logoutUser);
 
 // Route to get CSRF token
 router.get('/csrf-token', (req, res) => {
-    console.log(req.csrfToken());
     res.json({ csrfToken: req.csrfToken() });
   });
   

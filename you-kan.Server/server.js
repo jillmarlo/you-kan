@@ -10,11 +10,10 @@ const sequelize = require('./db/db-connector');
 
 require('dotenv').config();
 
-var createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const csrf = require('csurf');
-const path = require('path');
+
 const passport = require('passport');
 const logger = require('morgan');
 
