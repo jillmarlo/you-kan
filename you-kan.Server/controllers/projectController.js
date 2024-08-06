@@ -3,9 +3,7 @@ const { Project, ProjectUser } = require('../models');
 // CRUD for PROJECTS
 const getProject = async (req, res) => {
     try {
-      const targetUserId = req.params.userId;
-      const requesterUserId = req.query.user_id; // Assuming user ID is passed in query parameters, example" http://localhost:8000/project/user/2?user_id=10
-  
+      const requesterUserId = req.user.user_id;
   
       // Validate that the requesterUserId is provided
       if (!requesterUserId) {
@@ -14,7 +12,7 @@ const getProject = async (req, res) => {
   
       // Check if the requester is allowed to view projects of the target user
       const project = await Project.findOne({
-        where: { creator_user_id: targetUserId }
+        where: { creator_user_id: requesterUserId }
       });
   
       if (!project) {
@@ -25,9 +23,9 @@ const getProject = async (req, res) => {
         return res.status(403).json({ error: 'User does not have permission to view these projects' });
       }
   
-      // Fetch projects where creator_user_id matches targetUserId
+      // Fetch projects where creator_user_id matches requesterUserId
       const projects = await Project.findAll({
-        where: { creator_user_id: targetUserId }
+        where: { creator_user_id: requesterUserId }
       });
   
       res.json(projects);
@@ -39,7 +37,7 @@ const getProject = async (req, res) => {
   
   const getProjectById = async (req, res) => {
       try {
-        const requesterUserId = req.query.user_id; // Assuming user ID is passed in query parameters , example http://localhost:8000/project/2?user_id=10
+        const requesterUserId = req.user.user_id;
         const projectId = req.params.id;
     
         // Validate that the requesterUserId is provided
@@ -70,9 +68,22 @@ const getProject = async (req, res) => {
     
   
     const createProject = async (req, res) => {
-      const { project_name, creator_user_id } = req.body;
+      const { project_name } = req.body;
+      const creator_user_id = req.user.user_id;
     
       try {
+      // Check if the project name is already used by this user
+      const existingProject = await Project.findOne({
+        where: {
+          project_name,
+          creator_user_id
+        }
+      });
+
+      if (existingProject) {
+        return res.status(400).json({ error: 'Project name already used by this user' });
+      }
+
         // Create the project
         const project = await Project.create({
           project_name,
@@ -95,8 +106,9 @@ const getProject = async (req, res) => {
   
   const updateProject = async (req, res) => {
     try {
-      const requesterUserId = req.query.user_id; // Assuming user ID is passed in query parameters , example http://localhost:8000/project/11?user_id=2
+      const requesterUserId = req.user.user_id;
       const projectId = req.params.id;
+      const { project_name } = req.body;
   
       // Validate that the requesterUserId is provided
       if (!requesterUserId) {
@@ -113,6 +125,20 @@ const getProject = async (req, res) => {
       // Check if the requester has permission to view the project
       if (project.creator_user_id !== parseInt(requesterUserId, 10)) {
         return res.status(403).json({ error: 'User does not have permission to view this project' });
+      }
+
+      // Check if the new project name is already used by this user
+      if (project_name !== project.project_name) {
+        const existingProject = await Project.findOne({
+          where: {
+            project_name,
+            creator_user_id: requesterUserId
+          }
+        });
+
+        if (existingProject) {
+          return res.status(400).json({ error: 'Project name already used by this user' });
+        }
       }
   
       const [updated] = await Project.update(req.body, {
@@ -131,7 +157,7 @@ const getProject = async (req, res) => {
   
   const deleteProject = async (req, res) => {
     try {
-      const requesterUserId = req.query.user_id; // Assuming user ID is passed in query parameters , example http://localhost:8000/project/11?user_id=2
+      const requesterUserId = req.user.user_id;
       const projectId = req.params.id;
   
       // Validate that the requesterUserId is provided
