@@ -1,7 +1,7 @@
 .card-style {
     display: flex;
     flex: 1;
-    margin: 10px;
+    margin-bottom: 0px;
     width: 200px;
 }
 
