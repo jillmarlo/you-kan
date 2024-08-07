@@ -5,13 +5,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Project } from '../../models/project.model';
 import { User } from '../../../user-management/models/user.model';
-import { FormBuilder, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ProjectDetailComponent } from '../project-detail/project-detail.component';
 import { NewProjectFormComponent } from '../new-project-form/new-project-form.component';
 import { ProjectService } from '../../services/project.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Sprint } from '../../../sprints/models/sprint.model';
 import { MatDialog } from '@angular/material/dialog';
+import { UsersService } from '../../../user-management/components/users/users.service';
+import { SprintService } from '../../../sprints/services/sprint.service';
+import { concatMap, of } from 'rxjs';
 
 @Component({
   selector: 'app-project-list',
@@ -32,9 +35,11 @@ import { MatDialog } from '@angular/material/dialog';
     ])
   ]
 })
+
 export class ProjectListComponent implements OnInit {
-  private fb = inject(FormBuilder);
   projectService = inject(ProjectService);
+  sprintService = inject(SprintService);
+  userService = inject(UsersService);
   private dialog = inject(MatDialog);
 
   dataSource: Project[] = [];
@@ -43,9 +48,10 @@ export class ProjectListComponent implements OnInit {
 
 
   ngOnInit(): void {
-     this.projectService.getProjects().subscribe((projects) =>
-      this.dataSource = projects
-     )
+    this.projectService.getProjectsForUser().subscribe((projects) => {
+      this.setProjectAttributes(projects);
+      this.dataSource = projects;
+    })
   }
 
   editProject(project: any) {
@@ -53,23 +59,22 @@ export class ProjectListComponent implements OnInit {
     // Implement edit logic
   }
 
-  saveProject(updatedProject: any) {
-    debugger;
-    const index = this.dataSource.findIndex(p => p.project_id === updatedProject.project_id);
-    if (index !== -1) {
-      this.dataSource[index] = updatedProject;
-      this.dataSource = [...this.dataSource]; 
-    }
-    this.selectedProject = null;
+  saveProject(updatedProject: Project) {
+    this.projectService.updateProject(updatedProject).subscribe(() => {
+      const index = this.dataSource.findIndex(p => p.project_id === updatedProject.project_id);
+      if (index !== -1) {
+        this.dataSource[index] = updatedProject;
+        this.dataSource = [...this.dataSource];
+      }
+      this.selectedProject = null;
+    })
   }
 
   cancelEdit() {
     this.selectedProject = null;
   }
 
-  //http delete is commented until back end hooked up
   deleteProject(project: any) {
-    debugger;
     this.projectService.deleteProject(project.project_id).subscribe(() => {
       this.dataSource = this.dataSource.filter(p => p.project_id !== project.project_id);
       this.dataSource = [...this.dataSource];
@@ -81,13 +86,39 @@ export class ProjectListComponent implements OnInit {
       width: '300px',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        //http request to save project and get id back
-        let newProj = { project_id: this.dataSource.length + 1, project_name: result.project_name, creator_user_id: 1 } as Project;
-        this.dataSource = [...this.dataSource, newProj];
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(
+        concatMap(result => {
+          if (result) {
+            return this.projectService.createProject(result);
+          } else {
+            return of(null);
+          }
+        })
+      ).subscribe(result => {
+        if (result) {
+          let newProj = { ...result } as Project;
+          this.dataSource = [...this.dataSource, newProj];
+        }
+      });
+  }
+
+  setProjectAttributes(projects: Project[]) {
+    projects.forEach(proj => {
+      this.fetchProjectSprints(proj)
+    })
+  }
+
+  fetchProjectUsers(project: Project) {
+    //this needs to be an http request; endpoint doesnt exist yet
+
+  }
+
+  fetchProjectSprints(project: Project) {
+    this.sprintService.getSprints(project.project_id).subscribe((sprints: Sprint[]) => {
+      project.sprints = sprints;
+    })
   }
 
 }

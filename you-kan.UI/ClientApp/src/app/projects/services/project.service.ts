@@ -28,12 +28,13 @@ export class ProjectService {
   
     // create a new project
     createProject(project: Project): Observable<Project> {
-      return this.http.post<Project>(this.apiRoot, project);
+      return this.http.post<Project>(this.apiRoot, {project_name: project.project_name, creator_user_id: 1});
     }
   
     // update an existing project
-    updateProject(updateProject: Project): Observable<Project> {
-      return this.http.put<Project>(`${this.apiRoot}/${updateProject.project_id}`, updateProject);
+    updateProject(updateProject: any): Observable<Project> {
+      const params = new HttpParams().set('user_id', 1);
+      return this.http.put<Project>(`${this.apiRoot}/${updateProject.project_id}`, updateProject, {params});
     }
   
     // remove a project

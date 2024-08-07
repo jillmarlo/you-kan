@@ -85,7 +85,7 @@ const getProject = async (req, res) => {
           project_id: project.project_id
         });
     
-        res.status(201).send('Project created and associated with user successfully');
+        res.status(201).json(project);
       } catch (err) {
         console.error(err);
         res.status(500).send('Server error');
@@ -97,7 +97,7 @@ const getProject = async (req, res) => {
     try {
       const requesterUserId = req.query.user_id; // Assuming user ID is passed in query parameters , example http://localhost:8000/project/11?user_id=2
       const projectId = req.params.id;
-  
+
       // Validate that the requesterUserId is provided
       if (!requesterUserId) {
         return res.status(400).json({ error: 'User ID is required' });
@@ -116,7 +116,7 @@ const getProject = async (req, res) => {
       }
   
       const [updated] = await Project.update(req.body, {
-        where: { project_id: req.params.id }
+        where: { project_id: projectId}
       });
       if (updated) {
         res.json({ message: 'Project updated' });

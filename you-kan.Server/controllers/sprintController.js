@@ -1,13 +1,13 @@
 const { Sprint, Project, User } = require('../models');
 
-const getSprint = async (req, res) => {
+const getSprints = async (req, res) => {
     try {
         const targetProjectId = req.params.projectId; 
         //const requesterProjectId = req.query.project_id; // Assuming project ID is passed in query, example: "http://localhost:8000/api/sprints/project/3?project_id=3"
 
         // Validate that the requesterProjectId is provided
         if (!targetProjectId) {
-            return res.status(400).json({ error: 'Project ID is required' });
+            return res.status(400).json({ error: 'User ID is required' });
         }
 
         // Check if the requester is allowed to view sprints of the target project
@@ -88,7 +88,7 @@ const createSprint = async (req, res) => {
             end_date
         });
 
-        res.status(201).send('Sprint created successfully');
+        res.status(201).json(sprint);
     } catch (err) {
         console.error(err);
         res.status(500).send('Server error');
@@ -184,4 +184,5 @@ const deleteSprint = async (req, res) => {
 };
 
 
-module.exports = { getSprint, getSprintById, createSprint, updateSprint, deleteSprint };
+module.exports = { getSprints
+, getSprintById, createSprint, updateSprint, deleteSprint };

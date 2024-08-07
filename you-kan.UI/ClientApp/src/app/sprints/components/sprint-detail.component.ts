@@ -54,6 +54,7 @@ export class SprintDetailComponent implements OnInit {
       if (date) {
         const endDate = this.calculateEndDate(date);
         this.sprintForm.get('end_date')?.setValue(endDate);
+        console.log(endDate)
       }
     });
   }
@@ -74,7 +75,8 @@ export class SprintDetailComponent implements OnInit {
     if (this.sprintForm.valid) {
       this.dialogRef.close({
         ...this.sprintForm.value,
-        projectId: this.data.projectId
+        end_date: this.sprintForm.get('end_date')?.value,
+        project_id: this.data.projectId
       });
     }
   }
