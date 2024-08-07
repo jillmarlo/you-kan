@@ -7,22 +7,24 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const sequelize = require('./db/db-connector');
 
+
 require('dotenv').config();
 
-const app = express();
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const csrf = require('csurf');
 
-app.use(cors());
-app.use(bodyParser.json());
-// middleware
-app.use(express.json()) 
+const passport = require('passport');
+const logger = require('morgan');
 
-// const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
-// app.use(session({
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: true,
-// }));
+// Initialize session store
+const sessionStore = new SequelizeStore({
+  db: sequelize,
+  checkExpirationInterval: 15 * 60 * 1000, // Check expiration every 15 minutes
+  expiration: 24 * 60 * 60 * 1000, // Session expiration time (24 hours)
+});
 
 // Check database connection and sync models
 sequelize.authenticate()
@@ -33,12 +35,56 @@ sequelize.sync()
   .then(() => console.log('Models synchronized...'))
   .catch(err => console.log('Error: ' + err));
 
+const app = express();
+
+app.locals.pluralize = require('pluralize');
+
+// CORS Configuration
+const corsOptions = {
+  origin: 'http://localhost:4200', // The origin of Angular app
+  credentials: true // Allow cookies and credentials to be included
+};
+
+// middleware
+app.use(logger('dev'));
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.use(express.json()) 
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// Configure session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET, // Replace with a strong secret
+  resave: false,
+  saveUninitialized: false,
+  store: sessionStore, // Use the Sequelize session store instance
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(csrf());
+app.use(passport.authenticate('session'));
+app.use(function(req, res, next) {
+  const msgs = req.session.messages || [];
+  res.locals.messages = msgs;
+  res.locals.hasMessages = !! msgs.length;
+  req.session.messages = [];
+  next();
+});
+app.use(function(req, res, next) {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
 const taskRoutes = require('./routes/taskRoutes');
 const projectRoutes = require('./routes/projectRoutes')
 const userRoutes = require('./routes/userRoutes')
 const sprintRoutes = require('./routes/sprintRoutes')
 const subtaskRoutes = require('./routes/subtaskRoutes')
 const commentRoutes = require('./routes/commentRoutes')
+const authRoutes = require('./routes/authRoutes')
 
 // routes
 app.use('/api/tasks', taskRoutes);
@@ -47,6 +93,7 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/sprints', sprintRoutes);
+app.use('/', authRoutes);
 
 const PORT = 8000;
 app.listen(PORT, () => {
