@@ -8,8 +8,6 @@ import { SignUpComponent } from './user-management/components/sign-up/sign-up.co
 import { HomeComponent } from './home/home.component';
 
 // Testing 
-import { RegisterComponent } from './register/register.component';
-// import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
@@ -21,11 +19,6 @@ export const routes: Routes = [
     { path: 'projects', component: ProjectListComponent },
     { path: 'login', component: LoginComponent},
     { path: 'sign-up', component: SignUpComponent},
-
-    /* Testing for registering, logging in, and for all routes with ensureLoggedin in backend.
-        Can use this to refactor to standards. 
-    */ 
-    { path: 'register', component: RegisterComponent },
-    // { path: 'login', component: LoginComponent },
     { path: 'logout', component: LogoutComponent }
+
 ];
