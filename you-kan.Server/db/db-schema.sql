@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   CONSTRAINT `Tasks_ibfk_2`
     FOREIGN KEY (`sprint_id`)
     REFERENCES `you-kan`.`Sprints` (`sprint_id`)
-    ON DELETE SET NULL -- Allow NULL on delete
+    ON DELETE SET NULL
     ON UPDATE CASCADE,
   CONSTRAINT `Tasks_ibfk_3`
     FOREIGN KEY (`project_id`)
