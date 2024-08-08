@@ -46,6 +46,9 @@ import { CommonModule } from '@angular/common'; // needed for *ngIf
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
+
+  showForm: boolean = false;
+
   // readonly dialogRef = inject(MatDialogRef<SignUpComponent>);
   readonly userService = inject(UsersService);
   public dialog = inject(MatDialog);
@@ -118,6 +121,11 @@ export class HomeComponent {
     } else {
       console.log('Form is invalid');
     }
+  }
+
+  toggleForm(event: Event) {
+    event.preventDefault();
+    this.showForm = !this.showForm;
   }
 
 }

@@ -1,11 +1,11 @@
-<img src="assets/images/youkan-transparent.png" class="center" height="350px" width="350px">
-<h2 style="text-align: center;"><i>Welcome to You-Kan</i></h2>
-<p style="text-align: center;"> Your go-to project management tool! Please login or sign up to get started!</p>
+<div class="header">
+<h2><img src="assets/images/youkan-transparent.png" class="logo" height="350px" width="350px"></h2>
+</div>
 
-<div></div>
-<h3 style="text-align: center;" mat-dialog-title>Sign Up</h3>
-<p style="text-align: center;">** Please note that your email will be your username going forward!</p>
+<div *ngIf="showForm">
 <mat-dialog-content>
+    <h3 style="text-align: center;" mat-dialog-title>Sign Up</h3>
+    <p style="text-align: center;">** Please note that your email will be your username going forward!</p>
   <form align="center" [formGroup]="userForm">
     <mat-form-field class="basic-input">
       <mat-label>First Name</mat-label>
@@ -33,13 +33,14 @@
 <div mat-dialog-actions align="center">
   <button mat-button cdkFocusInitial (click)="submit()">Sign Up</button>
 </div>
+<p style="text-align: center;"><a href="#" (click)="toggleForm($event)">I already have an account!</a></p>
+</div>
 
-<div></div>
-<div></div>
 
+<div *ngIf="!showForm">
+<mat-dialog-content>
 <h3 style="text-align: center;" mat-dialog-title>Login</h3>
 <p style="text-align: center;">Please login with your email and password below.</p>
-<mat-dialog-content>
   <form align="center" [formGroup]="loginForm">
     <mat-form-field class="basic-input">
       <mat-label>Email</mat-label>
@@ -57,3 +58,7 @@
 <div mat-dialog-actions align="center">
   <button mat-button cdkFocusInitial (click)="onLogin()">Login</button>
 </div>
+<p style="text-align: center;"><a href="#" (click)="toggleForm($event)">Don't have an account?</a></p>
+</div>
+
+

@@ -13,11 +13,7 @@
 
 }
 
-:host {
-  padding-top: 30px;
-}
-
-.center {
+.logo {
   display: block;
   margin-left: auto;
   margin-right: auto;
