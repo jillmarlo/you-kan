@@ -14,10 +14,10 @@ require('dotenv').config({ path: envFile });
 const logger = process.env.LOGGER === 'false' ? false : console.log;
 
 const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
   {
-    database: process.env.DB_NAME,
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
     storage: process.env.STORAGE,
     host: process.env.DB_HOST,
     dialect: process.env.DIALECT,
