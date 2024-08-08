@@ -55,8 +55,7 @@ const getTaskById = async (req, res) => {
 }
 
 const createTask = async (req, res) => {
-    const taskBody = { ...req.body, created_at: new Date().toISOString(), creator_user_id: 1 };
-    console.log(req.body);
+    const taskBody = { ...req.body, created_at: new Date().toISOString() };
 
     let newTask;
     try {

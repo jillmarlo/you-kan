@@ -22,7 +22,7 @@ export class LoginComponent {
     this.authService.login(this.email, this.password).subscribe(
       response => {
         console.log('Login successful', response);
-        this.router.navigate(['/projects']);
+        this.router.navigate(['/task-board']);
       },
       error => {
         console.error('Login error', error);

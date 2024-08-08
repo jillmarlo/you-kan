@@ -4,6 +4,7 @@ const { Project, ProjectUser, User } = require('../models');
 const getProject = async (req, res) => {
     try {
       const requesterUserId = req.user.user_id;
+      console.log(requesterUserId)
   
       // Validate that the requesterUserId is provided
       if (!requesterUserId) {

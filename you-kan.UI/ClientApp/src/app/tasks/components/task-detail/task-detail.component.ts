@@ -132,8 +132,7 @@ export class TaskDetailComponent implements OnInit {
     this.taskUnderEdit?.comments?.push(
       {
          task_id: this.taskUnderEdit.task_id, 
-         comment_text: this.newCommentForm.get('newComment')?.value, 
-         user_id: 1} as Comment);
+         comment_text: this.newCommentForm.get('newComment')?.value} as Comment);
 
       this.newCommentForm.reset();
     }

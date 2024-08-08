@@ -18,7 +18,7 @@ export class ProjectService {
   
     // get all projects by user 
     getProjectsForUser(): Observable<Project[]> {
-      return this.http.get<Project[]>('http://localhost:8000/api/projects/user?user_id=1');
+      return this.http.get<Project[]>(this.apiRoot);
     }
 
     // get project by projectId
@@ -28,18 +28,16 @@ export class ProjectService {
   
     // create a new project
     createProject(project: Project): Observable<Project> {
-      return this.http.post<Project>(this.apiRoot, {project_name: project.project_name, creator_user_id: 1});
+      return this.http.post<Project>(this.apiRoot, {project_name: project.project_name });
     }
   
     // update an existing project
     updateProject(updateProject: any): Observable<Project> {
-      const params = new HttpParams().set('user_id', 1);
-      return this.http.put<Project>(`${this.apiRoot}/${updateProject.project_id}`, updateProject, {params});
+      return this.http.put<Project>(`${this.apiRoot}/${updateProject.project_id}`, updateProject);
     }
   
     // remove a project
     deleteProject(id: number): Observable<void> {
-      const params = new HttpParams().set('user_id', 1);
-      return this.http.delete<void>(`${this.apiRoot}/${id}`, {params});
+      return this.http.delete<void>(`${this.apiRoot}/${id}`);
     }
 }
