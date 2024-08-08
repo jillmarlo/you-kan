@@ -23,7 +23,8 @@ import { CommonModule } from '@angular/common'; // needed for *ngIf
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatCardModule, 
+  imports: [
+    MatCardModule, 
     MatFormFieldModule, 
     ReactiveFormsModule, 
     MatInputModule, 
@@ -37,7 +38,8 @@ import { CommonModule } from '@angular/common'; // needed for *ngIf
     MatDatepickerModule, 
     MatNativeDateModule, 
     MatIcon,
-    CommonModule], 
+    CommonModule
+  ], 
     templateUrl: './login.component.html',
     styleUrl: './login.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
