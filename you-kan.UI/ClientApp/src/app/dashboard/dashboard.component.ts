@@ -5,6 +5,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule, MatNavList } from '@angular/material/list';
 import { RouterOutlet, RouterLink, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,12 +16,23 @@ import { RouterOutlet, RouterLink, RouterModule } from '@angular/router';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent  {
+export class DashboardComponent {
 
-    //to implement
-    openUserDetail() { }
+  constructor(private authService: AuthService, private router: Router) {}
 
-    //to implemet
-    logout() { }
+  logout() {
+    this.authService.logout().subscribe(
+      response => {
+        console.log('Logout successful', response);
+        this.router.navigate(['/login']);
+      },
+      error => {
+        console.error('Logout error', error);
+      }
+    );
+  }
 
+  openUserDetail() {
+    // implement here
+  }
 }

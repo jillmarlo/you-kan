@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -18,7 +19,6 @@ export const routes: Routes = [
     { path: 'task-board', component: TaskBoardComponent },
     { path: 'users', component: UsersComponent },
     { path: 'projects', component: ProjectListComponent },
-    // { path: 'login', component: LoginComponent},
     { path: 'sign-up', component: SignUpComponent},
 
     /* Testing for registering, logging in, and for all routes with ensureLoggedin in backend.
