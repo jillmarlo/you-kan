@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
@@ -28,41 +28,38 @@ import { UsersService } from './users.service';
   styleUrl: './users-detail.component.css'
 })
 export class UsersDetailComponent {
-  readonly dialogRef = inject(MatDialogRef<UsersDetailComponent>);
-  readonly userService = inject(UsersService);
- // readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+  private dialog = inject(MatDialog);
 
-  @Input() user!: User;
+  @Input() user: any;
+  @Output() save = new EventEmitter<any>();
+  @Output() cancel = new EventEmitter<void>();
 
-  constructor() {}
+  userForm: FormGroup;
 
-  userForm = new FormGroup({
-    first_name: new FormControl<string>('', [Validators.required]),
-    last_name: new FormControl<string>('', [Validators.required]),
-    email: new FormControl<string>('', [Validators.required]),
-    passoword_hash: new FormControl<string>('', [Validators.required]),
-    created_at: new FormControl(new Date(), [Validators.required]),
- });
-
-  cancel(): void {
-    this.dialogRef.close();
+  constructor(private fb: FormBuilder) {
+    this.userForm = this.fb.group({
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      email: ['', Validators.required]
+    });
   }
 
-  submit(): void {
-    // if (this.taskForm.valid) {
-    //   const task: Task = {
-    //     name: this.taskForm.get('name').value,
-    //     typeId: this.taskForm.get('type').value,
-    //     priorityId: this.taskForm.get('priority').value,
-    //     description: this.taskForm.get('description').value,
-    //     statusId: this.taskForm.get('status').value,
-    //     assigneeId: this.taskForm.get('assignee').value,
-    //     creatorId: this.taskForm.get('creator').value,
-    //   };
+  ngOnInit() {
+    if (this.user) {
+      this.userForm.patchValue(this.user);
+    }
+  }
 
-    //   this.taskService.createTask(task).subscribe((task) => {
-    //     console.log('Added task:', task);
-    //   });
-    // }
+  onSubmit() {
+    if (this.userForm.valid) {
+      const updatedUser = {
+        ...this.userForm.value,
+      };
+      this.save.emit(updatedUser);
+    }
+  }
+
+  onCancel() {
+    this.cancel.emit();
   }
 }

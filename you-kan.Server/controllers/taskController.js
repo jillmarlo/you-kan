@@ -55,24 +55,20 @@ const getTaskById = async (req, res) => {
 }
 
 const createTask = async (req, res) => {
-    const taskBody = { ...req.body, created_at: new Date().toISOString(), creator_user_id: 1 };
-    console.log(req.body);
+    const taskBody = { ...req.body, created_at: new Date().toISOString() };
 
-    let newTask;
+    if (taskBody.sprint_id === undefined) {
+        taskBody.sprint_id = null; // Set sprint_id to null if not provided
+    }
+
     try {
-        newTask = await Task.create(taskBody);
-    } catch(error) {
-        console.error('Error creating task:', error);
-
-        return res.sendStatus(500).json({ error: error.message });
-    }
-
-    if (!newTask) {
-        return res.sendStatus(404);
-    } else {
+        const newTask = await Task.create(taskBody);
         res.status(201).json(newTask);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-}
+};
+
 
 const deleteTask = async (req, res) => {
     const queryOptions = { where: { task_id: req.params.id } };

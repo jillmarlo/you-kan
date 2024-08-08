@@ -21,7 +21,7 @@ const ProjectUser = sequelize.define('ProjectUser', {
     sequelize,
     timestamps: false,
     modelName: 'ProjectUser',
-    tableName: 'Project_Users' // Ensure this matches your table name
+    tableName: 'Project_Users' // Ensure this matches table name
   });
 
 return ProjectUser
