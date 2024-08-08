@@ -20,7 +20,7 @@
                 </mat-form-field>
             </form>
             <mat-chip-listbox>
-                <mat-label>Users:</mat-label>
+                <mat-label>Collaborators:</mat-label>
                 <mat-chip *ngFor="let user of projectUsers()" (removed)="removeUser(user)">
                     <mat-icon matChipAvatar>person</mat-icon>
                     {{user.first_name}}
