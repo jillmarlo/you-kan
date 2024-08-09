@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +11,8 @@ import { Project } from '../projects/models/project.model';
 import { ProjectService } from '../projects/services/project.service';
 import { User } from '../user-management/models/user.model';
 import { Sprint } from '../sprints/models/sprint.model';
+import { SprintService } from '../sprints/services/sprint.service';
+import { UsersService } from '../user-management/components/users/users.service';
 
 @Component({
   selector: 'app-taskboard-action-bar',
@@ -21,20 +23,18 @@ import { Sprint } from '../sprints/models/sprint.model';
 })
 export class TaskboardActionBarComponent implements OnInit {
   private projectService = inject(ProjectService);
+  private sprintService = inject(SprintService);
+  private userService = inject(UsersService);
+  public dialog = inject(MatDialog);
   @Output() projectChanged = new EventEmitter<number>();
   @Output() taskboardFiltersChanged = new EventEmitter<any>();
   @Output() taskCreated = new EventEmitter<Task>();
   projects!: Project[];
   selectedProjectId: number | null = null;
-  sprintsForProject!: Sprint[];
-  usersForProject!: User[];
-
-
-  public dialog = inject(MatDialog);
+  sprintsForProject = signal<Sprint[]>([]);
+  usersForProject = signal<User[]>([]);
 
   priorities = ['Low', 'Medium', 'High', 'Critical'];
-  assignees = [{ id: 1, name: 'Developer 1' }, { id: 2, name: 'Developer 2' }, { id: 3, name: 'Developer 3' }];
-  sprints = [{ id: 1, name: '7/1/24 - 7/12/24' }, { id: 2, name: '7/15/24 - 7/26/24' }, { id: 3, name: '7/29/24 - 8/9/24' }];
 
   projectInput = new FormGroup({
     project: new FormControl<number | null>(null, [Validators.required]),
@@ -57,6 +57,7 @@ export class TaskboardActionBarComponent implements OnInit {
   }
 
   loadProjects() {
+    debugger;
     this.projectService.getProjectsForUser().subscribe(
       (data: Project[]) => {
         this.projects = data;
@@ -64,22 +65,22 @@ export class TaskboardActionBarComponent implements OnInit {
     );
   }
 
+  //update task filters for project
   onProjectChange(event: any) {
     if (event.value == null) {
       this.selectedProjectId = null;
       this.taskboardFilters.reset();
       this.projectChanged.emit(event.value);
-
     }
     else {
       this.selectedProjectId = event.value;
       this.projectChanged.emit(event.value);
       this.taskboardFilters.reset();
-
-
+      this.updateFiltersForProject(event.value);
     }
   }
 
+  //opens dialog to create a new task
   addNewTask(): void {
     const dialogRef = this.dialog.open(TaskDetailComponent, {
       width: '50vw',
@@ -99,6 +100,17 @@ export class TaskboardActionBarComponent implements OnInit {
         this.taskCreated.emit(newTask);
       }
     });
+  }
+
+  //gets the filter values for a project 
+  updateFiltersForProject(id: number) {
+    this.sprintService.getSprints(id).subscribe((sprints) => {
+      this.sprintsForProject.set(sprints);
+    })
+
+    this.userService.getUsers().subscribe((userData) => {
+      this.usersForProject.set(userData.data);
+    })
   }
 
 }

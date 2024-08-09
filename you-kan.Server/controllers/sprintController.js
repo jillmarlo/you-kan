@@ -1,6 +1,6 @@
 const { Sprint, Project, User, ProjectUser } = require('../models');
 
-const getSprint = async (req, res) => {
+const getSprints = async (req, res) => {
     try {
       const targetProjectId = req.params.projectId; 
       const requesterUserId = req.user.user_id;
@@ -219,4 +219,5 @@ const deleteSprint = async (req, res) => {
 };
 
 
-module.exports = { getSprint, getSprintById, createSprint, updateSprint, deleteSprint };
+module.exports = { getSprints
+, getSprintById, createSprint, updateSprint, deleteSprint };

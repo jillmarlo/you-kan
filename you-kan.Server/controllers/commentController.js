@@ -1,6 +1,8 @@
 const { Comment } = require('../models');
 
 const getComments = async (req, res) => {
+    console.log(req.query)
+
     const { task_id } = req.query;
 
     const where = {};

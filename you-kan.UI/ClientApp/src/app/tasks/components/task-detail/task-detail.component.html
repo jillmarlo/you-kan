@@ -23,7 +23,7 @@
                 <mat-label>Sprint</mat-label>
                 <mat-select formControlName="sprint_id">
                     <mat-option [value]="null">---</mat-option>
-                    @for (sprint of sprintsProject1; track sprint.sprint_id ) {
+                    @for (sprint of sprintsForProject; track sprint.sprint_id ) {
                     <mat-option [value]="sprint.sprint_id">{{sprint.sprint_name}}</mat-option>
                     }
                 </mat-select>
@@ -48,7 +48,7 @@
                 <mat-label>Assignee</mat-label>
                 <mat-select formControlName="assignee_id">
                     <mat-option [value]="null">---</mat-option>
-                    @for (assignee of availableUsers; track assignee.user_id ) {
+                    @for (assignee of usersForProject; track assignee.user_id ) {
                     <mat-option [value]="assignee.user_id">{{assignee.first_name}} {{assignee.last_name}}</mat-option>
                     }
                 </mat-select>

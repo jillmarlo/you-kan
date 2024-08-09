@@ -7,16 +7,18 @@ import { Observable } from 'rxjs';
 export class UsersService {
 
   protected http = inject(HttpClient);
-  private apiRoot = '';
+  private apiRoot = 'http://localhost:8000/api/users/';
 
   constructor() {}
 
     // get all users
-    getUsers(): Observable<User[]> {
-      return this.http.get<User[]>(this.apiRoot);
+    getUsers(): Observable<any> {
+      return this.http.get<any>(this.apiRoot);
     }
+
+    //TODO- getUsersForProject(id: number)??
   
-    // get task by userID
+    // get user by userID
     getUser(user_id: number): Observable<User> {
       return this.http.get<User>(`${this.apiRoot}/${user_id}`);
     }

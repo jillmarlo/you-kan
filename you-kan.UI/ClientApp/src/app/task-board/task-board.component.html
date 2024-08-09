@@ -4,7 +4,7 @@
 <div class="taskboard-wrapper">
     <div cdkDropListGroup class="status-columns">
         @for (statusList of allTasksByStatus(); track statusList.status) {
-        <div cdkDropList [cdkDropListData]="statusList.tasks" (cdkDropListDropped)="onTaskDropped($event, statusList)">
+        <div style="display:flex;" cdkDropList [cdkDropListData]="statusList.tasks" (cdkDropListDropped)="onTaskDropped($event, statusList)">
             <app-column [status]="statusList.status" [tasks]="statusList.tasks">
                 @for(task of statusList.tasks; track task.task_title) {
                 <app-task-card (taskEdited)="updateTask(task)" (taskDeleted)="deleteTask(task)" cdkDrag [task]="task"></app-task-card>
