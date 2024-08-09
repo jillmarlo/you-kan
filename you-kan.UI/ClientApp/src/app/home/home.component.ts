@@ -88,6 +88,7 @@ export class HomeComponent {
         this.authService.register({ first_name, last_name, email, password }).subscribe(
           response => {
             console.log('Registration successful', response);
+            this.authService.isLoggedIn.next(true);
             this.router.navigate(['/task-board']);
           },
           error => {
