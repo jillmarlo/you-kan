@@ -49,6 +49,7 @@ export class HomeComponent {
 
   showForm: boolean = false;
 
+
   // readonly dialogRef = inject(MatDialogRef<SignUpComponent>);
   readonly userService = inject(UsersService);
   public dialog = inject(MatDialog);
@@ -109,6 +110,7 @@ export class HomeComponent {
         this.authService.login(email, password).subscribe(
           response => {
             console.log('Login successful', response);
+            this.authService.isLoggedIn.next(true);
             this.router.navigate(['/task-board']);
           },
           error => {
