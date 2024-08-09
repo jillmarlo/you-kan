@@ -3,7 +3,9 @@ const { Sprint, Project, User, ProjectUser } = require('../models');
 const getSprints = async (req, res) => {
     try {
       const targetProjectId = req.params.projectId; 
-      const requesterUserId = req.user.user_id;
+      const requesterUserId = 6;
+
+      console.log(targetProjectId)
   
       // Validate that the requesterUserId is provided
       if (!requesterUserId) {
@@ -26,10 +28,12 @@ const getSprints = async (req, res) => {
       const sprints = await Sprint.findAll({
         where: { project_id: targetProjectId },
       });
+
+      console.log(sprints)
   
       res.json(sprints);
     } catch (err) {
-      res.status(500).json({ error: 'Server error' });
+      res.status(500).json(err);
     }
   };
 
