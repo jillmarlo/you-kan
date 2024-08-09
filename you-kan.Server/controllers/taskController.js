@@ -1,18 +1,20 @@
-const { Task, Sprint, Task_Assignee } = require('../models');
+const { Task, Sprint, Task_Assignee, User } = require('../models');
 const { Sequelize } = require('sequelize');
 
 const getTasks = async (req, res) => {
-    const userRequserId= req.user.user_id
-    console.log(`USER ID: ${userRequserId}`);
     const { project_id, user_id, sprint_id, status, priority, sort } = req.query;
 
-    const include = [];
-    if (userRequserId) {
-        include.push({
-            model: Task_Assignee,
-            where: { user_id: userRequserId }
-        });
+    if (!user_id) {
+        return res.sendStatus(400).json({ error: 'User ID must be specified in the query parameters.' });
     }
+
+    const include = [];    
+
+    include.push({
+        model: User,
+        where: { user_id }
+    });
+
 
     const where = {};
     if (project_id) where.project_id = project_id;
@@ -61,6 +63,7 @@ const getTaskById = async (req, res) => {
 
 const createTask = async (req, res) => {
     const taskBody = { ...req.body, created_at: new Date().toISOString() };
+    const userRequesterId = req.user.user_id;
 
     if (taskBody.sprint_id === undefined) {
         taskBody.sprint_id = null; // Set sprint_id to null if not provided
@@ -68,6 +71,10 @@ const createTask = async (req, res) => {
 
     try {
         const newTask = await Task.create(taskBody);
+        await Task_Assignee.create({
+            user_id: userRequesterId, 
+            task_id: newTask.task_id
+        });
         res.status(201).json(newTask);
     } catch (error) {
         res.status(500).json({ error: error.message });
