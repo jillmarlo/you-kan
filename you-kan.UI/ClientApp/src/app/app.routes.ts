@@ -10,15 +10,16 @@ import { HomeComponent } from './home/home.component';
 // Testing 
 import { LogoutComponent } from './logout/logout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent},
-    { path: 'task-board', component: TaskBoardComponent },
-    { path: 'users', component: UsersComponent },
-    { path: 'projects', component: ProjectListComponent },
+    { path: 'task-board', component: TaskBoardComponent, canActivate: [AuthGuard] },
+    { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
+    { path: 'projects', component: ProjectListComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent},
     { path: 'sign-up', component: SignUpComponent},
-    { path: 'logout', component: LogoutComponent }
+    { path: 'logout', component: LogoutComponent, canActivate: [AuthGuard] }
 
 ];
