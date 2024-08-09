@@ -74,13 +74,8 @@ const getTaskById = async (req, res) => {
 const createTask = async (req, res) => {
     const taskBody = { ...req.body, created_at: new Date().toISOString() };
 
-    let newTask;
-    try {
-        newTask = await Task.create(taskBody);
-    } catch(error) {
-        console.error('Error creating task:', error);
-
-        return res.sendStatus(500).json({ error: error.message });
+    if (taskBody.sprint_id === undefined) {
+        taskBody.sprint_id = null; // Set sprint_id to null if not provided
     }
 
     if (!newTask) {

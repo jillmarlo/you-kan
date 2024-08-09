@@ -2,33 +2,32 @@ const { Sprint, Project, User, ProjectUser } = require('../models');
 
 const getSprints = async (req, res) => {
     try {
-        const targetProjectId = req.params.projectId; 
-        //const requesterProjectId = req.query.project_id; // Assuming project ID is passed in query, example: "http://localhost:8000/api/sprints/project/3?project_id=3"
-
-        // Validate that the requesterProjectId is provided
-        if (!targetProjectId) {
-            return res.status(400).json({ error: 'User ID is required' });
-        }
-
-        // Check if the requester is allowed to view sprints of the target project
-        const sprint = await Sprint.findOne({
-            where: { project_id: targetProjectId }
-        });
-
-        if (!sprint) {
-            return res.status(404).json({ error: 'No sprint found' });
-        }
-
-        if (sprint.project_id !== parseInt(targetProjectId, 10)) {
-            return res.status(403).json({ error: 'User does not have permission to view these sprints' });
-        }
-
-        // Fetch sprints where project_id matches targetProjectId
-        const sprints = await Sprint.findAll({
-            where: { project_id: targetProjectId }
-        });
-
-        res.json(sprints);
+      const targetProjectId = req.params.projectId; 
+      const requesterUserId = req.user.user_id;
+  
+      // Validate that the requesterUserId is provided
+      if (!requesterUserId) {
+        return res.status(400).json({ error: 'User ID is required' });
+      }
+  
+      // Check if the requester is a collaborator on the target project
+      const projectUser = await ProjectUser.findOne({
+        where: {
+          user_id: requesterUserId,
+          project_id: targetProjectId,
+        },
+      });
+  
+      if (!projectUser) {
+        return res.status(403).json({ error: 'User does not have permission to view these sprints' });
+      }
+  
+      // Fetch sprints where project_id matches targetProjectId
+      const sprints = await Sprint.findAll({
+        where: { project_id: targetProjectId },
+      });
+  
+      res.json(sprints);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Server error' });
