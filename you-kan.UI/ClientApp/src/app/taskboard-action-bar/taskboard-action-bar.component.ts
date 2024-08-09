@@ -57,7 +57,6 @@ export class TaskboardActionBarComponent implements OnInit {
   }
 
   loadProjects() {
-    debugger;
     this.projectService.getProjectsForUser().subscribe(
       (data: Project[]) => {
         this.projects = data;
@@ -105,7 +104,12 @@ export class TaskboardActionBarComponent implements OnInit {
   //gets the filter values for a project 
   updateFiltersForProject(id: number) {
     this.sprintService.getSprints(id).subscribe((sprints) => {
+      if(sprints.length == 0) {
+        this.sprintsForProject.set([]);
+      }
+      else {
       this.sprintsForProject.set(sprints);
+      }
     })
 
     this.userService.getUsers().subscribe((userData) => {

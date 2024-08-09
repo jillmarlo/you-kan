@@ -11,15 +11,10 @@ export class TaskService {
 
   constructor() {}
 
-    // get all tasks
-    getTasks(): Observable<Task[]> {
-      return this.http.get<Task[]>(this.apiRoot);
-    }
-
-    // get all tasks
+    // get all tasks for a project
     getTasksForProject(projectId: number): Observable<Task[]> {
       const params = new HttpParams().set('project_id', projectId.toString());
-      return this.http.get<Task[]>('http://localhost:8000/api/tasks/', {params});
+      return this.http.get<Task[]>(this.apiRoot, {params});
     }
   
     // get task by taskId
@@ -29,7 +24,7 @@ export class TaskService {
   
     // create a new task
     createTask(task: Task): Observable<Task> {
-      return this.http.post<Task>('http://localhost:8000/api/tasks/', task);
+      return this.http.post<Task>(this.apiRoot, task);
     }
   
     // update an existing task

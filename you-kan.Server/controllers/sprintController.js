@@ -16,7 +16,7 @@ const getSprints = async (req, res) => {
         });
 
         if (!sprint) {
-            return res.status(404).json({ error: 'No sprint found' });
+            return res.status(200).json([]);
         }
 
         if (sprint.project_id !== parseInt(targetProjectId, 10)) {

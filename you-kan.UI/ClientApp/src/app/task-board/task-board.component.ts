@@ -52,13 +52,7 @@ export class TaskBoardComponent implements OnInit {
       const task = event.container.data[event.currentIndex];
       task.status = statusList.status;
 
-      //TODO - Make an HTTP request to save new status in db
-
-      // const updatedTasks = this.allTasksSignal().map(item =>
-      //   item.task_id === task.task_id ? { ...item, status: task.status } : item
-      // );
-
-      // this.allTasksSignal.set(updatedTasks);
+      this.updateTask(task);
     }
   }
 
