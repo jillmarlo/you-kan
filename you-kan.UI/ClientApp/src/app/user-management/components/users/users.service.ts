@@ -20,21 +20,21 @@ export class UsersService {
   
     // get user by userID
     getUser(user_id: number): Observable<User> {
-      return this.http.get<User>(`${this.apiRoot}/${user_id}`);
+      return this.http.get<User>(`${this.apiRoot}/${user_id}`, {withCredentials: true});
     }
   
     // create a new user
     createUser(user: User): Observable<User> {
-      return this.http.post<User>(this.apiRoot, user);
+      return this.http.post<User>(this.apiRoot, user, {withCredentials: true});
     }
   
     // update an existing user
     updateUser(updateUser: User): Observable<User> {
-      return this.http.put<User>(`${this.apiRoot}/${updateUser.user_id}`, updateUser);
+      return this.http.put<User>(`${this.apiRoot}/${updateUser.user_id}`, updateUser, {withCredentials: true});
     }
   
     // remove a user
     deleteUser(user_id: number): Observable<void> {
-      return this.http.delete<void>(`${this.apiRoot}/${user_id}`);
+      return this.http.delete<void>(`${this.apiRoot}/${user_id}`, {withCredentials: true});
     }
 }

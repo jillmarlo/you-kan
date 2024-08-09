@@ -80,7 +80,7 @@ export class HomeComponent {
     });
   }
 
-  submit() {
+  onSignUp() {
     if (this.userForm.valid) {
       const { first_name, last_name, email, password } = this.userForm.value;
 

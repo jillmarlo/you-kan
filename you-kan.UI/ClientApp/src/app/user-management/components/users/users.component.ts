@@ -30,6 +30,7 @@ import { MatDialog } from '@angular/material/dialog';
     ])
   ]
 })
+
 export class UsersComponent implements OnInit {
   private fb = inject(FormBuilder);
   userService = inject(UsersService);
@@ -39,16 +40,10 @@ export class UsersComponent implements OnInit {
   displayColumns: string[] = ['first_name', 'last_name', 'email', 'actions'];
   selectedUser: any = null;
 
-  // replace with endpoint
-  // only display name &  email from sqlquery - test data has full info
-  userTestData: User[] = [
-    {user_id: 1, first_name: 'John', last_name: 'Smith', email: 'jsmith@test.com', password_hash: 'testing123', created_at: 'Date here'}, 
-    { user_id: 2, first_name: 'Jane', last_name: 'Doe', email: 'jdoe@test.com', password_hash: 'testing456', created_at: 'Date here'},
-    { user_id: 3, first_name: 'Hannibal', last_name: 'Lecter', email: 'hlecter@test.com', password_hash: 'wgraham123', created_at: 'Date here'}
-  ];
-
   ngOnInit(): void {
-      this.dataSource = this.userTestData;
+      this.userService.getUsers().subscribe((users) => {
+      this.dataSource = users;
+    })
   }
 
   editUser(user: any) {
@@ -56,24 +51,28 @@ export class UsersComponent implements OnInit {
     // Implement edit logic
   }
 
-  saveUpdate(updatedUser: any) {
-    debugger;
-    const idx = this.dataSource.findIndex(u => u.user_id === updatedUser.user_id);
-    if (idx !== -1) {
-      this.dataSource[idx] = updatedUser;
-      this.dataSource = [...this.dataSource];
+  saveUpdate(updatedUser: User) {
+    this,this.userService.updateUser(updatedUser).subscribe((
+    ) =>  {
+      const idx = this.dataSource.findIndex(u => u.user_id === updatedUser.user_id);
+      if (idx !== -1) {
+        this.dataSource[idx] = updatedUser;
+        this.dataSource = [...this.dataSource];
     }
     this.selectedUser = null;
-  }
+  })
+}
 
   cancelEdit() {
     this.selectedUser = null;
   }
 
   deleteUser(user: any) {
-    this.dataSource = this.dataSource.filter(u => u.user_id !== user.user_id);
-    this.dataSource = [...this.dataSource];
-    // Implement delete logic
+    this,this.userService.deleteUser(user.user_id).subscribe(() => {
+      this.dataSource = this.dataSource.filter(u => u.user_id !== user.user_id);
+      this.dataSource = [...this.dataSource];
+    })
+
   }
 
   openUser(): void {

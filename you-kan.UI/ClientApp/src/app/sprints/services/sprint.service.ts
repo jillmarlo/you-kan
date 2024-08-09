@@ -14,12 +14,12 @@ export class SprintService {
 
     // get sprints by project id
     getSprints(projectId: number): Observable<Sprint[]> {
-      return this.http.get<Sprint[]>(`${this.apiRoot}/project/${projectId}`);
+      return this.http.get<Sprint[]>(`${this.apiRoot}/project/${projectId}`, { withCredentials: true });
     }
   
     // create a new sprint
     createSprint(sprint: Sprint): Observable<Sprint> {
-      return this.http.post<Sprint>(this.apiRoot, sprint);
+      return this.http.post<Sprint>(this.apiRoot, sprint, { withCredentials: true });
     }
   
     // update an existing sprint

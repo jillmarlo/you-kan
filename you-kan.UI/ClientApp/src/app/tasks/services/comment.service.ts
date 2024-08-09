@@ -19,16 +19,16 @@ export class CommentService {
 
     // create a new task
     createComment(comment: Comment): Observable<Comment> {
-      return this.http.post<Comment>(this.apiRoot, comment);
+      return this.http.post<Comment>(this.apiRoot, comment, { withCredentials: true });
     }
   
     // // update an existing task
     // updateTask(updateTask: Task): Observable<Task> {
-    //   return this.http.put<Task>(`${this.apiRoot}/${updateTask.task_id}`, updateTask);
+    //   return this.http.put<Task>(`${this.apiRoot}/${updateTask.task_id}`, updateTask, { withCredentials: true });
     // }
   
     // remove a task
     deleteComment(id: number | any): Observable<void> {
-      return this.http.delete<void>(`${this.apiRoot}/${id}`);
+      return this.http.delete<void>(`${this.apiRoot}/${id}`, { withCredentials: true });
     }
 }

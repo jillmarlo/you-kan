@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, switchMap, tap } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000'; // Update with server URL
+  private apiUrl = 'http://localhost:4200'; // Update with server URL
+
+  // observable for toggling dashboard nav/toolbar
+  isLoggedIn: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
 
   private csrfToken: string | null = null;
   private sessionId: string | null = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { this.isLoggedIn.next(false) }
 
   // Get CSRF token from the server
   private fetchCsrfToken(): Observable<string> {

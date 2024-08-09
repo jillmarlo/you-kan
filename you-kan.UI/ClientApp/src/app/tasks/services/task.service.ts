@@ -13,7 +13,7 @@ export class TaskService {
 
     // get all tasks
     getTasks(): Observable<Task[]> {
-      return this.http.get<Task[]>(this.apiRoot);
+      return this.http.get<Task[]>(this.apiRoot, { withCredentials: true });
     }
 
     // get all tasks
@@ -24,21 +24,21 @@ export class TaskService {
   
     // get task by taskId
     getTask(id: number): Observable<Task> {
-      return this.http.get<Task>(`${this.apiRoot}/${id}`);
+      return this.http.get<Task>(`${this.apiRoot}/${id}`, { withCredentials: true });
     }
   
     // create a new task
     createTask(task: Task): Observable<Task> {
-      return this.http.post<Task>('http://localhost:8000/api/tasks/', task);
+      return this.http.post<Task>('http://localhost:8000/api/tasks/', task, { withCredentials: true });
     }
   
     // update an existing task
     updateTask(updateTask: Task): Observable<Task> {
-      return this.http.put<Task>(`${this.apiRoot}/${updateTask.task_id}`, updateTask);
+      return this.http.put<Task>(`${this.apiRoot}/${updateTask.task_id}`, updateTask, { withCredentials: true });
     }
   
     // remove a task
     deleteTask(id: number | any): Observable<void> {
-      return this.http.delete<void>(`${this.apiRoot}/${id}`);
+      return this.http.delete<void>(`${this.apiRoot}/${id}`, { withCredentials: true });
     }
 }
