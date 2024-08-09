@@ -2,13 +2,15 @@ const { Task, Sprint, Task_Assignee } = require('../models');
 const { Sequelize } = require('sequelize');
 
 const getTasks = async (req, res) => {
+    const userRequserId= req.user.user_id
+    console.log(`USER ID: ${userRequserId}`);
     const { project_id, user_id, sprint_id, status, priority, sort } = req.query;
 
     const include = [];
-    if (user_id) {
+    if (userRequserId) {
         include.push({
             model: Task_Assignee,
-            where: { user_id }
+            where: { user_id: userRequserId }
         });
     }
 
@@ -25,10 +27,13 @@ const getTasks = async (req, res) => {
 
     const queryOptions = { where, include, order };
 
+    console.log(queryOptions);
+
     let task;
     try {
         task = await Task.findAll(queryOptions);
-    } catch {
+    } catch(error) {
+        console.log(error)
         return res.sendStatus(500);
     }
 
