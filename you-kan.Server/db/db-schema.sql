@@ -129,14 +129,14 @@ USE `you-kan` ;
 -- Table `Comments`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Comments` (
-  `comment_id` INT NOT NULL,
+  `comment_id` INT NOT NULL AUTO_INCREMENT,
   `task_id` INT NOT NULL,
   `comment_text` VARCHAR(255) NOT NULL,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` INT NOT NULL,
   PRIMARY KEY (`comment_id`),
-  INDEX `task_id_idx` (`task_id` ASC) VISIBLE,
-  INDEX `Comments_ibfk_2` (`user_id` ASC) VISIBLE,
+  INDEX `task_id_idx` (`task_id` ASC),
+  INDEX `user_id_idx` (`user_id` ASC),
   CONSTRAINT `Comments_ibfk_1`
     FOREIGN KEY (`task_id`)
     REFERENCES `Tasks` (`task_id`)
@@ -146,8 +146,8 @@ CREATE TABLE IF NOT EXISTS `Comments` (
     FOREIGN KEY (`user_id`)
     REFERENCES `Users` (`user_id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
+    ON UPDATE NO ACTION
+) ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
