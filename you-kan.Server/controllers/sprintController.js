@@ -29,7 +29,6 @@ const getSprints = async (req, res) => {
   
       res.json(sprints);
     } catch (err) {
-      console.error(err);
       res.status(500).json({ error: 'Server error' });
     }
   };

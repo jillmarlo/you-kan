@@ -1,30 +1,27 @@
 import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import {MaterialModule } from '../shared/material.module';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { TaskDetailComponent } from '../tasks/components/task-detail/task-detail.component';
 import { Task } from '../tasks/models/task.model';
 import { Project } from '../projects/models/project.model';
 import { ProjectService } from '../projects/services/project.service';
 import { User } from '../user-management/models/user.model';
+import { UserService } from '../user-management/services/user.service';
 import { Sprint } from '../sprints/models/sprint.model';
 import { SprintService } from '../sprints/services/sprint.service';
-import { UsersService } from '../user-management/components/users/users.service';
 
 @Component({
   selector: 'app-taskboard-action-bar',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatFormFieldModule, MatSelectModule, ReactiveFormsModule],
+  imports: [MaterialModule, ReactiveFormsModule],
   templateUrl: './taskboard-action-bar.component.html',
   styleUrl: './taskboard-action-bar.component.css'
 })
 export class TaskboardActionBarComponent implements OnInit {
   private projectService = inject(ProjectService);
   private sprintService = inject(SprintService);
-  private userService = inject(UsersService);
+  private userService = inject(UserService);
   public dialog = inject(MatDialog);
   @Output() projectChanged = new EventEmitter<number>();
   @Output() taskboardFiltersChanged = new EventEmitter<any>();

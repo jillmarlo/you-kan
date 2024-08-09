@@ -1,16 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
+import { MaterialModule } from '../../../shared/material.module';
 import { Task } from '../../models/task.model';
-import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
 
 @Component({
   selector: 'app-task-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MaterialModule],
   templateUrl: './task-card.component.html',
   styleUrl: './task-card.component.css'
 })

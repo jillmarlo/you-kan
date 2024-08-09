@@ -1,19 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatCardModule } from '@angular/material/card';
-import { MatSelectModule } from '@angular/material/select';
-import { MatListModule } from '@angular/material/list';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatIconModule } from '@angular/material/icon';
+import { MaterialModule} from '../../../shared/material.module'
 import { User } from '../../../user-management/models/user.model';
 import { Sprint } from '../../../sprints/models/sprint.model';
 import { SprintDetailComponent } from '../../../sprints/components/sprint-detail.component';
 import { MatDialog } from '@angular/material/dialog';
-import { UsersService } from '../../../user-management/components/users/users.service';
+import { UserService } from '../../../user-management/services/user.service';
 import { SprintService } from '../../../sprints/services/sprint.service';
 import { concatMap, of } from 'rxjs';
 
@@ -21,14 +14,13 @@ import { concatMap, of } from 'rxjs';
 @Component({
   selector: 'app-project-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatChipsModule,
-    MatButtonModule, MatInputModule, MatCardModule, MatSelectModule, MatIconModule, MatListModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule],
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.css'
 })
 export class ProjectDetailComponent {
   private dialog = inject(MatDialog);
-  private userService = inject(UsersService);
+  private userService = inject(UserService);
   private sprintService = inject(SprintService);
   @Input() project: any;
   @Output() save = new EventEmitter<any>();

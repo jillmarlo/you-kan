@@ -1,10 +1,7 @@
 import { CommonModule, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { MatTableModule, } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
+import { MaterialModule } from '../../../shared/material.module';
 import { Project } from '../../models/project.model';
-import { User } from '../../../user-management/models/user.model';
 import { FormsModule } from '@angular/forms';
 import { ProjectDetailComponent } from '../project-detail/project-detail.component';
 import { NewProjectFormComponent } from '../new-project-form/new-project-form.component';
@@ -12,15 +9,15 @@ import { ProjectService } from '../../services/project.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Sprint } from '../../../sprints/models/sprint.model';
 import { MatDialog } from '@angular/material/dialog';
-import { UsersService } from '../../../user-management/components/users/users.service';
+import { UserService } from '../../../user-management/services/user.service';
 import { SprintService } from '../../../sprints/services/sprint.service';
 import { concatMap, of } from 'rxjs';
 
 @Component({
   selector: 'app-project-list',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, NgFor, NgIf, UpperCasePipe,
-    ProjectDetailComponent, FormsModule, MatTableModule],
+  imports: [CommonModule, MaterialModule, NgFor, NgIf, UpperCasePipe,
+    ProjectDetailComponent, FormsModule],
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.css',
   animations: [
@@ -39,7 +36,7 @@ import { concatMap, of } from 'rxjs';
 export class ProjectListComponent implements OnInit {
   projectService = inject(ProjectService);
   sprintService = inject(SprintService);
-  userService = inject(UsersService);
+  userService = inject(UserService);
   private dialog = inject(MatDialog);
 
   dataSource: Project[] = [];

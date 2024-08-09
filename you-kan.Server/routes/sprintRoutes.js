@@ -2,7 +2,7 @@ const express = require('express');
 const { getSprints, getSprintById, createSprint, deleteSprint, updateSprint } = require('../controllers/sprintController')
 
 const router = express.Router();
-const ensureLoggedIn = ensureLogIn();
+//const ensureLoggedIn = ensureLogIn();
 
 router.get('/project/:projectId', getSprints);
 router.get('/:id', getSprintById);

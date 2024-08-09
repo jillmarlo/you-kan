@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { User } from '../../models/user.model';
+import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class UsersService {
+export class UserService {
 
   protected http = inject(HttpClient);
   private apiRoot = 'http://localhost:8000/api/users/';

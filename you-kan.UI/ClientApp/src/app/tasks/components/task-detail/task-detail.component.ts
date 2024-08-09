@@ -1,29 +1,23 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
-import { User } from '../../../user-management/models/user.model';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { MaterialModule } from '../../../shared/material.module';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 import { Sprint } from '../../../sprints/models/sprint.model';
-import { Comment } from '../../models/comment.model';
 import { SprintService } from '../../../sprints/services/sprint.service';
+import { Comment } from '../../models/comment.model';
 import { CommentService } from '../../services/comment.service';
-import { UsersService } from '../../../user-management/components/users/users.service';
+import { User } from '../../../user-management/models/user.model';
+import { UserService } from '../../../user-management/services/user.service';
 
 
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatSelectModule, 
-    MatDialogContent, MatDialogActions, MatDialogTitle, MatButtonModule, TextFieldModule, MatListModule],
+  imports: [ ReactiveFormsModule, MaterialModule,
+    MatDialogContent, MatDialogActions, MatDialogTitle, TextFieldModule],
   templateUrl: './task-detail.component.html',
   styleUrl: './task-detail.component.css'
 })
@@ -33,7 +27,7 @@ export class TaskDetailComponent implements OnInit {
   readonly taskService = inject(TaskService);
   readonly sprintService = inject(SprintService);
   readonly commentService = inject(CommentService);
-  readonly userService = inject(UsersService);
+  readonly userService = inject(UserService);
   
   public data: { projectId: number, task?: Task } = inject(MAT_DIALOG_DATA);
 
@@ -113,10 +107,6 @@ export class TaskDetailComponent implements OnInit {
     if (this.taskForm.valid) {
       this.dialogRef.close(this.taskForm.value); 
     }
-    //   this.taskService.createTask(task).subscribe((task) => {
-    //     console.log('Added task:', task);
-    //   });
-    // }
   }
 
   deleteTask(): void {
@@ -140,7 +130,6 @@ export class TaskDetailComponent implements OnInit {
 
   deleteComment(currentComment : Comment) {
     //will need to make http request here too to delete
-    debugger;
     let newCommentList = this.taskUnderEdit.comments?.filter((c) => c.comment_id !== currentComment.comment_id );
     this.taskUnderEdit.comments = newCommentList;
   }
