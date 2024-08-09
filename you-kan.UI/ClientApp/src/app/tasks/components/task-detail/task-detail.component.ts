@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { User } from '../../../user-management/models/user.model';
@@ -14,6 +14,9 @@ import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 import { Sprint } from '../../../sprints/models/sprint.model';
 import { Comment } from '../../models/comment.model';
+import { SprintService } from '../../../sprints/services/sprint.service';
+import { CommentService } from '../../services/comment.service';
+import { UsersService } from '../../../user-management/components/users/users.service';
 
 
 @Component({
@@ -28,7 +31,22 @@ export class TaskDetailComponent implements OnInit {
   private fb = inject(FormBuilder);
   readonly dialogRef = inject(MatDialogRef<TaskDetailComponent>);
   readonly taskService = inject(TaskService);
+  readonly sprintService = inject(SprintService);
+  readonly commentService = inject(CommentService);
+  readonly userService = inject(UsersService);
+  
   public data: { projectId: number, task?: Task } = inject(MAT_DIALOG_DATA);
+
+  //ideally these would be in a reference table and we would use Ids insted of magic strings
+  taskTypes: string[] = ['Feature','Bug'];
+  taskEfforts: number[] = [1,2,3,4,5]
+  priorities: string[] = ['Low','Medium','High','Critical'];
+  taskStatuses: string[] = ['Backlog','Committed','Developing','Testing','Complete'];
+  sprintsForProject!: Sprint[];
+  usersForProject!: User[];
+
+  @Output() taskDeleted = new EventEmitter();
+
   taskForm: FormGroup;
   newCommentForm: FormGroup;
   taskUnderEdit!: Task;
@@ -50,8 +68,8 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
+
   ngOnInit() {
-    debugger;
     if (this.data.task) {
       this.taskUnderEdit = this.data.task;
 
@@ -62,17 +80,28 @@ export class TaskDetailComponent implements OnInit {
         priority: this.data.task?.priority,
         status: this.data.task?.status,
         effort: this.data.task?.effort,
-        sprint_id: this.data.task?.sprint_id?? null,
-        assignee_id: this.data.task?.assignee_id?? null,
+        sprint_id: this.data.task?.sprint_id ?? null,
+        assignee_id: this.data.task?.assignee_id ?? null,
       });
 
       this.newCommentForm.setValue({
         newComment: ''
       });
 
-      if (this.taskUnderEdit.task_id === 1) {
-        this.taskUnderEdit.comments = this.commentsTask1;
-      }
+      //get comments for task
+      // this.commentService.getCommentsForTask(this.taskUnderEdit.task_id)
+      // .subscribe((comments) => {
+      //    this.taskUnderEdit.comments = comments})
+      
+
+      this.sprintService.getSprints(this.data.projectId).subscribe((sprints) => {
+        this.sprintsForProject = sprints;
+      })
+
+      this.userService.getUsers().subscribe((users) => {
+        this.usersForProject = users.data;
+      })
+
     }
   }
 
@@ -90,16 +119,20 @@ export class TaskDetailComponent implements OnInit {
     // }
   }
 
+  deleteTask(): void {
+    this.dialogRef.close(this.taskUnderEdit.task_id);
+  }
+  
+
   //Comments will be handled separately from Tasks as the Task endpoints don't accommodate complex objects
   addComment() {
     debugger;
     if (this.newCommentForm.get('newComment')?.value !== '') {
     //first need http request to add comment and return the new comments id, then push to array
     this.taskUnderEdit?.comments?.push(
-      {comment_id: this.taskUnderEdit?.comments?.length + 1,
+      {
          task_id: this.taskUnderEdit.task_id, 
-         comment_text: this.newCommentForm.get('newComment')?.value, 
-         user_id: 1} as Comment);
+         comment_text: this.newCommentForm.get('newComment')?.value} as Comment);
 
       this.newCommentForm.reset();
     }
@@ -112,25 +145,9 @@ export class TaskDetailComponent implements OnInit {
     this.taskUnderEdit.comments = newCommentList;
   }
 
-  sprintsProject1: Sprint[] = [
-    { sprint_id: 1, sprint_name: 'Gather requirements', project_id: 1, start_date: new Date(2024, 6, 1), end_date: new Date(2024, 6, 12) },
-    { sprint_id: 2, sprint_name: 'Project diagrams', project_id: 1, start_date: new Date(2024, 6, 15), end_date: new Date(2024, 6, 26) },
-  ];
-
   commentsTask1: Comment[] = [{comment_id: 1, task_id: 1, comment_text: 'test comment 1', user_id: 1, },
     {comment_id: 2, task_id: 1, comment_text: 'test comment 2', user_id: 2, }]
  
-  taskTypes: string[] = ['Feature','Bug'];
-
-  priorities: string[] = ['Low','Medium','High','Critical'];
-
-  taskStatuses: string[] = ['Backlog','Uncommitted','Developing','Testing','Complete'];
-
-  availableUsers: User[] = [
-    { user_id: 1, first_name: 'John', last_name: 'Smith', email: 'jsmith@test.com' },
-    { user_id: 2, first_name: 'Jane', last_name: 'Doe', email: 'jdoe@test.com' },
-    { user_id: 3, first_name: 'Hannibal', last_name: 'Lecter', email: 'hlecter@test.com'}
-  ];
 
 
 }

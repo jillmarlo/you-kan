@@ -1,19 +1,25 @@
 import { inject, Injectable } from '@angular/core';
 import { Task } from '../models/task.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
 
   protected http = inject(HttpClient);
-  private apiRoot = '';
+  private apiRoot = 'http://localhost:8000/api/tasks';
 
   constructor() {}
 
     // get all tasks
     getTasks(): Observable<Task[]> {
       return this.http.get<Task[]>(this.apiRoot);
+    }
+
+    // get all tasks
+    getTasksForProject(projectId: number): Observable<Task[]> {
+      const params = new HttpParams().set('project_id', projectId.toString());
+      return this.http.get<Task[]>('http://localhost:8000/api/tasks/', {params});
     }
   
     // get task by taskId
@@ -23,7 +29,7 @@ export class TaskService {
   
     // create a new task
     createTask(task: Task): Observable<Task> {
-      return this.http.post<Task>(this.apiRoot, task);
+      return this.http.post<Task>('http://localhost:8000/api/tasks/', task);
     }
   
     // update an existing task
@@ -32,7 +38,7 @@ export class TaskService {
     }
   
     // remove a task
-    deleteTask(id: number): Observable<void> {
+    deleteTask(id: number | any): Observable<void> {
       return this.http.delete<void>(`${this.apiRoot}/${id}`);
     }
 }

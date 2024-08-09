@@ -55,7 +55,7 @@ app.use(cookieParser());
 
 // Configure session middleware
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Replace with a strong secret
+  secret: 'abc', // Replace with a strong secret
   resave: false,
   saveUninitialized: false,
   store: sessionStore, // Use the Sequelize session store instance

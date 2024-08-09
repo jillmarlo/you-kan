@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Project } from '../models/project.model';
 
@@ -7,7 +7,7 @@ import { Project } from '../models/project.model';
 export class ProjectService {
 
   protected http = inject(HttpClient);
-  private apiRoot = '';
+  private apiRoot = 'http://localhost:8000/api/projects';
 
   constructor() {}
 
@@ -16,6 +16,11 @@ export class ProjectService {
       return this.http.get<Project[]>(this.apiRoot);
     }
   
+    // get all projects by user 
+    getProjectsForUser(): Observable<Project[]> {
+      return this.http.get<Project[]>(this.apiRoot);
+    }
+
     // get project by projectId
     getProject(id: number): Observable<Project> {
       return this.http.get<Project>(`${this.apiRoot}/${id}`);
@@ -23,11 +28,11 @@ export class ProjectService {
   
     // create a new project
     createProject(project: Project): Observable<Project> {
-      return this.http.post<Project>(this.apiRoot, project);
+      return this.http.post<Project>(this.apiRoot, {project_name: project.project_name });
     }
   
     // update an existing project
-    updateProject(updateProject: Project): Observable<Project> {
+    updateProject(updateProject: any): Observable<Project> {
       return this.http.put<Project>(`${this.apiRoot}/${updateProject.project_id}`, updateProject);
     }
   

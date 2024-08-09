@@ -4,6 +4,7 @@ const { Project, ProjectUser, User } = require('../models');
 const getProject = async (req, res) => {
     try {
       const requesterUserId = req.user.user_id;
+      console.log(requesterUserId)
   
       // Validate that the requesterUserId is provided
       if (!requesterUserId) {
@@ -141,7 +142,7 @@ const updateProject = async (req, res) => {
     }
   
       const [updated] = await Project.update(req.body, {
-        where: { project_id: req.params.id }
+        where: { project_id: projectId}
       });
       if (updated) {
         res.json({ message: 'Project updated' });

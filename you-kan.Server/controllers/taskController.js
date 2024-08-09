@@ -67,52 +67,26 @@ const getTaskById = async (req, res) => {
     if (!task) {
         return res.sendStatus(404);
     } else {
-        res.status(200).json(task);
+        return res.status(200).json(task);
     }
 }
 
 const createTask = async (req, res) => {
-    const userRequesterId = req.user.user_id;
+    const taskBody = { ...req.body, created_at: new Date().toISOString() };
 
-    // Ensure that the creator_user_id is set to the user creating the task
-    const taskBody = { 
-        ...req.body, 
-        created_at: new Date().toISOString(), 
-        creator_user_id: userRequesterId 
-    };
-
-    if (taskBody.sprint_id === undefined) {
-        taskBody.sprint_id = null; // Set sprint_id to null if not provided
-    }
-
-    // Validate project_id
-    if (!taskBody.project_id) {
-        return res.status(400).json({ error: 'Project ID must be specified.' });
-    }
-
+    let newTask;
     try {
-        // Check if the user is part of the project
-        const isCollaborator = await ProjectUser.findOne({
-            where: { user_id: userRequesterId, project_id: taskBody.project_id }
-        });
+        newTask = await Task.create(taskBody);
+    } catch(error) {
+        console.error('Error creating task:', error);
 
-        if (!isCollaborator) {
-            return res.status(403).json({ error: 'You do not have permission to create tasks in this project.' });
-        }
+        return res.sendStatus(500).json({ error: error.message });
+    }
 
-        // Create the task
-        const newTask = await Task.create(taskBody);
-
-        // Assign the task to the creator
-        await Task_Assignee.create({
-            user_id: userRequesterId, 
-            task_id: newTask.task_id
-        });
-
-        return res.status(201).json(newTask);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Server error' });
+    if (!newTask) {
+        return res.sendStatus(404);
+    } else {
+        res.status(201).json(newTask);
     }
 };
 

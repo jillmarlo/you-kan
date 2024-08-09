@@ -1,14 +1,13 @@
 const express = require('express');
-const { getSprint, getSprintById, createSprint, deleteSprint, updateSprint } = require('../controllers/sprintController')
-const ensureLogIn = require('connect-ensure-login').ensureLoggedIn;
+const { getSprints, getSprintById, createSprint, deleteSprint, updateSprint } = require('../controllers/sprintController')
 
 const router = express.Router();
 const ensureLoggedIn = ensureLogIn();
 
-router.get('/project/:projectId', ensureLoggedIn, getSprint);
-router.get('/:id', ensureLoggedIn, getSprintById);
-router.post('/project/:projectId', ensureLoggedIn, createSprint)
-router.put('/:id', ensureLoggedIn, updateSprint)
-router.delete('/:id', ensureLoggedIn, deleteSprint)
+router.get('/project/:projectId', getSprints);
+router.get('/:id', getSprintById);
+router.post('/', createSprint)
+router.put('/:id', updateSprint)
+router.delete('/:id', deleteSprint)
 
 module.exports = router;
