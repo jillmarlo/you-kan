@@ -30,7 +30,6 @@ import { MatDialog } from '@angular/material/dialog';
     ])
   ]
 })
-
 export class UsersComponent implements OnInit {
   private fb = inject(FormBuilder);
   userService = inject(UsersService);
@@ -40,8 +39,9 @@ export class UsersComponent implements OnInit {
   displayColumns: string[] = ['first_name', 'last_name', 'email', 'actions'];
   selectedUser: any = null;
 
+
   ngOnInit(): void {
-      this.userService.getUsers().subscribe((users) => {
+    this.userService.getUsers().subscribe((users) => {
       this.dataSource = users;
     })
   }
@@ -52,7 +52,7 @@ export class UsersComponent implements OnInit {
   }
 
   saveUpdate(updatedUser: User) {
-    this,this.userService.updateUser(updatedUser).subscribe((
+    this.userService.updateUser(updatedUser).subscribe((
     ) =>  {
       const idx = this.dataSource.findIndex(u => u.user_id === updatedUser.user_id);
       if (idx !== -1) {

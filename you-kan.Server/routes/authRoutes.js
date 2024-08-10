@@ -2,9 +2,16 @@ const express = require('express');
 const passport = require('passport');
 const { registerUser, loginUser, logoutUser } = require('../controllers/authController')
 const ensureLogIn = require('connect-ensure-login').ensureLoggedIn;
+const csrf = require('csurf');
 
 const router = express.Router();
 const ensureLoggedIn = ensureLogIn();
+
+router.use(csrf());
+router.use(function(req, res, next) {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
 
 router.post('/register', registerUser);
 router.post('/login/password', loginUser);

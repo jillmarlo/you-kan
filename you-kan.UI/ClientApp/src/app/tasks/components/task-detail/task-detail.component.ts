@@ -99,7 +99,7 @@ export class TaskDetailComponent implements OnInit {
       })
 
       this.userService.getUsers().subscribe((users) => {
-        this.usersForProject = users.data;
+        this.usersForProject = users;
       })
 
     }

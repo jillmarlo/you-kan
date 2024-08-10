@@ -109,7 +109,8 @@ export class TaskboardActionBarComponent implements OnInit {
     })
 
     this.userService.getUsers().subscribe((userData) => {
-      this.usersForProject.set(userData.data);
+      this.usersForProject.set(userData);
+      // this.usersForProject.set(userData.data);
     })
   }
 

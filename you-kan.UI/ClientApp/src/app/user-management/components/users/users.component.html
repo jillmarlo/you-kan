@@ -1,4 +1,5 @@
 <h3>Users</h3>
+<div>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 user-table">
     <!-- First Name Column -->
     <ng-container matColumnDef="first_name">
@@ -37,6 +38,7 @@
       *matRowDef="let row; columns: displayColumns;"
   ></tr>
 </table>
+</div>
 
 <app-users-detail *ngIf="selectedUser" [@detailExpand] [user]="selectedUser" (save)="saveUpdate($event)"
   (cancel)="cancelEdit()">

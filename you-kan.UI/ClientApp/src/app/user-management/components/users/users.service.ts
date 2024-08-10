@@ -7,13 +7,13 @@ import { Observable } from 'rxjs';
 export class UsersService {
 
   protected http = inject(HttpClient);
-  private apiRoot = 'http://localhost:8000/api/users/';
+  private apiRoot = 'http://localhost:8000/api/users';
 
   constructor() {}
 
     // get all users
-    getUsers(): Observable<any> {
-      return this.http.get<any>(this.apiRoot);
+    getUsers(): Observable<User[]> {
+      return this.http.get<User[]>(this.apiRoot, { withCredentials: true });
     }
 
     //TODO- getUsersForProject(id: number)??

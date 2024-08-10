@@ -38,6 +38,7 @@ export class UsersDetailComponent {
 
   constructor(private fb: FormBuilder) {
     this.userForm = this.fb.group({
+      user_id: ['', Validators.required],
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       email: ['', Validators.required]

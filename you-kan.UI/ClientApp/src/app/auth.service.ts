@@ -7,7 +7,7 @@ import { ReplaySubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:4200'; // Update with server URL
+  private apiUrl = 'http://localhost:8000'; // Update with server URL
 
   // observable for toggling dashboard nav/toolbar
   isLoggedIn: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
