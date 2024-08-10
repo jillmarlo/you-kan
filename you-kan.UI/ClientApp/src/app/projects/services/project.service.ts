@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
 import { Project } from '../models/project.model';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../user-management/services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {

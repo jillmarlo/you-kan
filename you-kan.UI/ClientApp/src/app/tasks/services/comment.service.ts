@@ -1,34 +1,50 @@
 import { inject, Injectable } from '@angular/core';
-import { Task } from '../models/task.model';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, switchMap } from 'rxjs';
+import { AuthService } from '../../user-management/services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class CommentService {
 
   protected http = inject(HttpClient);
+  private authService = inject(AuthService);
   private apiRoot = 'http://localhost:8000/api/comments';
 
   constructor() {}
 
+  private addCsrfToken(headers: HttpHeaders = new HttpHeaders()): Observable<HttpHeaders> {
+    return this.authService.getCsrfToken().pipe(
+      switchMap(csrfToken => {
+        return new Observable<HttpHeaders>(observer => {
+          observer.next(headers.set('X-CSRF-Token', csrfToken));
+          observer.complete();
+        });
+      })
+    );
+  }
+
     // get comments for task
-    getCommentsForTask(taskId: any): Observable<Comment[]> {
-      const params = new HttpParams().set('id', taskId);
-      return this.http.get<Comment[]>(this.apiRoot, {params});
+    getCommentsForTask(taskId: any): Observable<any[]> {
+      const params = new HttpParams().set('task_id', taskId);
+      return this.addCsrfToken().pipe(
+        switchMap(headers => this.http.get<any[]>(this.apiRoot, { headers, params, withCredentials: true })))
+    }
+
+    getCommentById(id: any): Observable<Comment> {
+      const params = new HttpParams().set('id', id);
+      return this.addCsrfToken().pipe(
+        switchMap(headers => this.http.get<Comment>(this.apiRoot, { headers, params, withCredentials: true })))
     }
 
     // create a new task
-    createComment(comment: Comment): Observable<Comment> {
-      return this.http.post<Comment>(this.apiRoot, comment, { withCredentials: true });
+    createComment(comment: any): Observable<any> {
+      return this.addCsrfToken().pipe(
+        switchMap(headers => this.http.post<any>(this.apiRoot, comment, { headers, withCredentials: true })))
     }
-  
-    // // update an existing task
-    // updateTask(updateTask: Task): Observable<Task> {
-    //   return this.http.put<Task>(`${this.apiRoot}/${updateTask.task_id}`, updateTask, { withCredentials: true });
-    // }
   
     // remove a task
     deleteComment(id: number | any): Observable<void> {
-      return this.http.delete<void>(`${this.apiRoot}/${id}`, { withCredentials: true });
+      return this.addCsrfToken().pipe(
+        switchMap(headers => this.http.delete<void>(`${this.apiRoot}/${id}`, { headers, withCredentials: true })))
     }
 }

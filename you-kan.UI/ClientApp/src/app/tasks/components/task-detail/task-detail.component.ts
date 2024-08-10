@@ -1,29 +1,23 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
-import { User } from '../../../user-management/models/user.model';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { MaterialModule } from '../../../shared/material.module';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 import { Sprint } from '../../../sprints/models/sprint.model';
-import { Comment } from '../../models/comment.model';
 import { SprintService } from '../../../sprints/services/sprint.service';
+import { Comment } from '../../models/comment.model';
 import { CommentService } from '../../services/comment.service';
-import { UsersService } from '../../../user-management/components/users/users.service';
+import { User } from '../../../user-management/models/user.model';
+import { UserService } from '../../../user-management/services/user.service';
 
 
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatSelectModule, 
-    MatDialogContent, MatDialogActions, MatDialogTitle, MatButtonModule, TextFieldModule, MatListModule],
+  imports: [ ReactiveFormsModule, MaterialModule,
+    MatDialogContent, MatDialogActions, MatDialogTitle, TextFieldModule],
   templateUrl: './task-detail.component.html',
   styleUrl: './task-detail.component.css'
 })
@@ -33,7 +27,7 @@ export class TaskDetailComponent implements OnInit {
   readonly taskService = inject(TaskService);
   readonly sprintService = inject(SprintService);
   readonly commentService = inject(CommentService);
-  readonly userService = inject(UsersService);
+  readonly userService = inject(UserService);
   
   public data: { projectId: number, task?: Task } = inject(MAT_DIALOG_DATA);
 
@@ -89,19 +83,24 @@ export class TaskDetailComponent implements OnInit {
       });
 
       //get comments for task
-      // this.commentService.getCommentsForTask(this.taskUnderEdit.task_id)
-      // .subscribe((comments) => {
-      //    this.taskUnderEdit.comments = comments})
-      
-
+      this.commentService.getCommentsForTask(this.taskUnderEdit.task_id).subscribe(
+        (comments) => {
+         this.taskUnderEdit.comments = comments
+        })
+         
+      //get sprint options for proj  
       this.sprintService.getSprints(this.data.projectId).subscribe((sprints) => {
         this.sprintsForProject = sprints;
       })
 
       this.userService.getUsers().subscribe((users) => {
-        this.usersForProject = users;
+        this.usersForProject = users.data;
+        // if (this.taskUnderEdit.comments) {
+        //   this.taskUnderEdit.comments.forEach((com) => {
+        //     com.user = this.usersForProject.filter(u => com.user_id == u.user_id)
+        //   })
+        // }
       })
-
     }
   }
 
@@ -113,41 +112,36 @@ export class TaskDetailComponent implements OnInit {
     if (this.taskForm.valid) {
       this.dialogRef.close(this.taskForm.value); 
     }
-    //   this.taskService.createTask(task).subscribe((task) => {
-    //     console.log('Added task:', task);
-    //   });
-    // }
   }
 
   deleteTask(): void {
     this.dialogRef.close(this.taskUnderEdit.task_id);
   }
-  
 
-  //Comments will be handled separately from Tasks as the Task endpoints don't accommodate complex objects
+  //Comments will be handled separatel. y from Tasks as the Task endpoints don't accommodate complex objects
   addComment() {
     debugger;
     if (this.newCommentForm.get('newComment')?.value !== '') {
-    //first need http request to add comment and return the new comments id, then push to array
-    this.taskUnderEdit?.comments?.push(
-      {
-         task_id: this.taskUnderEdit.task_id, 
-         comment_text: this.newCommentForm.get('newComment')?.value} as Comment);
-
-      this.newCommentForm.reset();
+      let newComment = {comment_id: null, task_id: this.taskUnderEdit.task_id, comment_text: this.newCommentForm.get('newComment')?.value,  user_id: 6,};
+      this.commentService.createComment(newComment).subscribe((com) => {
+        this.taskUnderEdit?.comments?.push(com as Comment);
+        this.newCommentForm.reset();
+      })
     }
   }
 
-  deleteComment(currentComment : Comment) {
-    //will need to make http request here too to delete
+  deleteComment(comment : Comment) {
     debugger;
-    let newCommentList = this.taskUnderEdit.comments?.filter((c) => c.comment_id !== currentComment.comment_id );
-    this.taskUnderEdit.comments = newCommentList;
+    this.commentService.deleteComment(comment.comment_id).subscribe(() => {
+      let newCommentList = this.taskUnderEdit.comments?.filter((c) => c.comment_id !== comment.comment_id );
+      this.taskUnderEdit.comments = newCommentList;
+    })
   }
 
-  commentsTask1: Comment[] = [{comment_id: 1, task_id: 1, comment_text: 'test comment 1', user_id: 1, },
-    {comment_id: 2, task_id: 1, comment_text: 'test comment 2', user_id: 2, }]
- 
-
-
+  editComment(currentComment : Comment) {
+    //will need to make http request here too to delete
+    // this.commentService.
+    // let newCommentList = this.taskUnderEdit.comments?.filter((c) => c.comment_id !== currentComment.comment_id );
+    // this.taskUnderEdit.comments = newCommentList;
+  }
 }

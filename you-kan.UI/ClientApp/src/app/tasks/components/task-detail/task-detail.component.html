@@ -74,7 +74,7 @@
             <button mat-button type="submit" (click)="addComment()">Add</button>
         </form>
         <mat-list>
-            @for (comment of data.task?.comments; track comment.comment_id) {
+            @for (comment of taskUnderEdit.comments; track comment.comment_id) {
             <mat-list-item>
                 {{ comment.comment_text }}
                 <button mat-icon-button matListItemMeta (click)="deleteComment(comment)">

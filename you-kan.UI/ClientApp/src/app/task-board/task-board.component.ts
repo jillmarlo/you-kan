@@ -5,6 +5,7 @@ import { ColumnComponent } from '../column/column.component';
 import { TaskboardActionBarComponent } from '../taskboard-action-bar/taskboard-action-bar.component';
 import { TaskCardComponent } from '../tasks/components/task-card/task-card.component';
 import { TaskService } from '../tasks/services/task.service';
+import { User } from '../user-management/models/user.model';
 
 @Component({
   selector: 'app-task-board',
@@ -16,6 +17,7 @@ import { TaskService } from '../tasks/services/task.service';
 
 export class TaskBoardComponent implements OnInit {
   taskService = inject(TaskService);
+  currentProjectUsers: User[] = [];
 
   //Signals that manage the state of the taskboard; could be moved to a service if desired
   allTasksForProject!: Task[];
@@ -52,18 +54,13 @@ export class TaskBoardComponent implements OnInit {
       const task = event.container.data[event.currentIndex];
       task.status = statusList.status;
 
-      //TODO - Make an HTTP request to save new status in db
-
-      // const updatedTasks = this.allTasksSignal().map(item =>
-      //   item.task_id === task.task_id ? { ...item, status: task.status } : item
-      // );
-
-      // this.allTasksSignal.set(updatedTasks);
+      this.updateTask(task);
     }
   }
 
   //Changing the project on the taskboard isn't a filter, it will fetch a new list
   handleProjectChange($event: number) {
+    debugger;
 
     if ($event == null) {
       this.allTasksForProject = [];
@@ -128,6 +125,10 @@ export class TaskBoardComponent implements OnInit {
       this.allTasksForProject = updatedArray;
       this.allTasksSignal.set(updatedArray);
     })
+  }
+
+  setProjectUsers($event: any) {
+    this.currentProjectUsers = $event;
   }
 
 }

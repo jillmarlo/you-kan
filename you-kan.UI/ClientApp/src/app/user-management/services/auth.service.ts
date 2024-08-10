@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, switchMap, tap } from 'rxjs';
-import { ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +8,12 @@ import { ReplaySubject } from 'rxjs';
 export class AuthService {
   private apiUrl = 'http://localhost:8000'; // Update with server URL
 
-  // observable for toggling dashboard nav/toolbar
-  isLoggedIn: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
-
   private csrfToken: string | null = null;
   private sessionId: string | null = null;
+
+
+  // observable for toggling dashboard nav/toolbar
+  isLoggedIn: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
 
   constructor(private http: HttpClient) { this.isLoggedIn.next(false) }
 

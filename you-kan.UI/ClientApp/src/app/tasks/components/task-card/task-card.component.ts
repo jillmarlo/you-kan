@@ -1,16 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
+import { MaterialModule } from '../../../shared/material.module';
 import { Task } from '../../models/task.model';
-import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
+import { User } from '../../../user-management/models/user.model';
 
 @Component({
   selector: 'app-task-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MaterialModule],
   templateUrl: './task-card.component.html',
   styleUrl: './task-card.component.css'
 })
@@ -18,6 +17,7 @@ export class TaskCardComponent {
   private dialog = inject(MatDialog);
   @Output() taskEdited = new EventEmitter<any>();
   @Output() taskDeleted = new EventEmitter<any>();
+  @Input() usersForProject!: User[];
   @Input() task!: any;
 
   constructor() {}
@@ -43,6 +43,10 @@ export class TaskCardComponent {
 
   deleteTask(task: Task) {
     this.taskDeleted.emit(task);
-
   }
+
+  taskIsBug(): boolean {
+    return this.task.task_type == "Bug"
+  }
+
 }

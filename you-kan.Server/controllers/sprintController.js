@@ -3,24 +3,24 @@ const { Sprint, Project, User, ProjectUser } = require('../models');
 const getSprints = async (req, res) => {
     try {
       const targetProjectId = req.params.projectId; 
-      const requesterUserId = req.user.user_id;
-  
+      const requesterUserId = req.user.user_id;;
+
       // Validate that the requesterUserId is provided
       if (!requesterUserId) {
         return res.status(400).json({ error: 'User ID is required' });
       }
   
       // Check if the requester is a collaborator on the target project
-      const projectUser = await ProjectUser.findOne({
-        where: {
-          user_id: requesterUserId,
-          project_id: targetProjectId,
-        },
-      });
+    //   const projectUser = await ProjectUser.findOne({
+    //     where: {
+    //       user_id: requesterUserId,
+    //       project_id: targetProjectId,
+    //     },
+    //   });
   
-      if (!projectUser) {
-        return res.status(403).json({ error: 'User does not have permission to view these sprints' });
-      }
+    //   if (!projectUser) {
+    //     return res.status(403).json({ error: 'User does not have permission to view these sprints' });
+    //   }
   
       // Fetch sprints where project_id matches targetProjectId
       const sprints = await Sprint.findAll({
@@ -29,8 +29,7 @@ const getSprints = async (req, res) => {
   
       res.json(sprints);
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Server error' });
+      res.status(500).json(err);
     }
   };
 

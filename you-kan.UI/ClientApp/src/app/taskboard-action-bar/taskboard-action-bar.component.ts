@@ -1,34 +1,33 @@
 import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import {MaterialModule } from '../shared/material.module';
+import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailComponent } from '../tasks/components/task-detail/task-detail.component';
 import { Task } from '../tasks/models/task.model';
 import { Project } from '../projects/models/project.model';
 import { ProjectService } from '../projects/services/project.service';
 import { User } from '../user-management/models/user.model';
+import { UserService } from '../user-management/services/user.service';
 import { Sprint } from '../sprints/models/sprint.model';
 import { SprintService } from '../sprints/services/sprint.service';
-import { UsersService } from '../user-management/components/users/users.service';
 
 @Component({
   selector: 'app-taskboard-action-bar',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatFormFieldModule, MatSelectModule, ReactiveFormsModule],
+  imports: [MaterialModule, ReactiveFormsModule],
   templateUrl: './taskboard-action-bar.component.html',
   styleUrl: './taskboard-action-bar.component.css'
 })
 export class TaskboardActionBarComponent implements OnInit {
   private projectService = inject(ProjectService);
   private sprintService = inject(SprintService);
-  private userService = inject(UsersService);
+  private userService = inject(UserService);
   public dialog = inject(MatDialog);
   @Output() projectChanged = new EventEmitter<number>();
   @Output() taskboardFiltersChanged = new EventEmitter<any>();
   @Output() taskCreated = new EventEmitter<Task>();
+  @Output() projectUsers = new EventEmitter<User[]>;
+
   projects!: Project[];
   selectedProjectId: number | null = null;
   sprintsForProject = signal<Sprint[]>([]);
@@ -57,7 +56,6 @@ export class TaskboardActionBarComponent implements OnInit {
   }
 
   loadProjects() {
-    debugger;
     this.projectService.getProjectsForUser().subscribe(
       (data: Project[]) => {
         this.projects = data;
@@ -67,6 +65,7 @@ export class TaskboardActionBarComponent implements OnInit {
 
   //update task filters for project
   onProjectChange(event: any) {
+    debugger;
     if (event.value == null) {
       this.selectedProjectId = null;
       this.taskboardFilters.reset();
@@ -105,12 +104,18 @@ export class TaskboardActionBarComponent implements OnInit {
   //gets the filter values for a project 
   updateFiltersForProject(id: number) {
     this.sprintService.getSprints(id).subscribe((sprints) => {
+      if(sprints.length == 0) {
+        this.sprintsForProject.set([]);
+      }
+      else {
       this.sprintsForProject.set(sprints);
+      }
     })
 
+    //TODO change to just get users in proj
     this.userService.getUsers().subscribe((userData) => {
-      this.usersForProject.set(userData);
-      // this.usersForProject.set(userData.data);
+      this.usersForProject.set(userData.data);
+      this.projectUsers.emit(userData.data);
     })
   }
 

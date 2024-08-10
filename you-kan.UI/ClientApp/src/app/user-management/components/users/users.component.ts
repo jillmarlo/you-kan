@@ -1,21 +1,16 @@
 import { CommonModule, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
+import { MaterialModule } from '../../../shared/material.module';
 import { User } from '../../models/user.model';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { UsersDetailComponent } from './users-detail.component';
-import { FormBuilder, FormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { UserDetailComponent } from '../user-detail/user-detail.component';
+import { FormBuilder } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { UsersService } from './users.service';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-users-component',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatIconModule, MatButtonModule, MatDialogModule, NgFor, NgIf, UpperCasePipe, UsersDetailComponent, 
-  ],
+  imports: [CommonModule, MaterialModule, NgFor, NgIf, UpperCasePipe, UserDetailComponent ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
   animations:[
@@ -32,8 +27,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class UsersComponent implements OnInit {
   private fb = inject(FormBuilder);
-  userService = inject(UsersService);
-  private dialog = inject(MatDialog);
+  userService = inject(UserService);
 
   dataSource: User[] = [];
   displayColumns: string[] = ['first_name', 'last_name', 'email', 'actions'];
@@ -72,14 +66,5 @@ export class UsersComponent implements OnInit {
       this.dataSource = [...this.dataSource];
     })
 
-  }
-
-  openUser(): void {
-    const sprintRef = this.dialog.open(UsersDetailComponent);
-
-    sprintRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-      }
-    });
   }
 }

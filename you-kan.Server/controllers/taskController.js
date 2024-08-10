@@ -3,7 +3,7 @@ const { Sequelize } = require('sequelize');
 
 const getTasks = async (req, res) => {
     const { project_id, user_id, sprint_id, status, priority, sort } = req.query;
-    const requesterUserId = req.user.user_id;
+    const requesterUserId = req.user.user_id;;
 
     // Use the user_id from the query if provided, otherwise use the requesterUserId
     const userId = user_id || requesterUserId;
@@ -28,7 +28,7 @@ const getTasks = async (req, res) => {
         }
 
         // Build the query options
-        const include = [{ model: User, where: { user_id: userId } }];
+       // const include = [{ model: User, where: { user_id: userId } }];
         const where = { project_id }; // Ensure that tasks are filtered by the project
 
         if (sprint_id) where.sprint_id = sprint_id;
@@ -40,13 +40,13 @@ const getTasks = async (req, res) => {
             order.push(sort.split(':')); // Assumes only 1 sort query param for now
         }
 
-        const queryOptions = { where, include, order };
+        const queryOptions = { where, order };
 
         // Fetch the tasks
         const tasks = await Task.findAll(queryOptions);
 
         if (tasks.length === 0) {
-            return res.status(404).json({ error: 'No tasks found.' });
+            return res.status(200).json([]);
         }
 
         return res.status(200).json(tasks);
@@ -78,10 +78,29 @@ const createTask = async (req, res) => {
         taskBody.sprint_id = null; // Set sprint_id to null if not provided
     }
 
-    if (!newTask) {
-        return res.sendStatus(404);
-    } else {
-        res.status(201).json(newTask);
+    try {
+        // Check if the user is part of the project
+        const isCollaborator = await ProjectUser.findOne({
+            where: { user_id: userRequesterId, project_id: taskBody.project_id }
+        });
+
+        if (!isCollaborator) {
+            return res.status(403).json({ error: 'You do not have permission to create tasks in this project.' });
+        }
+
+        // Create the task
+        const newTask = await Task.create(taskBody);
+
+        // Assign the task to the creator
+        await Task_Assignee.create({
+            user_id: userRequesterId, 
+            task_id: newTask.task_id
+        });
+
+        return res.status(201).json(newTask);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error' });
     }
 };
 

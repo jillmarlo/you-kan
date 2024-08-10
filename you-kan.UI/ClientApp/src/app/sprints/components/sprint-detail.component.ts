@@ -1,23 +1,19 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { MaterialModule } from '../../shared/material.module';
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
 import { Sprint } from '../models/sprint.model';
 import { SprintService } from '../services/sprint.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 @Component({
   selector: 'app-sprint-detail',
   standalone: true,
-  imports: [MatCardModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatDialogContent, MatDialogActions,
-    MatDialogTitle, MatButtonModule, TextFieldModule, MatDatepickerModule, MatNativeDateModule, MatIconModule],
+  imports: [ MaterialModule, ReactiveFormsModule, MatDialogContent, MatDialogActions,
+    MatDialogTitle,  TextFieldModule, MatDatepickerModule, MatNativeDateModule],
   providers: [MatDatepickerModule, MatNativeDateModule, provideNativeDateAdapter()],
   templateUrl: './sprint-detail.component.html',
   styleUrl: './sprint-detail.component.css'

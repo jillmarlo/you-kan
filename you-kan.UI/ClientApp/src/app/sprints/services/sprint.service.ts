@@ -1,36 +1,53 @@
 import { inject, Injectable } from '@angular/core';
 import { Sprint } from '../models/sprint.model';
 //import { User } from '../../user-management/models/user.model';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, switchMap } from 'rxjs';
+import { AuthService } from '../../user-management/services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class SprintService {
 
   protected http = inject(HttpClient);
+  private authService = inject(AuthService);
   private apiRoot = 'http://localhost:8000/api/sprints';
 
   constructor() {}
 
+  private addCsrfToken(headers: HttpHeaders = new HttpHeaders()): Observable<HttpHeaders> {
+    return this.authService.getCsrfToken().pipe(
+      switchMap(csrfToken => {
+        return new Observable<HttpHeaders>(observer => {
+          observer.next(headers.set('X-CSRF-Token', csrfToken));
+          observer.complete();
+        });
+      })
+    );
+  }
+
     // get sprints by project id
     getSprints(projectId: number): Observable<Sprint[]> {
-      return this.http.get<Sprint[]>(`${this.apiRoot}/project/${projectId}`, { withCredentials: true });
+      return this.addCsrfToken().pipe(
+        switchMap(headers => this.http.get<Sprint[]>(`${this.apiRoot}/project/${projectId}`, { headers, withCredentials: true }))) 
     }
   
     // create a new sprint
     createSprint(sprint: Sprint): Observable<Sprint> {
-      return this.http.post<Sprint>(this.apiRoot, sprint, { withCredentials: true });
+      return this.addCsrfToken().pipe(
+        switchMap(headers => this.http.post<Sprint>(this.apiRoot, sprint, { headers, withCredentials: true })))
     }
   
     // update an existing sprint
     updateSprint(updateSprint: Sprint): Observable<Sprint> {
       const params = new HttpParams().set('user_id', 1);
-      return this.http.put<Sprint>(`${this.apiRoot}/${updateSprint.sprint_id}`, updateSprint, {params});
+      return this.addCsrfToken().pipe(
+        switchMap(headers => this.http.put<Sprint>(`${this.apiRoot}/${updateSprint.sprint_id}`, updateSprint, { headers, params, withCredentials: true })))
     }
   
     // remove a sprint
     deleteSprint(id: any): Observable<void> {
       const params = new HttpParams().set('user_id', 1);
-      return this.http.delete<void>(`${this.apiRoot}/${id}`, {params});
+      return this.addCsrfToken().pipe(
+        switchMap(headers => this.http.delete<void>(`${this.apiRoot}/${id}`, { headers, params, withCredentials: true })))
     }
 }
