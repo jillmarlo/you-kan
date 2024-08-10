@@ -8,7 +8,7 @@ import { AuthService } from '../user-management/services/auth.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MaterialModule, RouterModule, RouterOutlet, RouterLink],
+  imports: [MaterialModule, RouterModule, RouterOutlet, RouterLink, NgIf],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })

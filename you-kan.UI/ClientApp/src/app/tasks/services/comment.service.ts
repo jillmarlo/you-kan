@@ -13,7 +13,7 @@ export class CommentService {
 
     // get comments for task
     getCommentsForTask(taskId: any): Observable<any[]> {
-      const params = new HttpParams().set('id', taskId);
+      const params = new HttpParams().set('task_id', taskId);
       return this.http.get<any[]>(this.apiRoot, {params});
     }
 

@@ -89,17 +89,18 @@ export class TaskDetailComponent implements OnInit {
          console.log(comments)
         })
          
+      //get sprint options for proj  
       this.sprintService.getSprints(this.data.projectId).subscribe((sprints) => {
         this.sprintsForProject = sprints;
       })
 
       this.userService.getUsers().subscribe((users) => {
         this.usersForProject = users.data;
-        if (this.taskUnderEdit.comments) {
-          this.taskUnderEdit.comments.forEach((com) => {
-            com.user = this.usersForProject.filter(u => com.user_id == u.user_id)
-          })
-        }
+        // if (this.taskUnderEdit.comments) {
+        //   this.taskUnderEdit.comments.forEach((com) => {
+        //     com.user = this.usersForProject.filter(u => com.user_id == u.user_id)
+        //   })
+        // }
       })
     }
   }
@@ -118,7 +119,7 @@ export class TaskDetailComponent implements OnInit {
     this.dialogRef.close(this.taskUnderEdit.task_id);
   }
 
-  //Comments will be handled separately from Tasks as the Task endpoints don't accommodate complex objects
+  //Comments will be handled separatel. y from Tasks as the Task endpoints don't accommodate complex objects
   addComment() {
     debugger;
     if (this.newCommentForm.get('newComment')?.value !== '') {
@@ -131,10 +132,10 @@ export class TaskDetailComponent implements OnInit {
   }
 
   deleteComment(comment : Comment) {
+    debugger;
     this.commentService.deleteComment(comment.comment_id).subscribe(() => {
       let newCommentList = this.taskUnderEdit.comments?.filter((c) => c.comment_id !== comment.comment_id );
       this.taskUnderEdit.comments = newCommentList;
-
     })
   }
 
