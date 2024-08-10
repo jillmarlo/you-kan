@@ -33,8 +33,7 @@ const getUsers = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const userData = req.body;
-    console.log("id to change: ", userData.user_id);
-  
+
     // Check if a new password is being set
     if (userData.password_hash) {
       // Hash the new password
@@ -44,7 +43,6 @@ const updateUser = async (req, res) => {
     const [updated] = await User.update(userData, {
       where: { user_id: req.user.user_id }
     });
-    console.log("id updated: ", updated);
     
     if (updated) {
       res.json({ message: 'Data updated' });
@@ -59,9 +57,8 @@ const updateUser = async (req, res) => {
   
   const deleteUser = async (req, res) => {
     try {
-      console.log(req.user.user_id);
       const deleted = await User.destroy({
-        where: { user_id: req.user.user_id }
+        where: { user_id: req.params.id }
       });
 
       if (deleted) {

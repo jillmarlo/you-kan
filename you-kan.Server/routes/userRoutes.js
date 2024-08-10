@@ -8,6 +8,6 @@ const ensureLoggedIn = ensureLogIn();
 router.get('/', ensureLoggedIn,  getUsers); // most likely dont need route, nice to have for checking loggedin
 router.get('/:id', ensureLoggedIn, getUserById);// most likely dont need route, nice to have for checking loggedin
 router.put('/:id', ensureLoggedIn, updateUser);
-router.delete('/admin', ensureLoggedIn, deleteUser);
+router.delete('/:id', ensureLoggedIn, deleteUser);
 
 module.exports = router;
