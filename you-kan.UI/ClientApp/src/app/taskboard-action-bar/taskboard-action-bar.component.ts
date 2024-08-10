@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {MaterialModule } from '../shared/material.module';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailComponent } from '../tasks/components/task-detail/task-detail.component';
 import { Task } from '../tasks/models/task.model';
 import { Project } from '../projects/models/project.model';
@@ -26,6 +26,8 @@ export class TaskboardActionBarComponent implements OnInit {
   @Output() projectChanged = new EventEmitter<number>();
   @Output() taskboardFiltersChanged = new EventEmitter<any>();
   @Output() taskCreated = new EventEmitter<Task>();
+  @Output() projectUsers = new EventEmitter<User[]>;
+
   projects!: Project[];
   selectedProjectId: number | null = null;
   sprintsForProject = signal<Sprint[]>([]);
@@ -54,7 +56,6 @@ export class TaskboardActionBarComponent implements OnInit {
   }
 
   loadProjects() {
-    debugger;
     this.projectService.getProjectsForUser().subscribe(
       (data: Project[]) => {
         this.projects = data;
@@ -64,6 +65,7 @@ export class TaskboardActionBarComponent implements OnInit {
 
   //update task filters for project
   onProjectChange(event: any) {
+    debugger;
     if (event.value == null) {
       this.selectedProjectId = null;
       this.taskboardFilters.reset();
@@ -110,8 +112,10 @@ export class TaskboardActionBarComponent implements OnInit {
       }
     })
 
+    //TODO change to just get users in proj
     this.userService.getUsers().subscribe((userData) => {
       this.usersForProject.set(userData.data);
+      this.projectUsers.emit(userData.data);
     })
   }
 

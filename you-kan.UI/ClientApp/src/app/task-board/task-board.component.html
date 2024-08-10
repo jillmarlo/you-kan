@@ -1,6 +1,7 @@
 <app-taskboard-action-bar (projectChanged)="handleProjectChange($event)"
     (taskboardFiltersChanged)="handleFiltersChange($event)"
-    (taskCreated)="handleTaskCreated($event)"></app-taskboard-action-bar>
+    (taskCreated)="handleTaskCreated($event)"
+    (projectUsers)="setProjectUsers($event)"></app-taskboard-action-bar>
 <div class="taskboard-wrapper">
     <div cdkDropListGroup class="status-columns">
         @for (statusList of allTasksByStatus(); track statusList.status) {

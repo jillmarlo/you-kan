@@ -4,6 +4,7 @@ import { MaterialModule } from '../../../shared/material.module';
 import { Task } from '../../models/task.model';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
+import { User } from '../../../user-management/models/user.model';
 
 @Component({
   selector: 'app-task-card',
@@ -16,6 +17,7 @@ export class TaskCardComponent {
   private dialog = inject(MatDialog);
   @Output() taskEdited = new EventEmitter<any>();
   @Output() taskDeleted = new EventEmitter<any>();
+  @Input() usersForProject!: User[];
   @Input() task!: any;
 
   constructor() {}
@@ -46,5 +48,5 @@ export class TaskCardComponent {
   taskIsBug(): boolean {
     return this.task.task_type == "Bug"
   }
-  
+
 }
