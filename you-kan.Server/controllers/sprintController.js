@@ -3,11 +3,8 @@ const { Sprint, Project, User, ProjectUser } = require('../models');
 const getSprints = async (req, res) => {
     try {
       const targetProjectId = req.params.projectId; 
-      const requesterUserId = 6;
+      const requesterUserId = req.user.user_id;;
 
-      console.log('targetProjectId')
-      console.log(targetProjectId);
-  
       // Validate that the requesterUserId is provided
       if (!requesterUserId) {
         return res.status(400).json({ error: 'User ID is required' });

@@ -1,4 +1,4 @@
-<mat-toolbar *ngIf="true" class="toolbar" color="primary">
+<mat-toolbar *ngIf="isLoggedIn" class="toolbar" color="primary">
     <mat-toolbar-row>
         <h4><img src="assets/images/youkan-transparent.png" height="175px" width="115px"></h4>
         <div class="toolbar-actions">
@@ -13,7 +13,7 @@
 </mat-toolbar>
     <mat-sidenav-container>
         <!-- Left sidenav -->
-        <mat-sidenav *ngIf="true" mode="side" opened class="side-nav-detail">
+        <mat-sidenav *ngIf="isLoggedIn" mode="side" opened class="side-nav-detail">
             <mat-nav-list>
                 <li><a routerLink="/task-board" mat-button>Task Board</a></li>
                 <li><a routerLink="/projects" mat-button>Projects</a></li>

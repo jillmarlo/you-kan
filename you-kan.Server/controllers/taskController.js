@@ -3,7 +3,7 @@ const { Sequelize } = require('sequelize');
 
 const getTasks = async (req, res) => {
     const { project_id, user_id, sprint_id, status, priority, sort } = req.query;
-    const requesterUserId = 6;
+    const requesterUserId = req.user.user_id;;
 
     // Use the user_id from the query if provided, otherwise use the requesterUserId
     const userId = user_id || requesterUserId;

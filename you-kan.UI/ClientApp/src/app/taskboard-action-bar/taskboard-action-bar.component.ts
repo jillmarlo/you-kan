@@ -54,6 +54,7 @@ export class TaskboardActionBarComponent implements OnInit {
   }
 
   loadProjects() {
+    debugger;
     this.projectService.getProjectsForUser().subscribe(
       (data: Project[]) => {
         this.projects = data;
