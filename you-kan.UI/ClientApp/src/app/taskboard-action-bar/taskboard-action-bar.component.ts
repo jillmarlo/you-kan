@@ -65,7 +65,6 @@ export class TaskboardActionBarComponent implements OnInit {
 
   //update task filters for project
   onProjectChange(event: any) {
-    debugger;
     if (event.value == null) {
       this.selectedProjectId = null;
       this.taskboardFilters.reset();
@@ -90,6 +89,7 @@ export class TaskboardActionBarComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      debugger;
       if (result) {
         const newTask: Task = {
           task_id: null, task_title: result.task_title, task_type: result.task_type, priority: result.priority,

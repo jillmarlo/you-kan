@@ -98,6 +98,7 @@ export class TaskBoardComponent implements OnInit {
   }
 
   handleTaskCreated($event: Task) {
+    debugger;
     const newTask = $event as Task;
     this.taskService.createTask(newTask).subscribe(
       (data: Task) => {
