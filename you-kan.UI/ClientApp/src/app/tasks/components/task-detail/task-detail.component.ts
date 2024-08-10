@@ -11,12 +11,13 @@ import { Comment } from '../../models/comment.model';
 import { CommentService } from '../../services/comment.service';
 import { User } from '../../../user-management/models/user.model';
 import { UserService } from '../../../user-management/services/user.service';
+import { NgIf } from '@angular/common';
 
 
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [ ReactiveFormsModule, MaterialModule,
+  imports: [ ReactiveFormsModule, MaterialModule, NgIf,
     MatDialogContent, MatDialogActions, MatDialogTitle, TextFieldModule],
   templateUrl: './task-detail.component.html',
   styleUrl: './task-detail.component.css'
@@ -29,7 +30,7 @@ export class TaskDetailComponent implements OnInit {
   readonly commentService = inject(CommentService);
   readonly userService = inject(UserService);
   
-  public data: { projectId: number, task?: Task } = inject(MAT_DIALOG_DATA);
+  public data: { projectId: number, task?: Task, usersForProject: User[] } = inject(MAT_DIALOG_DATA);
 
   //ideally these would be in a reference table and we would use Ids insted of magic strings
   taskTypes: string[] = ['Feature','Bug'];
@@ -43,6 +44,7 @@ export class TaskDetailComponent implements OnInit {
 
   taskForm: FormGroup;
   newCommentForm: FormGroup;
+  commentsForNewTask: Comment[] = [];
   taskUnderEdit!: Task;
 
   constructor() {
@@ -93,14 +95,7 @@ export class TaskDetailComponent implements OnInit {
         this.sprintsForProject = sprints;
       })
 
-      this.userService.getUsers().subscribe((users) => {
-        this.usersForProject = users.data;
-        // if (this.taskUnderEdit.comments) {
-        //   this.taskUnderEdit.comments.forEach((com) => {
-        //     com.user = this.usersForProject.filter(u => com.user_id == u.user_id)
-        //   })
-        // }
-      })
+      this.usersForProject = this.data.usersForProject;
     }
   }
 
