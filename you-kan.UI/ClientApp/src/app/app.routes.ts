@@ -4,6 +4,9 @@ import { UsersComponent } from './user-management/components/users/users.compone
 import { TaskBoardComponent } from './task-board/task-board.component';
 import { HomeComponent } from './home/home.component';
 
+// Testing 
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full'},

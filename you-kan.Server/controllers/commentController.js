@@ -1,8 +1,9 @@
 const { Comment, Task, ProjectUser } = require('../models');
 
 const getComments = async (req, res) => {
+
     const { task_id } = req.query;
-    const requesterUserId = req.user.user_id;
+    const requesterUserId = req.user.user_id;;
 
     if (!task_id) {
         return res.status(400).json({ error: 'Task ID must be specified in the query parameters.' });
@@ -98,6 +99,7 @@ const createComment = async (req, res) => {
 const deleteComment = async (req, res) => {
     const commentId = req.params.id;
     const requesterUserId = req.user.user_id;
+    console.log(commentId)
 
     let comment;
     try {
@@ -117,10 +119,12 @@ const deleteComment = async (req, res) => {
 
         const projectId = task.project_id;
 
-        // Check if the requesterUserId is part of the project
+        //Check if the requesterUserId is part of the project
         const isCollaborator = await ProjectUser.findOne({
             where: { user_id: requesterUserId, project_id: projectId }
         });
+        console.log('is collaborator')
+        console.log(isCollaborator)
 
         if (!isCollaborator) {
             return res.status(403).json({ error: 'You do not have permission to delete comments in this project.' });

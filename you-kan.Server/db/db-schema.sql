@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `task_id` INT NOT NULL AUTO_INCREMENT,
   `task_title` VARCHAR(255) NOT NULL,
   `task_description` VARCHAR(255) NULL DEFAULT NULL,
-  `sprint_id` INT NULL,
+  `sprint_id` INT NULL DEFAULT NULL,
   `priority` VARCHAR(255) NOT NULL,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `status` VARCHAR(255) NOT NULL,

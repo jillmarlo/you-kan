@@ -38,7 +38,7 @@
   ></tr>
 </table>
 
-<app-users-detail *ngIf="selectedUser" [@detailExpand] [user]="selectedUser" (save)="saveUpdate($event)"
+<app-user-detail *ngIf="selectedUser" [@detailExpand] [user]="selectedUser" (save)="saveUpdate($event)"
   (cancel)="cancelEdit()">
-</app-users-detail>
+</app-user-detail>
   

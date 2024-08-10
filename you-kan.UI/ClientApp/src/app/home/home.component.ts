@@ -1,61 +1,27 @@
-import { ChangeDetectionStrategy, Component, inject, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { TextFieldModule } from '@angular/cdk/text-field';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-// import { InputOption } from '../shared/input-option.model';
-import { MatDatepicker } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatIcon } from '@angular/material/icon';
+import { Component, inject, Input } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MaterialModule } from '../shared/material.module'
 import { User } from './../user-management/models/user.model';
-import { UsersService } from './../user-management/components/users/users.service';
-
+import { UserService } from '../user-management/services/user.service';
 import { Router } from '@angular/router';
-import { AuthService } from './../auth.service';
-import { CommonModule } from '@angular/common'; // needed for *ngIf
+import { AuthService } from '../user-management/services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    MatCardModule, 
-    MatFormFieldModule, 
+  imports: [ MaterialModule,
     ReactiveFormsModule, 
-    MatInputModule, 
-    MatSelectModule, 
-    MatDialogContent, 
-    MatDialogActions, 
-    MatDialogTitle, 
-    MatButtonModule, 
-    TextFieldModule, 
-    MatDatepicker, 
-    MatDatepickerModule, 
-    MatNativeDateModule, 
-    MatIcon,
     CommonModule
   ], 
-  providers: [provideNativeDateAdapter()],
+  providers: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-
-  showForm: boolean = false;
-
-
-  // readonly dialogRef = inject(MatDialogRef<SignUpComponent>);
-  readonly userService = inject(UsersService);
-  public dialog = inject(MatDialog);
- // readonly data = inject<DialogData>(MAT_DIALOG_DATA);
-
+  readonly userService = inject(UserService);
   @Input() user!: User;
+  showForm: boolean = false;
 
   userForm = new FormGroup({
     first_name: new FormControl<string>('', [Validators.required]),
@@ -70,15 +36,6 @@ export class HomeComponent {
   })
 
   constructor(private authService: AuthService, private router: Router) {}
-
-  openUser(): void {
-    const signUpRef = this.dialog.open(HomeComponent);
-
-    signUpRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-      }
-    });
-  }
 
   submit() {
     if (this.userForm.valid) {

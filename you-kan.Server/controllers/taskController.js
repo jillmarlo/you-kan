@@ -3,7 +3,7 @@ const { Sequelize } = require('sequelize');
 
 const getTasks = async (req, res) => {
     const { project_id, user_id, sprint_id, status, priority, sort } = req.query;
-    const requesterUserId = req.user.user_id;
+    const requesterUserId = req.user.user_id;;
 
     // Use the user_id from the query if provided, otherwise use the requesterUserId
     const userId = user_id || requesterUserId;
@@ -28,7 +28,7 @@ const getTasks = async (req, res) => {
         }
 
         // Build the query options
-        const include = [{ model: User, where: { user_id: userId } }];
+       // const include = [{ model: User, where: { user_id: userId } }];
         const where = { project_id }; // Ensure that tasks are filtered by the project
 
         if (sprint_id) where.sprint_id = sprint_id;
@@ -40,13 +40,13 @@ const getTasks = async (req, res) => {
             order.push(sort.split(':')); // Assumes only 1 sort query param for now
         }
 
-        const queryOptions = { where, include, order };
+        const queryOptions = { where, order };
 
         // Fetch the tasks
         const tasks = await Task.findAll(queryOptions);
 
         if (tasks.length === 0) {
-            return res.status(404).json({ error: 'No tasks found.' });
+            return res.status(200).json([]);
         }
 
         return res.status(200).json(tasks);
@@ -67,27 +67,15 @@ const getTaskById = async (req, res) => {
     if (!task) {
         return res.sendStatus(404);
     } else {
-        res.status(200).json(task);
+        return res.status(200).json(task);
     }
 }
 
 const createTask = async (req, res) => {
-    const userRequesterId = req.user.user_id;
-
-    // Ensure that the creator_user_id is set to the user creating the task
-    const taskBody = { 
-        ...req.body, 
-        created_at: new Date().toISOString(), 
-        creator_user_id: userRequesterId 
-    };
+    const taskBody = { ...req.body, created_at: new Date().toISOString() };
 
     if (taskBody.sprint_id === undefined) {
         taskBody.sprint_id = null; // Set sprint_id to null if not provided
-    }
-
-    // Validate project_id
-    if (!taskBody.project_id) {
-        return res.status(400).json({ error: 'Project ID must be specified.' });
     }
 
     try {
