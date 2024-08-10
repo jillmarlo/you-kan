@@ -63,27 +63,29 @@
                 </mat-select>
             </mat-form-field>
         </form>
-
-        <p style="font-size: large; padding-top: 30px">Comments:</p>
-        <form [formGroup]="newCommentForm">
-            <mat-form-field class="comment-input">
-                <mat-label>add a comment</mat-label>
-                <textarea matInput formControlName="newComment" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                    cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2"></textarea>
-            </mat-form-field>
-            <button mat-button type="submit" (click)="addComment()">Add</button>
-        </form>
-        <mat-list>
-            @for (comment of taskUnderEdit.comments; track comment.comment_id) {
-            <mat-list-item>
-                {{ comment.comment_text }}
-                <button mat-icon-button matListItemMeta (click)="deleteComment(comment)">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </mat-list-item>
-            }
-        </mat-list>
-    </mat-dialog-content>
+        
+        <div *ngIf="this.data.task">
+            <p style="font-size: large; padding-top: 30px">Comments:</p>
+            <form [formGroup]="newCommentForm">
+                <mat-form-field class="comment-input">
+                    <mat-label>add a comment</mat-label>
+                    <textarea matInput formControlName="newComment" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2"></textarea>
+                </mat-form-field>
+                <button mat-button type="submit" (click)="addComment()">Add</button>
+            </form>
+            <mat-list>
+                @for (comment of taskUnderEdit.comments; track comment.comment_id) {
+                <mat-list-item>
+                    {{ comment.comment_text }}
+                    <button mat-icon-button matListItemMeta (click)="deleteComment(comment)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-list-item>
+                }
+            </mat-list>
+        </div>
+        </mat-dialog-content>
     <mat-dialog-actions>
         <button mat-button (click)="cancel()">Cancel</button>
         <button mat-button cdkFocusInitial (click)="submit()">{{data.task ? 'Update' : 'Create'}}</button>
