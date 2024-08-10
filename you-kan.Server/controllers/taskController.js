@@ -73,15 +73,19 @@ const getTaskById = async (req, res) => {
 
 const createTask = async (req, res) => {
     const taskBody = { ...req.body, created_at: new Date().toISOString() };
+    const requesterUserId = req.user.user_id;
 
     if (taskBody.sprint_id === undefined) {
         taskBody.sprint_id = null; // Set sprint_id to null if not provided
     }
 
+    //set the creator id to the user id of the requester
+    taskBody.creator_user_id = requesterUserId; 
+
     try {
         // Check if the user is part of the project
         const isCollaborator = await ProjectUser.findOne({
-            where: { user_id: userRequesterId, project_id: taskBody.project_id }
+            where: { user_id: requesterUserId, project_id: taskBody.project_id }
         });
 
         if (!isCollaborator) {
@@ -90,12 +94,6 @@ const createTask = async (req, res) => {
 
         // Create the task
         const newTask = await Task.create(taskBody);
-
-        // Assign the task to the creator
-        await Task_Assignee.create({
-            user_id: userRequesterId, 
-            task_id: newTask.task_id
-        });
 
         return res.status(201).json(newTask);
     } catch (error) {
