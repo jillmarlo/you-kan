@@ -65,4 +65,18 @@ export class ProjectService {
       switchMap(headers => this.http.delete<void>(`${this.apiRoot}/${id}`, { headers, withCredentials: true }))
     );
   }
+
+  addProjectUser(projectId: number, userId: number): Observable<any> {
+      const params = new HttpParams().set('user_id', userId);
+      return this.addCsrfToken().pipe(
+        switchMap(headers => this.http.post<any>(`${this.apiRoot}/collaborators/${projectId}`, { headers, params, withCredentials: true }))
+      );
+    }
+
+    removeProjectUser(projectId: number, userId: number): Observable<void> {
+        const params = new HttpParams().set('user_id', userId);
+        return this.addCsrfToken().pipe(
+          switchMap(headers => this.http.delete<void>(`${this.apiRoot}/collaborators/${projectId}`, { headers, params, withCredentials: true }))
+        );
+      }
 }
