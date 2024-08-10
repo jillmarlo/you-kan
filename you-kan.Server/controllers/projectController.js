@@ -3,8 +3,7 @@ const { Project, ProjectUser, User } = require('../models');
 // CRUD for PROJECTS
 const getProject = async (req, res) => {
     try {
-      const requesterUserId = 6;
-      //console.log(requesterUserId)
+      const requesterUserId = req.user.user_id;
   
       // Validate that the requesterUserId is provided
       if (!requesterUserId) {

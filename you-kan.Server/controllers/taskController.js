@@ -72,22 +72,10 @@ const getTaskById = async (req, res) => {
 }
 
 const createTask = async (req, res) => {
-    const userRequesterId = req.user.user_id;
-
-    // Ensure that the creator_user_id is set to the user creating the task
-    const taskBody = { 
-        ...req.body, 
-        created_at: new Date().toISOString(), 
-        creator_user_id: userRequesterId 
-    };
+    const taskBody = { ...req.body, created_at: new Date().toISOString() };
 
     if (taskBody.sprint_id === undefined) {
         taskBody.sprint_id = null; // Set sprint_id to null if not provided
-    }
-
-    // Validate project_id
-    if (!taskBody.project_id) {
-        return res.status(400).json({ error: 'Project ID must be specified.' });
     }
 
     try {
