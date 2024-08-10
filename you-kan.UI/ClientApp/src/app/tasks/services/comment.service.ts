@@ -12,20 +12,20 @@ export class CommentService {
   constructor() {}
 
     // get comments for task
-    getCommentsForTask(taskId: any): Observable<Comment[]> {
+    getCommentsForTask(taskId: any): Observable<any[]> {
       const params = new HttpParams().set('id', taskId);
-      return this.http.get<Comment[]>(this.apiRoot, {params});
+      return this.http.get<any[]>(this.apiRoot, {params});
+    }
+
+    getCommentById(id: any): Observable<Comment> {
+      const params = new HttpParams().set('id', id);
+      return this.http.get<Comment>(this.apiRoot, {params});
     }
 
     // create a new task
-    createComment(comment: Comment): Observable<Comment> {
-      return this.http.post<Comment>(this.apiRoot, comment);
+    createComment(comment: any): Observable<any> {
+      return this.http.post<any>(this.apiRoot, comment);
     }
-  
-    // // update an existing task
-    // updateTask(updateTask: Task): Observable<Task> {
-    //   return this.http.put<Task>(`${this.apiRoot}/${updateTask.task_id}`, updateTask);
-    // }
   
     // remove a task
     deleteComment(id: number | any): Observable<void> {

@@ -3,7 +3,7 @@ const { Sequelize } = require('sequelize');
 
 const getTasks = async (req, res) => {
     const { project_id, user_id, sprint_id, status, priority, sort } = req.query;
-    const requesterUserId = req.user.user_id;
+    const requesterUserId = 6;
 
     // Use the user_id from the query if provided, otherwise use the requesterUserId
     const userId = user_id || requesterUserId;
@@ -28,7 +28,7 @@ const getTasks = async (req, res) => {
         }
 
         // Build the query options
-        const include = [{ model: User, where: { user_id: userId } }];
+       // const include = [{ model: User, where: { user_id: userId } }];
         const where = { project_id }; // Ensure that tasks are filtered by the project
 
         if (sprint_id) where.sprint_id = sprint_id;
@@ -40,7 +40,7 @@ const getTasks = async (req, res) => {
             order.push(sort.split(':')); // Assumes only 1 sort query param for now
         }
 
-        const queryOptions = { where, include, order };
+        const queryOptions = { where, order };
 
         // Fetch the tasks
         const tasks = await Task.findAll(queryOptions);
