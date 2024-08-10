@@ -28,7 +28,7 @@ export class TaskCardComponent {
       maxWidth: '50vw',
       height: '650px',
       maxHeight: '650px',
-      data: { project_id: this.task.project_id, task: editTask }
+      data: { project_id: this.task.project_id, task: editTask, usersForProject: this.usersForProject }
     });
 
     dialogRef.afterClosed().subscribe(result => {

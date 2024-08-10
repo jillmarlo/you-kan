@@ -1,5 +1,5 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Task } from '../tasks/models/task.model';
 import { ColumnComponent } from '../column/column.component';
 import { TaskboardActionBarComponent } from '../taskboard-action-bar/taskboard-action-bar.component';
@@ -60,8 +60,6 @@ export class TaskBoardComponent implements OnInit {
 
   //Changing the project on the taskboard isn't a filter, it will fetch a new list
   handleProjectChange($event: number) {
-    debugger;
-
     if ($event == null) {
       this.allTasksForProject = [];
     }
