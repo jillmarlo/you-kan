@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { NgIf } from '@angular/common';
 import { MaterialModule } from '../shared/material.module'
-import { RouterOutlet, Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../user-management/services/auth.service';
 
 @Component({
@@ -12,13 +14,18 @@ import { AuthService } from '../user-management/services/auth.service';
 })
 export class DashboardComponent {
 
-  constructor(private authService: AuthService, private router: Router) {}
+  isLoggedIn: boolean=false;
+
+  constructor(private authService: AuthService, private router: Router) {
+    authService.isLoggedIn.subscribe(newValue => {this.isLoggedIn = newValue}) // tells dashboard we are logged in
+  }
 
   logout() {
     this.authService.logout().subscribe(
       response => {
         console.log('Logout successful', response);
-        this.router.navigate(['/login']);
+        this.authService.isLoggedIn.next(false);
+        this.router.navigate(['/home']);
       },
       error => {
         console.error('Logout error', error);
