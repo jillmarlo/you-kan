@@ -87,9 +87,14 @@ export class TaskDetailComponent implements OnInit {
       //get comments for task
       this.commentService.getCommentsForTask(this.taskUnderEdit.task_id).subscribe(
         (comments) => {
-         this.taskUnderEdit.comments = comments
+          this.taskUnderEdit.comments = comments ?? [];
+          if (this.taskUnderEdit.comments.length > 0) {
+            this.taskUnderEdit.comments.forEach(com => {
+              com.user = this.findById(this.usersForProject, com.user_id)
+            })
+          }
         })
-         
+
       //get sprint options for proj  
       this.sprintService.getSprints(this.data.projectId).subscribe((sprints) => {
         this.sprintsForProject = sprints;
@@ -111,6 +116,12 @@ export class TaskDetailComponent implements OnInit {
 
   deleteTask(): void {
     this.dialogRef.close(this.taskUnderEdit.task_id);
+  }
+
+  getCommentCreatorName(comment: Comment): string {
+    console.log(comment)
+    return `${comment.user.first_name} ${comment.user.last_name[0]}`;
+
   }
 
   //Comments will be handled separatel. y from Tasks as the Task endpoints don't accommodate complex objects
@@ -138,5 +149,12 @@ export class TaskDetailComponent implements OnInit {
     // this.commentService.
     // let newCommentList = this.taskUnderEdit.comments?.filter((c) => c.comment_id !== currentComment.comment_id );
     // this.taskUnderEdit.comments = newCommentList;
+  }
+
+  findById(users: User[], id: number | undefined): any {
+    if (id == undefined) {
+      return {};
+    }
+    return users.find(user => user.user_id === id);
   }
 }
