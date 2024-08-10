@@ -67,7 +67,7 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(user: any) {
-    this,this.userService.deleteUser(user.user_id).subscribe(() => {
+    this.userService.deleteUser(user.user_id).subscribe(() => {
       this.dataSource = this.dataSource.filter(u => u.user_id !== user.user_id);
       this.dataSource = [...this.dataSource];
     })

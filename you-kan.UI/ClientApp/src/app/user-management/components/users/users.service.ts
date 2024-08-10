@@ -34,7 +34,7 @@ export class UsersService {
     }
   
     // remove a user
-    deleteUser(user_id: number): Observable<void> {
-      return this.http.delete<void>(`${this.apiRoot}/${user_id}`, {withCredentials: true});
+    deleteUser(id: number): Observable<void> {
+      return this.http.delete<void>(`${this.apiRoot}/${id}`, {withCredentials: true});
     }
 }

@@ -59,10 +59,11 @@ const updateUser = async (req, res) => {
   
   const deleteUser = async (req, res) => {
     try {
+      console.log(req.user.user_id);
       const deleted = await User.destroy({
         where: { user_id: req.user.user_id }
       });
-      console.log("deleted: ", deleted);
+
       if (deleted) {
         res.json({ message: 'Data deleted' });
       } else {
