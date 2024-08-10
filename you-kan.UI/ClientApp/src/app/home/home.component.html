@@ -28,10 +28,11 @@
       <mat-error *ngIf="userForm.get('password')?.hasError('required')">Password is required.</mat-error>
     </mat-form-field>
   </form>
+  <div align="center">
   <button mat-button cdkFocusInitial (click)="submit()">Sign Up</button>
   <p style="text-align: center;"><a href="#" (click)="toggleForm($event)">I already have an account!</a></p>
 </div>
-
+</div>
 
 <div *ngIf="!showForm">
   <h4 style="text-align: center;">Login</h4>

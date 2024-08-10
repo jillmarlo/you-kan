@@ -6,6 +6,7 @@ import { UserService } from '../../services/user.service';
 import { UserDetailComponent } from '../user-detail/user-detail.component';
 import { FormBuilder } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-users-component',
@@ -33,6 +34,7 @@ export class UsersComponent implements OnInit {
   displayColumns: string[] = ['first_name', 'last_name', 'email', 'actions'];
   selectedUser: any = null;
 
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe((users) => {

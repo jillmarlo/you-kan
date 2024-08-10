@@ -22,6 +22,7 @@ export class HomeComponent {
   readonly userService = inject(UserService);
   @Input() user!: User;
   showForm: boolean = false;
+  loggedEmail: string = '';
 
   userForm = new FormGroup({
     first_name: new FormControl<string>('', [Validators.required]),

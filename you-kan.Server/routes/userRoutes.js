@@ -10,4 +10,7 @@ router.get('/:id', ensureLoggedIn, getUserById);// most likely dont need route, 
 router.put('/:id', ensureLoggedIn, updateUser);
 router.delete('/:id', ensureLoggedIn, deleteUser);
 
+// router.put('/admin', ensureLoggedIn, updateUser);
+// router.delete('/admin', ensureLoggedIn, deleteUser);
+
 module.exports = router;
