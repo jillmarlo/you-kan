@@ -86,7 +86,6 @@ export class TaskDetailComponent implements OnInit {
       this.commentService.getCommentsForTask(this.taskUnderEdit.task_id).subscribe(
         (comments) => {
          this.taskUnderEdit.comments = comments
-         console.log(comments)
         })
          
       //get sprint options for proj  

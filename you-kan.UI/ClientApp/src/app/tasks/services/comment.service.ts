@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { Task } from '../models/task.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
 import { AuthService } from '../../user-management/services/auth.service';
@@ -46,6 +45,6 @@ export class CommentService {
     // remove a task
     deleteComment(id: number | any): Observable<void> {
       return this.addCsrfToken().pipe(
-        switchMap(headers => this.http.delete<void>(`${this.apiRoot}/${id}`)))
+        switchMap(headers => this.http.delete<void>(`${this.apiRoot}/${id}`, { headers, withCredentials: true })))
     }
 }

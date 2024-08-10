@@ -41,6 +41,10 @@ export class TaskCardComponent {
 
   deleteTask(task: Task) {
     this.taskDeleted.emit(task);
-
   }
+
+  taskIsBug(): boolean {
+    return this.task.task_type == "Bug"
+  }
+  
 }
