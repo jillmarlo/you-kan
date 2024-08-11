@@ -47,7 +47,6 @@ export class TaskboardActionBarComponent implements OnInit {
 
 
   ngOnInit(): void {
-    //TODO: Get project, sprint, assignee options and assign them to dropdowns
     this.loadProjects();
   
     this.taskboardFilters.valueChanges.subscribe(values =>
@@ -113,9 +112,9 @@ export class TaskboardActionBarComponent implements OnInit {
     })
 
     //TODO change to just get users in proj
-    this.userService.getUsers().subscribe((userData) => {
-      this.usersForProject.set(userData.data);
-      this.projectUsers.emit(userData.data);
+    this.projectService.getProjectCollaborators(id).subscribe((users) => {
+      this.usersForProject.set(users);
+      this.projectUsers.emit(users);
     })
   }
 

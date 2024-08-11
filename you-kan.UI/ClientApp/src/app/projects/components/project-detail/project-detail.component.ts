@@ -37,18 +37,25 @@ export class ProjectDetailComponent {
     this.projectForm = this.fb.group({
       project_name: ['', Validators.required],
     });
+
+    this.userService.getUsers().subscribe((users) => {
+      this.availableUsers = users;
+    })
   }
 
   ngOnInit() {
-    this.userService.getUsers().subscribe((users) => {
-      this.availableUsers = users;
-      // this.availableUsers = users.data;
-    })
-
+    debugger;
     if (this.project) {
+      let setOfCurrentUsers: any;
+
+      if (this.project.users.length > 0) {
+        setOfCurrentUsers = new Set(this.project.users.map((u: User) => u.user_id));
+        this.availableUsers = this.availableUsers.filter((u: User) => !setOfCurrentUsers.has(u.user_id));
+      }
+
       this.projectForm.patchValue(this.project);
-      this.projectUsers.set(this.project.users ?? []);
       this.projectSprints.set(this.project.sprints ?? []);
+      this.projectUsers.set(this.project.users ?? [])
     }
   }
 
@@ -76,10 +83,13 @@ export class ProjectDetailComponent {
 
   onSubmit() {
     if (this.projectForm.valid) {
-      const updatedProject = {
-        ...this.projectForm.value, project_id: this.project.project_id
-      };
-      this.save.emit(updatedProject);
+      if (this.projectForm.get('project_name')?.value === this.project.project_name) {
+        this.cancel.emit()
+      }
+      else {
+        const updatedProject = { ...this.projectForm.value, project_id: this.project.project_id};
+        this.save.emit(updatedProject);
+      }
     }
   }
 

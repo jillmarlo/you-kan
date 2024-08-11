@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../../user-management/services/user.service';
 import { SprintService } from '../../../sprints/services/sprint.service';
 import { concatMap, of } from 'rxjs';
+import { User } from '../../../user-management/models/user.model';
 
 @Component({
   selector: 'app-project-list',
@@ -103,13 +104,17 @@ export class ProjectListComponent implements OnInit {
 
   setProjectAttributes(projects: Project[]) {
     projects.forEach(proj => {
-      this.fetchProjectSprints(proj)
+      this.fetchProjectSprints(proj);
+    })
+    projects.forEach(proj => {
+      this.fetchProjectUsers(proj);
     })
   }
 
   fetchProjectUsers(project: Project) {
-    //this needs to be an http request; endpoint doesnt exist yet
-
+    this.projectService.getProjectCollaborators(project.project_id).subscribe((users: User[]) => {
+      project.users = users;
+    })
   }
 
   fetchProjectSprints(project: Project) {

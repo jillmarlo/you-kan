@@ -218,7 +218,7 @@ const getCollaborator = async (req, res) => {
 
     const users = collaborators.map(collaborator => collaborator.User);
 
-    res.status(200).json({ users }); // returns array of User object
+    res.status(200).json(users); // returns array of User object
   } catch (error) {
     console.error('Error fetching collaborators:', error);
     res.status(500).json({ message: 'Server error' });
