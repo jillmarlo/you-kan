@@ -61,10 +61,10 @@ export class ProjectService {
       );
     }
 
-    removeProjectUser(projectId: number, userId: number): Observable<void> {
-        const params = new HttpParams().set('user_id', userId);
-        return this.addCsrfToken().pipe(
-          switchMap(headers => this.http.delete<void>(`${this.apiRoot}/collaborators/${projectId}`, { headers, params, withCredentials: true }))
-        );
-      }
+  removeProjectUser(projectId: number, userId: number): Observable<void> {
+      const params = new HttpParams().set('user_id', userId);
+      return this.addCsrfToken().pipe(
+        switchMap(headers => this.http.delete<void>(`${this.apiRoot}/collaborators/${projectId}`, { headers, params, withCredentials: true }))
+      );
+    }
 }
