@@ -77,7 +77,7 @@
             <mat-list>
                 @for (comment of taskUnderEdit.comments; track comment.comment_id) {
                 <mat-list-item>
-                    {{ getCommentCreatorName(comment) }}: {{ comment.comment_text }}
+                     {{ comment.comment_text }}
                     <button mat-icon-button matListItemMeta (click)="deleteComment(comment)">
                         <mat-icon>delete</mat-icon>
                     </button>

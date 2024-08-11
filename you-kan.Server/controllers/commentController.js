@@ -99,7 +99,6 @@ const createComment = async (req, res) => {
 const deleteComment = async (req, res) => {
     const commentId = req.params.id;
     const requesterUserId = req.user.user_id;
-    console.log(commentId)
 
     let comment;
     try {
@@ -123,8 +122,6 @@ const deleteComment = async (req, res) => {
         const isCollaborator = await ProjectUser.findOne({
             where: { user_id: requesterUserId, project_id: projectId }
         });
-        console.log('is collaborator')
-        console.log(isCollaborator)
 
         if (!isCollaborator) {
             return res.status(403).json({ error: 'You do not have permission to delete comments in this project.' });
