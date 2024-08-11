@@ -31,7 +31,7 @@ export class UsersComponent implements OnInit {
   userService = inject(UserService);
 
   dataSource: User[] = [];
-  displayColumns: string[] = ['first_name', 'last_name', 'email', 'actions'];
+  displayColumns: string[] = ['first_name', 'last_name', 'email'];
   selectedUser: any = null;
 
   constructor(private authService: AuthService) {}

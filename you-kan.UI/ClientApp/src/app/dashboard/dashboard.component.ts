@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
@@ -32,6 +32,7 @@ export class DashboardComponent {
       }
     );
   }
+
 
   openUserDetail() {
     // implement here
