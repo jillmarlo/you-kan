@@ -30,11 +30,8 @@ export class AuthService {
   // Get stored CSRF token or fetch a new one if not available
   getCsrfToken(): Observable<string> {
     if (this.csrfToken) {
-      console.log('in get csrf token func')
-      console.log(this.csrfToken)
       return of(this.csrfToken);
     } else {
-      console.log('in else')
       return this.fetchCsrfToken();
     }
   }

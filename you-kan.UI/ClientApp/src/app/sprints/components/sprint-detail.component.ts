@@ -71,6 +71,7 @@ export class SprintDetailComponent implements OnInit {
     if (this.sprintForm.valid) {
       this.dialogRef.close({
         ...this.sprintForm.value,
+        sprint_id: this.data.sprint?.sprint_id ?? null,
         end_date: this.sprintForm.get('end_date')?.value,
         project_id: this.data.projectId
       });
