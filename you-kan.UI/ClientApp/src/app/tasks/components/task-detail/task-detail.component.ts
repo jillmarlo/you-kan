@@ -118,11 +118,10 @@ export class TaskDetailComponent implements OnInit {
     this.dialogRef.close(this.taskUnderEdit.task_id);
   }
 
-  getCommentCreatorName(comment: Comment): string {
-    console.log(comment)
-    return `${comment.user.first_name} ${comment.user.last_name[0]}`;
-
-  }
+  // getCommentCreatorName(comment: Comment): string {
+  //   console.log(comment)
+  //   return `${comment.user.first_name} ${comment.user.last_name[0]}`;
+  // }
 
   //Comments will be handled separatel. y from Tasks as the Task endpoints don't accommodate complex objects
   addComment() {

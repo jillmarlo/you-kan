@@ -32,22 +32,20 @@ export class SprintService {
     }
   
     // create a new sprint
-    createSprint(sprint: Sprint): Observable<Sprint> {
+    createSprint(sprint: Sprint, projectId: number): Observable<Sprint> {
       return this.addCsrfToken().pipe(
-        switchMap(headers => this.http.post<Sprint>(this.apiRoot, sprint, { headers, withCredentials: true })))
+        switchMap(headers => this.http.post<Sprint>(`${this.apiRoot}/project/${projectId}`, sprint, { headers, withCredentials: true })))
     }
   
     // update an existing sprint
     updateSprint(updateSprint: Sprint): Observable<Sprint> {
-      const params = new HttpParams().set('user_id', 1);
       return this.addCsrfToken().pipe(
-        switchMap(headers => this.http.put<Sprint>(`${this.apiRoot}/${updateSprint.sprint_id}`, updateSprint, { headers, params, withCredentials: true })))
+        switchMap(headers => this.http.put<Sprint>(`${this.apiRoot}/${updateSprint.sprint_id}`, updateSprint, { headers, withCredentials: true })))
     }
   
     // remove a sprint
     deleteSprint(id: any): Observable<void> {
-      const params = new HttpParams().set('user_id', 1);
       return this.addCsrfToken().pipe(
-        switchMap(headers => this.http.delete<void>(`${this.apiRoot}/${id}`, { headers, params, withCredentials: true })))
+        switchMap(headers => this.http.delete<void>(`${this.apiRoot}/${id}`, { headers, withCredentials: true })))
     }
 }

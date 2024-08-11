@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../../user-management/services/user.service';
 import { SprintService } from '../../../sprints/services/sprint.service';
 import { concatMap, of } from 'rxjs';
+import { ProjectService } from '../../services/project.service';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class ProjectDetailComponent {
   private dialog = inject(MatDialog);
   private userService = inject(UserService);
   private sprintService = inject(SprintService);
+  private projectService = inject(ProjectService);
   @Input() project: any;
   @Output() save = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
@@ -50,22 +52,26 @@ export class ProjectDetailComponent {
     }
   }
 
-  //TODO actually make http req to save user to this project
+  //Add user as collaborator on project
   addUser(user: User) {
-    if (this.projectUsers().length == 0) {
-      this.projectUsers.set([user]);
-      this.availableUsers = this.availableUsers.filter(u => u.user_id !== user.user_id);
-    }
-    else if (!this.projectUsers().find(u => u.user_id === user.user_id)) {
-      this.projectUsers.set([...this.projectUsers(), user]);
-      this.availableUsers = this.availableUsers.filter(u => u.user_id !== user.user_id);
-    }
+    this.projectService.addProjectUser(this.project.project_id, user.user_id).subscribe(() => {
+      if (this.projectUsers().length == 0) {
+        this.projectUsers.set([user]);
+        this.availableUsers = this.availableUsers.filter(u => u.user_id !== user.user_id);
+      }
+      else if (!this.projectUsers().find(u => u.user_id === user.user_id)) {
+        this.projectUsers.set([...this.projectUsers(), user]);
+        this.availableUsers = this.availableUsers.filter(u => u.user_id !== user.user_id);
+      }
+    })
   }
 
-  //TODO actually make http req to remove this user from project
+  //Remove user as collaborator on project
   removeUser(user: User) {
-    this.projectUsers.set(this.projectUsers().filter(u => u.user_id !== user.user_id));
-    this.availableUsers.push(user);
+    this.projectService.removeProjectUser(this.project.project_id, user.user_id).subscribe(() => {
+      this.projectUsers.set(this.projectUsers().filter(u => u.user_id !== user.user_id));
+      this.availableUsers.push(user);
+    })
   }
 
   onSubmit() {
@@ -87,7 +93,7 @@ export class ProjectDetailComponent {
       .pipe(
         concatMap(result => {
           if (result) {
-            return this.sprintService.createSprint({...result, project_id: this.project.project_id});
+            return this.sprintService.createSprint(result, this.project.project_id);
           } else {
             return of(null);
           }
