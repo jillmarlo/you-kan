@@ -53,7 +53,6 @@ export class ProjectListComponent implements OnInit {
 
   editProject(project: any) {
     this.selectedProject = { ...project };
-    // Implement edit logic
   }
 
   saveProject(updatedProject: Project) {
