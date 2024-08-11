@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, ReplaySubject, switchMap, tap } from 'rxjs';
+import { catchError, Observable, of, ReplaySubject, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,11 @@ export class AuthService {
 
   // observable for toggling dashboard nav/toolbar
   isLoggedIn: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+  currentUserId: ReplaySubject<number> = new ReplaySubject<number>(1);
 
-  constructor(private http: HttpClient) { this.isLoggedIn.next(false) }
+  constructor(private http: HttpClient) { this.isAuthenticated().subscribe();
+    this.currentUserId.next(-1);
+   }
 
   // Get CSRF token from the server
   private fetchCsrfToken(): Observable<string> {
@@ -46,6 +49,8 @@ export class AuthService {
         });
         return this.http.post<any>(`${this.apiUrl}/login/password`, { email, password }, { headers, withCredentials: true }).pipe(
           tap((response: any) => {
+            this.currentUserId.next(response.user.user_id);
+            this.isLoggedIn.next(true);
             this.sessionId = response.sessionId; // Assume the session ID is returned in the response
           })
         );
@@ -61,7 +66,12 @@ export class AuthService {
           'Content-Type': 'application/json',
           'X-CSRF-Token': csrfToken || ''  // Provide an empty string if csrfToken is null
         });
-        return this.http.post<any>(`${this.apiUrl}/register`, user, { headers, withCredentials: true });
+        return this.http.post<any>(`${this.apiUrl}/register`, user, { headers, withCredentials: true }).pipe(
+          tap((response: any) => {
+            this.currentUserId.next(response.user.user_id);
+            this.isLoggedIn.next(true);
+          })
+        );
       })
     );
   }
@@ -78,6 +88,7 @@ export class AuthService {
           tap(() => {
             this.csrfToken = null; // Clear CSRF token on logout
             this.sessionId = null; // Clear session ID on logout
+            this.isLoggedIn.next(false);
           })
         );
       })
@@ -86,7 +97,16 @@ export class AuthService {
 
  // Implement the logic to check if the user is authenticated
  isAuthenticated(): Observable<boolean> {
-  return this.http.get<boolean>(`${this.apiUrl}/is-authenticated`, { withCredentials: true });
+  return this.http.get<boolean>(`${this.apiUrl}/is-authenticated`, { withCredentials: true }).pipe(
+    catchError((error) => {
+      this.isLoggedIn.next(false);
+      return of(error)
+    }),
+    tap((response: any) => {
+      this.isLoggedIn.next(true);
+      this.currentUserId.next(response.user_id);
+    })
+  );
 }
 
 // Helper to get the session ID if needed

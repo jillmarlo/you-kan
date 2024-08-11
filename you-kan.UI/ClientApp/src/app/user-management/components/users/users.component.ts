@@ -7,6 +7,7 @@ import { UserDetailComponent } from '../user-detail/user-detail.component';
 import { FormBuilder } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users-component',
@@ -31,12 +32,14 @@ export class UsersComponent implements OnInit {
   userService = inject(UserService);
 
   dataSource: User[] = [];
-  displayColumns: string[] = ['first_name', 'last_name', 'email'];
+  displayColumns: string[] = ['first_name', 'last_name', 'email', 'actions'];
   selectedUser: any = null;
+  currentUserId: number = -1;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
+    this.authService.currentUserId.subscribe(newValue => {this.currentUserId = newValue});
     this.userService.getUsers().subscribe((users) => {
       this.dataSource = users;
     })
@@ -63,10 +66,27 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(user: any) {
+    if (confirm( "Are you sure you want to delete this user? You will not be able to login with them if you do.")) {
     this.userService.deleteUser(user.user_id).subscribe(() => {
       this.dataSource = this.dataSource.filter(u => u.user_id !== user.user_id);
       this.dataSource = [...this.dataSource];
+      this.authService.logout();
+      this.authService.isLoggedIn.next(false);
+      this.router.navigate(['/']);
     })
 
+  }}
+
+  logout() {
+    this.authService.logout().subscribe(
+      response => {
+        console.log('Logout successful', response);
+        this.authService.isLoggedIn.next(false);
+        this.router.navigate(['/']);
+      },
+      error => {
+        console.error('Logout error', error);
+      }
+    );
   }
-}
+  }

@@ -25,7 +25,6 @@ export class DashboardComponent {
     this.authService.logout().subscribe(
       response => {
         console.log('Logout successful', response);
-        this.authService.isLoggedIn.next(false);
         this.router.navigate(['/']);
       },
       error => {

@@ -26,7 +26,13 @@ router.get('/csrf-token', (req, res) => {
 
 // Check if the user is authenticated
 router.get('/is-authenticated', ensureLoggedIn, (req, res) => {
-  res.json({ authenticated: true });
+  res.json({ 
+    authenticated: true, 
+    user_id: req.user.user_id,
+    first_name: req.user.first_name,
+    last_name: req.user.last_name,
+    email: req.user.email
+  });
 });
   
 

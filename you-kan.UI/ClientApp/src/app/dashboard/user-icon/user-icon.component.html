@@ -1,0 +1,26 @@
+<div class="edit-account">
+    <h3 mat-dialog-title>Edit Account Details</h3>
+</div>
+    <mat-dialog-content>
+        <form [formGroup]="accountForm">
+            <mat-form-field class="basic-input">
+                <mat-label>First Name</mat-label>
+                <input matInput formControlName="first_name" />
+            </mat-form-field>
+            <mat-form-field class="basic-input">
+                <mat-label>Last Name</mat-label>
+                <input matInput formControlName="last_name" />
+            </mat-form-field>
+            <mat-form-field class="basic-input">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" />
+            </mat-form-field>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <div class="actions-bar">
+            <button mat-raised-button color="primary" type="submit" (click)="onSubmit()"
+                [disabled]="accountForm.invalid">Save</button>
+            <button mat-button type="button" (click)="onCancel()">Cancel</button>
+        </div>
+    </mat-dialog-actions>
