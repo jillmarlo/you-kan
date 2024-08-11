@@ -120,7 +120,6 @@ export class ProjectDetailComponent {
     dialogRef.afterClosed()
     .pipe(
       concatMap(result => {
-        debugger;
         if (result) {
           return this.sprintService.updateSprint(result);
         } else {
@@ -129,8 +128,6 @@ export class ProjectDetailComponent {
       })
     ).subscribe(result => {
       if (result) {
-        console.log('result')
-        console.log(result)
         let newArray = this.projectSprints();
         const index = newArray.findIndex((s: Sprint) => s.sprint_id === editSprint.sprint_id);
         if (index !== -1) {
