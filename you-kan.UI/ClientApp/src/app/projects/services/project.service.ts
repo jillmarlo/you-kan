@@ -57,7 +57,7 @@ export class ProjectService {
   addProjectUser(projectId: number, userId: number): Observable<any> {
       const params = new HttpParams().set('user_id', userId);
       return this.addCsrfToken().pipe(
-        switchMap(headers => this.http.post<any>(`${this.apiRoot}/collaborators/${projectId}`, { headers, params, withCredentials: true }))
+        switchMap(headers => this.http.post<any>(`${this.apiRoot}/collaborators/${projectId}`, {}, { headers, params, withCredentials: true }))
       );
     }
 

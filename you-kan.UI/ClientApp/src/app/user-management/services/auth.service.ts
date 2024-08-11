@@ -15,6 +15,7 @@ export class AuthService {
   // observable for toggling dashboard nav/toolbar
   isLoggedIn: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
   currentUserId: ReplaySubject<number> = new ReplaySubject<number>(1);
+  userProfile: ReplaySubject<{first_name: string, last_name: string, email: string}> = new ReplaySubject<{first_name: string, last_name: string, email: string}>(1);
 
   constructor(private http: HttpClient) { this.isAuthenticated().subscribe();
     this.currentUserId.next(-1);
@@ -50,6 +51,7 @@ export class AuthService {
         return this.http.post<any>(`${this.apiUrl}/login/password`, { email, password }, { headers, withCredentials: true }).pipe(
           tap((response: any) => {
             this.currentUserId.next(response.user.user_id);
+            this.userProfile.next({first_name: response.user.first_name, last_name: response.user.last_name, email: response.user.email});
             this.isLoggedIn.next(true);
             this.sessionId = response.sessionId; // Assume the session ID is returned in the response
           })
@@ -69,6 +71,7 @@ export class AuthService {
         return this.http.post<any>(`${this.apiUrl}/register`, user, { headers, withCredentials: true }).pipe(
           tap((response: any) => {
             this.currentUserId.next(response.user.user_id);
+            this.userProfile.next({first_name: response.user.first_name, last_name: response.user.last_name, email: response.user.email});
             this.isLoggedIn.next(true);
           })
         );
@@ -105,6 +108,7 @@ export class AuthService {
     tap((response: any) => {
       this.isLoggedIn.next(true);
       this.currentUserId.next(response.user_id);
+      this.userProfile.next({first_name: response.first_name, last_name: response.last_name, email: response.email});
     })
   );
 }

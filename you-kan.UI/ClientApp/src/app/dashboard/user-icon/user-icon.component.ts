@@ -1,9 +1,11 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../shared/material.module';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { User } from '../../user-management/models/user.model';
+import { AuthService } from '../../user-management/services/auth.service';
+import { Router } from '@angular/router';
 
 
 
@@ -17,36 +19,16 @@ import { User } from '../../user-management/models/user.model';
 })
 export class UserIconComponent {
   @Input() user: any;
-  @Output() save = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
   readonly dialogRef = inject(MatDialogRef<UserIconComponent>);
+  userProfile?: {first_name: string, last_name: string, email: string};
 
-  accountForm: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.accountForm = this.fb.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
-      email: ['', Validators.required]
-    });
-  }
-
-  ngOnInit() {
-    if (this.user) {
-      this.accountForm.patchValue(this.user);
-    }
-  }
-
-  onSubmit() {
-    if (this.accountForm.valid) {
-      const updatedUser = {
-        ...this.accountForm.value,
-      };
-      this.save.emit(updatedUser);
-    }
-  }
+  constructor(authService: AuthService, router: Router) {
+    authService.userProfile.subscribe(newValue => {console.log(this.userProfile);
+      this.userProfile = newValue}); 
+  }; 
 
   onCancel() {
-    this.cancel.emit();
+    this.dialogRef.close();
   }
 }
