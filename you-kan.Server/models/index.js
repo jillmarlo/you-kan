@@ -36,6 +36,12 @@ Project.belongsTo(User, { foreignKey: 'creator_user_id' });
 Project.hasMany(Task, { foreignKey: 'project_id' })
 Task.belongsTo(Project, { foreignKey: 'project_id' });
 
+User.hasMany(ProjectUser, { foreignKey: 'user_id' });
+ProjectUser.belongsTo(User, { foreignKey: 'user_id' });
+
+Project.hasMany(ProjectUser, { foreignKey: 'project_id' });
+ProjectUser.belongsTo(Project, { foreignKey: 'project_id' });
+
 // Many to many relationships
 User.belongsToMany(Task, { through: Task_Assignee, foreignKey: 'user_id', otherKey: 'task_id' });
 Task.belongsToMany(User, { through: Task_Assignee, foreignKey: 'task_id', otherKey: 'user_id' });

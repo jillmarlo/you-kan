@@ -203,16 +203,22 @@ const getCollaborator = async (req, res) => {
   try {
     const collaborators = await ProjectUser.findAll({
       where: { project_id },
-      attributes: ['user_id']
+      include: [
+        {
+          model: User,
+          attributes: ['user_id', "first_name", "last_name"]
+        }
+      ],
+      
     });
 
     if (!collaborators.length) {
       return res.status(404).json({ message: 'Project not found or no collaborators' });
     }
 
-    const userIds = collaborators.map(collaborator => collaborator.user_id);
+    const users = collaborators.map(collaborator => collaborator.User);
 
-    res.status(200).json({ userIds }); // returns array of user_id
+    res.status(200).json({ users }); // returns array of User object
   } catch (error) {
     console.error('Error fetching collaborators:', error);
     res.status(500).json({ message: 'Server error' });
