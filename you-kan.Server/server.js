@@ -64,17 +64,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(csrf());
 app.use(passport.authenticate('session'));
 app.use(function(req, res, next) {
   const msgs = req.session.messages || [];
   res.locals.messages = msgs;
   res.locals.hasMessages = !! msgs.length;
   req.session.messages = [];
-  next();
-});
-app.use(function(req, res, next) {
-  res.locals.csrfToken = req.csrfToken();
   next();
 });
 

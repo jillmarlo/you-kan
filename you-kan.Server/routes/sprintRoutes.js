@@ -3,7 +3,7 @@ const { getSprints, getSprintById, createSprint, deleteSprint, updateSprint } = 
 const ensureLogIn = require('connect-ensure-login').ensureLoggedIn;
 
 const router = express.Router();
-const ensureLoggedIn = ensureLogIn();
+ const ensureLoggedIn = ensureLogIn();
 
 router.get('/project/:projectId', ensureLoggedIn, getSprints);
 router.get('/:id', ensureLoggedIn, getSprintById);

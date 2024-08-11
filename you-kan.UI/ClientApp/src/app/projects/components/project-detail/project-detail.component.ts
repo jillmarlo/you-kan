@@ -41,7 +41,8 @@ export class ProjectDetailComponent {
 
   ngOnInit() {
     this.userService.getUsers().subscribe((users) => {
-      this.availableUsers = users.data;
+      this.availableUsers = users;
+      // this.availableUsers = users.data;
     })
 
     if (this.project) {

@@ -96,6 +96,7 @@ export class ProjectListComponent implements OnInit {
         if (result) {
           let newProj = { ...result } as Project;
           this.dataSource = [...this.dataSource, newProj];
+          this.ngOnInit();
         }
       });
   }

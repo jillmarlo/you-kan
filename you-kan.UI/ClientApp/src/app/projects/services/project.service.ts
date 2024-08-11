@@ -26,50 +26,38 @@ export class ProjectService {
 
   // Get all projects
   getProjects(): Observable<Project[]> {
-    return this.addCsrfToken().pipe(
-      switchMap(headers => this.http.get<Project[]>(this.apiRoot, { headers, withCredentials: true }))
-    );
+    return this.http.get<Project[]>(this.apiRoot, { withCredentials: true })
   }
 
   // Get all projects by user
   getProjectsForUser(): Observable<Project[]> {
-    return this.addCsrfToken().pipe(
-      switchMap(headers => this.http.get<Project[]>(this.apiRoot, { headers, withCredentials: true }))
-    );
+    return this.http.get<Project[]>(this.apiRoot, { withCredentials: true })
   }
 
   // Get project by projectId
   getProject(id: number): Observable<Project> {
-    return this.addCsrfToken().pipe(
-      switchMap(headers => this.http.get<Project>(`${this.apiRoot}/${id}`, { headers, withCredentials: true }))
-    );
+    return this.http.get<Project>(`${this.apiRoot}/${id}`, { withCredentials: true })
   }
 
   // Create a new project
   createProject(project: Project): Observable<Project> {
-    return this.addCsrfToken().pipe(
-      switchMap(headers => this.http.post<Project>(this.apiRoot, { project_name: project.project_name }, { headers, withCredentials: true }))
-    );
+    return this.http.post<Project>(this.apiRoot, { project_name: project.project_name }, { withCredentials: true })
   }
 
   // Update an existing project
   updateProject(updateProject: any): Observable<Project> {
-    return this.addCsrfToken().pipe(
-      switchMap(headers => this.http.put<Project>(`${this.apiRoot}/${updateProject.project_id}`, updateProject, { headers, withCredentials: true }))
-    );
+    return this.http.put<Project>(`${this.apiRoot}/${updateProject.project_id}`, updateProject, { withCredentials: true })
   }
 
   // Remove a project
   deleteProject(id: number): Observable<void> {
-    return this.addCsrfToken().pipe(
-      switchMap(headers => this.http.delete<void>(`${this.apiRoot}/${id}`, { headers, withCredentials: true }))
-    );
+    return this.http.delete<void>(`${this.apiRoot}/${id}`, { withCredentials: true })
   }
 
   addProjectUser(projectId: number, userId: number): Observable<any> {
       const params = new HttpParams().set('user_id', userId);
       return this.addCsrfToken().pipe(
-        switchMap(headers => this.http.post<any>(`${this.apiRoot}/collaborators/${projectId}`, { headers, params, withCredentials: true }))
+        switchMap(headers => this.http.post<any>(`${this.apiRoot}/collaborators/${projectId}`, {}, { headers, params, withCredentials: true }))
       );
     }
 

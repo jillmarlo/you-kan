@@ -10,10 +10,10 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ MaterialModule,
-    ReactiveFormsModule, 
+  imports: [MaterialModule,
+    ReactiveFormsModule,
     CommonModule
-  ], 
+  ],
   providers: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -22,6 +22,7 @@ export class HomeComponent {
   readonly userService = inject(UserService);
   @Input() user!: User;
   showForm: boolean = false;
+
 
   userForm = new FormGroup({
     first_name: new FormControl<string>('', [Validators.required]),
@@ -35,7 +36,13 @@ export class HomeComponent {
     password: new FormControl<string>('', [Validators.required])
   })
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    this.authService.isLoggedIn.subscribe(response => {
+      if (response === true) {
+        this.router.navigate(['/task-board'])
+      }
+    })
+  }
 
   submit() {
     if (this.userForm.valid) {
@@ -45,7 +52,6 @@ export class HomeComponent {
         this.authService.register({ first_name, last_name, email, password }).subscribe(
           response => {
             console.log('Registration successful', response);
-            this.authService.isLoggedIn.next(true);
             this.router.navigate(['/task-board']);
           },
           error => {
@@ -68,7 +74,6 @@ export class HomeComponent {
         this.authService.login(email, password).subscribe(
           response => {
             console.log('Login successful', response);
-            this.authService.isLoggedIn.next(true);
             this.router.navigate(['/task-board']);
           },
           error => {
