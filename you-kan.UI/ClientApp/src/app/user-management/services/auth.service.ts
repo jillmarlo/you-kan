@@ -103,7 +103,7 @@ export class AuthService {
   return this.http.get<boolean>(`${this.apiUrl}/is-authenticated`, { withCredentials: true }).pipe(
     catchError((error) => {
       this.isLoggedIn.next(false);
-      return of(error)
+      throw error
     }),
     tap((response: any) => {
       this.isLoggedIn.next(true);
