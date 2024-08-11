@@ -92,7 +92,7 @@ export class ProjectDetailComponent {
       .pipe(
         concatMap(result => {
           if (result) {
-            return this.sprintService.createSprint({...result, project_id: this.project.project_id});
+            return this.sprintService.createSprint(result, this.project.project_id);
           } else {
             return of(null);
           }
@@ -120,6 +120,7 @@ export class ProjectDetailComponent {
     dialogRef.afterClosed()
     .pipe(
       concatMap(result => {
+        debugger;
         if (result) {
           return this.sprintService.updateSprint(result);
         } else {
@@ -128,6 +129,8 @@ export class ProjectDetailComponent {
       })
     ).subscribe(result => {
       if (result) {
+        console.log('result')
+        console.log(result)
         let newArray = this.projectSprints();
         const index = newArray.findIndex((s: Sprint) => s.sprint_id === editSprint.sprint_id);
         if (index !== -1) {

@@ -147,25 +147,29 @@ const updateSprint = async (req, res) => {
             return res.status(403).json({ error: 'User does not have permission to update this sprint' });
         }
 
-        // Proceed with the update
-        const [updated] = await Sprint.update({
-            sprint_name,
-            start_date,
-            end_date
-        }, {
+        const updateSprint = await Sprint.findOne({
             where: { sprint_id: sprintId }
         });
 
-        if (updated) {
-            res.json({ message: 'Sprint updated' });
+        if (updateSprint) {
+            await updateSprint.update({
+                sprint_name,
+                start_date,
+                end_date
+            });
+
+        if (updateSprint) {
+            res.json(updateSprint);
         } else {
             res.status(404).json({ message: 'Sprint not found' });
-        }
+        }}
+        
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });
     }
-};
+}
+
 
 const deleteSprint = async (req, res) => {
     try {
@@ -217,6 +221,4 @@ const deleteSprint = async (req, res) => {
     }
 };
 
-
-module.exports = { getSprints
-, getSprintById, createSprint, updateSprint, deleteSprint };
+module.exports = { getSprints , getSprintById, createSprint, updateSprint, deleteSprint };
