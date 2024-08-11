@@ -5,6 +5,7 @@ import { NgIf } from '@angular/common';
 import { MaterialModule } from '../shared/material.module'
 import { AuthService } from '../user-management/services/auth.service';
 
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -25,7 +26,7 @@ export class DashboardComponent {
       response => {
         console.log('Logout successful', response);
         this.authService.isLoggedIn.next(false);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
       },
       error => {
         console.error('Logout error', error);
