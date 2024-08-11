@@ -221,7 +221,6 @@ const getCollaborator = async (req, res) => {
 
 // Function to add a collaborator to a project
 const addCollaborator = async (req, res) => {
-  console.log('TEST')
   const project_id = req.params.id;
   const { user_id } = req.query; 
 
