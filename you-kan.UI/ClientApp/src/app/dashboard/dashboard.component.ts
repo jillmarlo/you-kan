@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { MaterialModule } from '../shared/material.module'
 import { AuthService } from '../user-management/services/auth.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -24,14 +25,14 @@ export class DashboardComponent {
     this.authService.logout().subscribe(
       response => {
         console.log('Logout successful', response);
-        this.authService.isLoggedIn.next(false);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
       },
       error => {
         console.error('Logout error', error);
       }
     );
   }
+
 
   openUserDetail() {
     // implement here

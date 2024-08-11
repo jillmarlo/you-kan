@@ -31,9 +31,8 @@ export class CommentService {
     }
 
     getCommentById(id: any): Observable<Comment> {
-      const params = new HttpParams().set('id', id);
       return this.addCsrfToken().pipe(
-        switchMap(headers => this.http.get<Comment>(this.apiRoot, { headers, params, withCredentials: true })))
+        switchMap(headers => this.http.get<Comment>(`${this.apiRoot}/${id}`, { headers, withCredentials: true })))
     }
 
     // create a new task
