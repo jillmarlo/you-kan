@@ -7,9 +7,11 @@ const csrf = require('csurf');
 const router = express.Router();
 const ensureLoggedIn = ensureLogIn();
 
-router.use(csrf());
+router.use(csrf({cookie: true}));
 router.use(function(req, res, next) {
-  res.locals.csrfToken = req.csrfToken();
+  const token = req.csrfToken();
+  res.cookie('XSRF-TOKEN', token);
+  res.locals.csrfToken = token; 
   next();
 });
 
