@@ -52,10 +52,11 @@ export class UsersComponent implements OnInit {
 
   saveUpdate(updatedUser: User) {
     this.userService.updateUser(updatedUser).subscribe(() =>  {
-      const idx = this.dataSource.findIndex(u => u.user_id === updatedUser.user_id);
+      const idx = this.dataSource.findIndex(u => u.user_id === this.currentUserId);
       if (idx !== -1) {
         this.dataSource[idx] = updatedUser;
         this.dataSource = [...this.dataSource];
+        this.authService.userProfile.next(updatedUser);
     }
     this.selectedUser = null;
   })
