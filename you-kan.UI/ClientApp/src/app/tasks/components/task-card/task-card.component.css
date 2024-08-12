@@ -5,7 +5,6 @@
 
 .avatar {
     color: antiquewhite;
-    background-color: #280991; 
     padding: 2px;
     display: flex;
     justify-content: center;
@@ -17,6 +16,3 @@
     align-self: flex-end;
   }
 
-  .custom-dialog-class .mat-dialog-container {
-    background-color:rgba(25, 3, 55, 0.89);
-  }

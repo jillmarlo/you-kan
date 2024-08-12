@@ -141,7 +141,8 @@ export class ProjectDetailComponent {
         let newArray = this.projectSprints();
         const index = newArray.findIndex((s: Sprint) => s.sprint_id === editSprint.sprint_id);
         if (index !== -1) {
-          newArray[index] = { ...editSprint, ...result };
+          let updateSprint = { ...editSprint, ...result };
+          newArray[index] = updateSprint;
           this.projectSprints.set(newArray);
         }
       }
