@@ -6,6 +6,7 @@ import { TaskboardActionBarComponent } from '../taskboard-action-bar/taskboard-a
 import { TaskCardComponent } from '../tasks/components/task-card/task-card.component';
 import { TaskService } from '../tasks/services/task.service';
 import { User } from '../user-management/models/user.model';
+import { Sprint } from '../sprints/models/sprint.model';
 
 @Component({
   selector: 'app-task-board',
@@ -18,6 +19,7 @@ import { User } from '../user-management/models/user.model';
 export class TaskBoardComponent implements OnInit {
   taskService = inject(TaskService);
   currentProjectUsers: User[] = [];
+  currentProjectSprints: Sprint[] = [];
 
   //Signals that manage the state of the taskboard; could be moved to a service if desired
   allTasksForProject!: Task[];
@@ -36,7 +38,6 @@ export class TaskBoardComponent implements OnInit {
   })
 
   ngOnInit(): void {
-    //this will be fetched via http 
     this.allTasksForProject = [];
   }
 
@@ -60,7 +61,7 @@ export class TaskBoardComponent implements OnInit {
 
   //Changing the project on the taskboard isn't a filter, it will fetch a new list
   handleProjectChange($event: any) {
-    if ($event === 'null') {
+    if ($event === null) {
       this.allTasksForProject = [];
     }
     else {
@@ -78,7 +79,7 @@ export class TaskBoardComponent implements OnInit {
   //updates tasks on taskboard to filter by sprint, assignee, priority
   handleFiltersChange($event: any) {
     if ($event.sprint === null && $event.priority === null && $event.assignee === null) {
-      this.allTasksSignal.set([]);
+      this.allTasksSignal.set(this.allTasksForProject);
     }
     else {
       this.filterFormValues = $event;
@@ -96,7 +97,7 @@ export class TaskBoardComponent implements OnInit {
       }
       if ($event.assignee !== null) {
         allTasksFiltered = allTasksFiltered.filter(task =>
-          task.assignee_id === $event.assignee
+          task.assignee_user_id === $event.assignee
         )
       }
       this.allTasksSignal.set(allTasksFiltered);
@@ -122,6 +123,8 @@ export class TaskBoardComponent implements OnInit {
   }
 
   updateTask(task: any) {
+    debugger;
+    console.log(task)
     this.taskService.updateTask(task).subscribe((data: any) => {
       let updatedArray = this.allTasksForProject
         .filter((t) => t.task_id !== task.task_id)
@@ -133,6 +136,10 @@ export class TaskBoardComponent implements OnInit {
 
   setProjectUsers($event: any) {
     this.currentProjectUsers = $event;
+  }
+
+  setProjectSprints($event: any) {
+    this.currentProjectSprints = $event;
   }
 
 }

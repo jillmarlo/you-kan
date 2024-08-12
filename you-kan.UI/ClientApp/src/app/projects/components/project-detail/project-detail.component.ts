@@ -40,7 +40,6 @@ export class ProjectDetailComponent {
   }
 
   ngOnInit() {
-    debugger;
     this.userService.getUsers().subscribe((users) => {
       this.availableUsers = users;
     })

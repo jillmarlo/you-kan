@@ -16,7 +16,7 @@ const getProject = async (req, res) => {
       });
   
       if (!project) {
-        return res.status(404).json({ error: 'No projects found for the user' });
+        return res.status(200).json([]);
       }
   
       if (project.creator_user_id !== parseInt(requesterUserId, 10)) {
@@ -95,7 +95,7 @@ const createProject = async (req, res) => {
       project_id: project.project_id
     });
 
-    res.status(201).send('Project created and associated with user successfully');
+    res.status(201).json(project);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

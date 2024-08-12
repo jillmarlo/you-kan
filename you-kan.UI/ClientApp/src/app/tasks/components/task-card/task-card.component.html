@@ -12,9 +12,9 @@
       <mat-icon>delete</mat-icon>
     </button>
     <button mat-button (click)="editDetail(task)">Details</button>
-    <div *ngIf="this.task.assignee_id" style="padding-left: 50px;">
+    <div *ngIf="this.task.assignee_user_id" style="padding-left: 50px;">
       <div class="avatar">
-        {{ getUserInitials(taskUser) }}
+        {{ assigneeInitials() }}
       </div>
     </div>
   </mat-card-actions>
