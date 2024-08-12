@@ -76,12 +76,11 @@ export class ProjectListComponent implements OnInit {
   }
 
   deleteProject(project: any) {
-    if (confirm( "Are you sure you want to delete this project?")) {
     this.projectService.deleteProject(project.project_id).subscribe(() => {
       this.dataSource = this.dataSource.filter(p => p.project_id !== project.project_id);
       this.dataSource = [...this.dataSource];
     })
-  }}
+  }
 
   addProject() {
     const dialogRef = this.dialog.open(NewProjectFormComponent, {
