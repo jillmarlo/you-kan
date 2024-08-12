@@ -11,7 +11,7 @@ import { Sprint } from '../../../sprints/models/sprint.model';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../../user-management/services/user.service';
 import { SprintService } from '../../../sprints/services/sprint.service';
-import { concatMap, of } from 'rxjs';
+import { concatMap, of, switchMap } from 'rxjs';
 import { User } from '../../../user-management/models/user.model';
 
 @Component({
@@ -46,6 +46,10 @@ export class ProjectListComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.setProjectList();
+  }
+
+  setProjectList() {
     this.projectService.getProjectsForUser().subscribe((projects) => {
       this.setProjectAttributes(projects);
       this.dataSource = projects;
@@ -57,18 +61,25 @@ export class ProjectListComponent implements OnInit {
   }
 
   saveProject(updatedProject: Project) {
-    this.projectService.updateProject(updatedProject).subscribe(() => {
-      const index = this.dataSource.findIndex(p => p.project_id === updatedProject.project_id);
-      if (index !== -1) {
-        this.dataSource[index] = updatedProject;
-        this.dataSource = [...this.dataSource];
-      }
+    this.projectService.updateProject(updatedProject).pipe(
+      switchMap(() => this.projectService.getProjectsForUser())
+    ).subscribe((projects) => {
+      this.setProjectAttributes(projects);
+      this.dataSource = projects;
+
+      //const index = this.dataSource.findIndex(p => p.project_id === updatedProject.project_id);
+      // if (index !== -1) {
+      //   this.dataSource[index] = updatedProject;
+      //   this.dataSource = [...this.dataSource];
+      // }
       this.selectedProject = null;
+
     })
   }
 
   cancelEdit() {
     this.selectedProject = null;
+    this.setProjectList();
   }
 
   deleteProject(project: any) {
