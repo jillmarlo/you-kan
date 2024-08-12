@@ -64,6 +64,7 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(user: any) {
+    if (confirm( "Are you sure you want to delete this user? You will not be able to login with them again if you do.")) {
     this.userService.deleteUser(user.user_id).subscribe(() => {
       this.dataSource = this.dataSource.filter(u => u.user_id !== user.user_id);
       this.dataSource = [...this.dataSource];
@@ -72,7 +73,7 @@ export class UsersComponent implements OnInit {
       this.router.navigate(['/']);
     })
 
-  }
+  }}
 
   logout() {
     this.authService.logout().subscribe(
