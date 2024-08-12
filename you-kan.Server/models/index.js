@@ -12,12 +12,14 @@ const Sprint = require('./Sprint.model')(sequelize, DataTypes)
 const Task = require('./Task.model')(sequelize, DataTypes);
 const Subtask = require('./Subtask.model')(sequelize, DataTypes);
 const Comment = require('./Comment.model')(sequelize, DataTypes);
-const Task_Assignee = require('./Task_Assignee.model')(sequelize, DataTypes);
 const ProjectUser = require('./ProjectUser.model')(sequelize, DataTypes);
 
 // One to many relationships
 User.hasMany(Comment, { foreignKey: 'user_id' });
 Comment.belongsTo(User, { foreignKey: 'user_id' });
+
+User.hasMany(Task, { foreignKey: 'assignee_user_id' });
+Task.belongsTo(User, { foreignKey: 'assignee_user_id' });
 
 Task.hasMany(Comment, { foreignKey: 'task_id' });
 Comment.belongsTo(Task, { foreignKey: 'task_id' });
@@ -50,4 +52,4 @@ Task.belongsToMany(User, { through: Task_Assignee, foreignKey: 'task_id', otherK
 User.belongsToMany(Project, { through: ProjectUser, foreignKey: 'user_id', otherKey: 'project_id'});
 Project.belongsToMany(User, { through: ProjectUser, foreignKey: 'project_id', otherKey: 'user_id'});
 
-module.exports = { User, Project, Sprint, Task, Task_Assignee, Subtask, Comment, ProjectUser };
+module.exports = { User, Project, Sprint, Task, Subtask, Comment, ProjectUser };

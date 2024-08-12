@@ -65,7 +65,6 @@ export class TaskBoardComponent implements OnInit {
     }
     else {
       let allTasksNewReference: Task[] = [];
-
       this.taskService.getTasksForProject($event).subscribe(
         (data: Task[]) => {
           this.allTasksForProject = data;

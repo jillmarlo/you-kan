@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `status` VARCHAR(255) NOT NULL,
   `creator_user_id` INT NOT NULL,
+  `assignee_user_id` INT NULL DEFAULT NULL,
   `task_type` VARCHAR(255) NOT NULL,
   `effort` INT NOT NULL,
   `project_id` INT NOT NULL,
@@ -89,6 +90,11 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   INDEX `Tasks_ibfk_2_idx` (`sprint_id` ASC) VISIBLE,
   CONSTRAINT `Tasks_ibfk_1`
     FOREIGN KEY (`creator_user_id`)
+    REFERENCES `you-kan`.`Users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Tasks_ibfk_4`
+    FOREIGN KEY (`assignee_user_id`)
     REFERENCES `you-kan`.`Users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
