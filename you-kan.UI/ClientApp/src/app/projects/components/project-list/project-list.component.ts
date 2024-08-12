@@ -66,14 +66,7 @@ export class ProjectListComponent implements OnInit {
     ).subscribe((projects) => {
       this.setProjectAttributes(projects);
       this.dataSource = projects;
-
-      //const index = this.dataSource.findIndex(p => p.project_id === updatedProject.project_id);
-      // if (index !== -1) {
-      //   this.dataSource[index] = updatedProject;
-      //   this.dataSource = [...this.dataSource];
-      // }
       this.selectedProject = null;
-
     })
   }
 
