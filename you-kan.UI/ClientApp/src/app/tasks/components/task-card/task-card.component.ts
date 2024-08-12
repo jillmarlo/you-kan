@@ -55,17 +55,15 @@ export class TaskCardComponent implements OnInit {
       if (result) {
         let newTask = { ...editTask, ...result };
 
-        if (newTask.assignee_user_id !== editTask.assignee_user_id) {
-          this.userService.getUser(newTask.assignee_user_id).pipe(
-            tap(user => {
-              this.task.assignee_user_id = newTask.assignee_user_id;
-              this.assignee.set(user);
-            })
-          ).subscribe(() => {
-            this.taskEdited.emit(newTask);
-            this.task = newTask;
+        this.userService.getUser(newTask.assignee_user_id).pipe(
+          tap(user => {
+            this.task.assignee_user_id = newTask.assignee_user_id;
+            this.assignee.set(user);
           })
-        }
+        ).subscribe(() => {
+          this.taskEdited.emit(newTask);
+          this.task = newTask;
+        })
       }
     })
   }

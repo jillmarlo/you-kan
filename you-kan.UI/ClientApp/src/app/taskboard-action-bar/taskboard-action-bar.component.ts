@@ -21,7 +21,6 @@ import { SprintService } from '../sprints/services/sprint.service';
 export class TaskboardActionBarComponent implements OnInit {
   private projectService = inject(ProjectService);
   private sprintService = inject(SprintService);
-  private userService = inject(UserService);
   public dialog = inject(MatDialog);
   @Output() projectChanged = new EventEmitter<number>();
   @Output() taskboardFiltersChanged = new EventEmitter<any>();
@@ -87,7 +86,7 @@ export class TaskboardActionBarComponent implements OnInit {
       maxWidth: '50vw',
       height: '450px',
       maxHeight: '450px',
-      data: { project_id: this.selectedProjectId, usersForProject: this.usersForProject() }
+      data: { project_id: this.selectedProjectId, usersForProject: this.usersForProject(), sprintsForProject: this.sprintsForProject() }
     });
 
     dialogRef.afterClosed().subscribe(result => {
