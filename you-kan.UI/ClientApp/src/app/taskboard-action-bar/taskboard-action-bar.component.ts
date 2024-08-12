@@ -68,6 +68,8 @@ export class TaskboardActionBarComponent implements OnInit {
     if (event.value == null) {
       this.selectedProjectId = null;
       this.taskboardFilters.reset();
+      this.sprintsForProject.set([]);
+      this.usersForProject.set([]);
       this.projectChanged.emit(event.value);
     }
     else {
