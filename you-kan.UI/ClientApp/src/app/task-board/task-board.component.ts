@@ -63,6 +63,7 @@ export class TaskBoardComponent implements OnInit {
   handleProjectChange($event: any) {
     if ($event === null) {
       this.allTasksForProject = [];
+      this.allTasksSignal.set(this.allTasksForProject);
     }
     else {
       let allTasksNewReference: Task[] = [];
