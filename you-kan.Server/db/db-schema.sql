@@ -6,9 +6,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema you-kan
 -- -----------------------------------------------------
 
--- -----------------------------------------------------
--- Schema you-kan
--- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `you-kan` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
 USE `you-kan` ;
 
@@ -62,7 +59,8 @@ CREATE TABLE IF NOT EXISTS `Sprints` (
   INDEX `board_id` (`project_id` ASC) VISIBLE,
   CONSTRAINT `Sprints_ibfk_1`
     FOREIGN KEY (`project_id`)
-    REFERENCES `Projects` (`project_id`))
+    REFERENCES `Projects` (`project_id`)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -106,15 +104,14 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   CONSTRAINT `Tasks_ibfk_3`
     FOREIGN KEY (`project_id`)
     REFERENCES `you-kan`.`Projects` (`project_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Subtasks`
+-- Table `Subtasks`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Subtasks` (
   `subtask_id` INT NOT NULL AUTO_INCREMENT,
@@ -125,11 +122,12 @@ CREATE TABLE IF NOT EXISTS `Subtasks` (
   CONSTRAINT `Subtasks_ibfk_1`
     FOREIGN KEY (`task_id`)
     REFERENCES `Tasks` (`task_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-USE `you-kan` ;
 
 -- -----------------------------------------------------
 -- Table `Comments`
@@ -146,14 +144,14 @@ CREATE TABLE IF NOT EXISTS `Comments` (
   CONSTRAINT `Comments_ibfk_1`
     FOREIGN KEY (`task_id`)
     REFERENCES `Tasks` (`task_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `Comments_ibfk_2`
     FOREIGN KEY (`user_id`)
     REFERENCES `Users` (`user_id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -175,8 +173,7 @@ CREATE TABLE IF NOT EXISTS `Project_Users` (
   CONSTRAINT `fk_Users_has_Projects_Projects1`
     FOREIGN KEY (`project_id`)
     REFERENCES `Projects` (`project_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -199,8 +196,7 @@ CREATE TABLE IF NOT EXISTS `Task_Assignees` (
   CONSTRAINT `fk_Users_has_Tasks_Tasks1`
     FOREIGN KEY (`task_id`)
     REFERENCES `Tasks` (`task_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
