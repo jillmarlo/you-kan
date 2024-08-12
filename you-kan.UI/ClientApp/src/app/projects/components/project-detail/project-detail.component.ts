@@ -8,7 +8,7 @@ import { SprintDetailComponent } from '../../../sprints/components/sprint-detail
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../../user-management/services/user.service';
 import { SprintService } from '../../../sprints/services/sprint.service';
-import { concatMap, of } from 'rxjs';
+import { concatMap, of, tap } from 'rxjs';
 import { ProjectService } from '../../services/project.service';
 
 
@@ -40,21 +40,26 @@ export class ProjectDetailComponent {
   }
 
   ngOnInit() {
-    this.userService.getUsers().subscribe((users) => {
-      this.availableUsers = users;
-    })
-    
+    // Combine the user fetching with the project data processing
+    this.userService.getUsers().pipe(
+      tap(users =>  {
+        this.availableUsers = users
+      }),
+      tap(() => this.initializeProjectData())
+    ).subscribe();
+  }
+  
+  private initializeProjectData() {
     if (this.project) {
-      let setOfCurrentUsers: any;
-
-      if (this.project.users.length > 0) {
-        setOfCurrentUsers = new Set(this.project.users.map((u: User) => u.user_id));
-        this.availableUsers = this.availableUsers.filter((u: User) => !setOfCurrentUsers.has(u.user_id));
+      if (this.project.users && this.project.users.length > 0) {
+        const setOfCurrentUsers = new Set(this.project.users.map((u: User) => u.user_id));
+        let filteredAvailableUsers = this.availableUsers.filter((u: User) => !setOfCurrentUsers.has(u.user_id));
+        this.availableUsers = filteredAvailableUsers;
       }
-
+  
       this.projectForm.patchValue(this.project);
       this.projectSprints.set(this.project.sprints ?? []);
-      this.projectUsers.set(this.project.users ?? [])
+      this.projectUsers.set(this.project.users ?? []);
     }
   }
 
