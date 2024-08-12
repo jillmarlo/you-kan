@@ -64,7 +64,8 @@ export class TaskboardActionBarComponent implements OnInit {
 
   //update task filters for project
   onProjectChange(event: any) {
-    if (event.value == null) {
+    debugger;
+    if (event.value == 'null') {
       this.selectedProjectId = null;
       this.taskboardFilters.reset();
       this.projectChanged.emit(event.value);
@@ -84,7 +85,7 @@ export class TaskboardActionBarComponent implements OnInit {
       maxWidth: '50vw',
       height: '650px',
       maxHeight: '650px',
-      data: { project_id: this.selectedProjectId }
+      data: { project_id: this.selectedProjectId, usersForProject: this.usersForProject() }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -101,21 +102,27 @@ export class TaskboardActionBarComponent implements OnInit {
   }
 
   //gets the filter values for a project 
-  updateFiltersForProject(id: number) {
-    this.sprintService.getSprints(id).subscribe((sprints) => {
-      if(sprints.length == 0) {
-        this.sprintsForProject.set([]);
-      }
-      else {
-      this.sprintsForProject.set(sprints);
-      }
-    })
+  updateFiltersForProject(id: number | null) {
+    debugger;
+    if (!id) {
+      this.sprintsForProject.set([]);
+      this.usersForProject.set([]);
+    }
+    else {
+      this.sprintService.getSprints(id).subscribe((sprints) => {
+        if (sprints.length == 0) {
+          this.sprintsForProject.set([]);
+        }
+        else {
+          this.sprintsForProject.set(sprints);
+        }
+      })
 
-    //TODO change to just get users in proj
-    this.projectService.getProjectCollaborators(id).subscribe((users) => {
-      this.usersForProject.set(users);
-      this.projectUsers.emit(users);
-    })
+      this.projectService.getProjectCollaborators(id).subscribe((users) => {
+        this.usersForProject.set(users);
+        this.projectUsers.emit(users);
+      })
+    }
   }
 
 }

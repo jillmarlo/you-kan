@@ -37,14 +37,14 @@ export class ProjectDetailComponent {
     this.projectForm = this.fb.group({
       project_name: ['', Validators.required],
     });
-
-    this.userService.getUsers().subscribe((users) => {
-      this.availableUsers = users;
-    })
   }
 
   ngOnInit() {
     debugger;
+    this.userService.getUsers().subscribe((users) => {
+      this.availableUsers = users;
+    })
+    
     if (this.project) {
       let setOfCurrentUsers: any;
 

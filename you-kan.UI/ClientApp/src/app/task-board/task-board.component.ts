@@ -59,46 +59,52 @@ export class TaskBoardComponent implements OnInit {
   }
 
   //Changing the project on the taskboard isn't a filter, it will fetch a new list
-  handleProjectChange($event: number) {
-    if ($event == null) {
+  handleProjectChange($event: any) {
+    if ($event === 'null') {
       this.allTasksForProject = [];
     }
-    let allTasksNewReference: Task[] = [];
+    else {
+      let allTasksNewReference: Task[] = [];
 
-    this.taskService.getTasksForProject($event).subscribe(
-      (data: Task[]) => {
-        this.allTasksForProject = data;
-        allTasksNewReference = this.allTasksForProject;
-        this.allTasksSignal.set(allTasksNewReference);
-      }
-    )
+      this.taskService.getTasksForProject($event).subscribe(
+        (data: Task[]) => {
+          this.allTasksForProject = data;
+          allTasksNewReference = this.allTasksForProject;
+          this.allTasksSignal.set(allTasksNewReference);
+        }
+      )
+    }
   }
 
   //updates tasks on taskboard to filter by sprint, assignee, priority
   handleFiltersChange($event: any) {
-    this.filterFormValues = $event;
-    let allTasksFiltered: Task[] = this.allTasksForProject;
+    if ($event.sprint === null && $event.priority === null && $event.assignee === null) {
+      this.allTasksSignal.set([]);
+    }
+    else {
+      this.filterFormValues = $event;
+      let allTasksFiltered: Task[] = this.allTasksForProject;
 
-    if ($event.sprint !== null) {
-      allTasksFiltered = allTasksFiltered.filter(task =>
-        task.sprint_id === $event.sprint
-      )
+      if ($event.sprint !== null) {
+        allTasksFiltered = allTasksFiltered.filter(task =>
+          task.sprint_id === $event.sprint
+        )
+      }
+      if ($event.priority !== null) {
+        allTasksFiltered = allTasksFiltered.filter(task =>
+          task.priority === $event.priority
+        )
+      }
+      if ($event.assignee !== null) {
+        allTasksFiltered = allTasksFiltered.filter(task =>
+          task.assignee_id === $event.assignee
+        )
+      }
+      this.allTasksSignal.set(allTasksFiltered);
     }
-    if ($event.priority !== null) {
-      allTasksFiltered = allTasksFiltered.filter(task =>
-        task.priority === $event.priority
-      )
-    }
-    if ($event.assignee !== null) {
-      allTasksFiltered = allTasksFiltered.filter(task =>
-        task.assignee_id === $event.assignee
-      )
-    }
-    this.allTasksSignal.set(allTasksFiltered);
   }
 
   handleTaskCreated($event: Task) {
-    debugger;
     const newTask = $event as Task;
     this.taskService.createTask(newTask).subscribe(
       (data: Task) => {

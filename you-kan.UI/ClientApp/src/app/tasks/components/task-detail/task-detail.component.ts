@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MaterialModule } from '../../../shared/material.module';
 import { TextFieldModule } from '@angular/cdk/text-field';
@@ -62,6 +62,8 @@ export class TaskDetailComponent implements OnInit {
     this.newCommentForm = this.fb.group({
       newComment: ['']
     });
+debugger;
+    this.usersForProject = this.data.usersForProject;
   }
 
 
@@ -99,6 +101,7 @@ export class TaskDetailComponent implements OnInit {
       this.sprintService.getSprints(this.data.projectId).subscribe((sprints) => {
         this.sprintsForProject = sprints;
       })
+      debugger;
 
       this.usersForProject = this.data.usersForProject;
     }
@@ -118,14 +121,8 @@ export class TaskDetailComponent implements OnInit {
     this.dialogRef.close(this.taskUnderEdit.task_id);
   }
 
-  // getCommentCreatorName(comment: Comment): string {
-  //   console.log(comment)
-  //   return `${comment.user.first_name} ${comment.user.last_name[0]}`;
-  // }
-
-  //Comments will be handled separatel. y from Tasks as the Task endpoints don't accommodate complex objects
+  //Comments will be handled separately from Tasks as the Task endpoints don't accommodate complex objects
   addComment() {
-    debugger;
     if (this.newCommentForm.get('newComment')?.value !== '') {
       let newComment = {comment_id: null, task_id: this.taskUnderEdit.task_id, comment_text: this.newCommentForm.get('newComment')?.value,  user_id: 6,};
       this.commentService.createComment(newComment).subscribe((com) => {
