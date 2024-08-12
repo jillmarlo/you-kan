@@ -1,12 +1,8 @@
-<div class="edit-account">
-    <h3 mat-dialog-title>Hello, {{userProfile?.first_name}}</h3>
-</div>
+<h3 mat-dialog-title>Hello, {{userProfile?.first_name}}</h3>
     <mat-dialog-content>
-        <div class="first_name">
-            {{ userProfile?.first_name }}
-        </div>
-        <div class="last_name">
-            {{ userProfile?.last_name }}
+        <div class="header">Here is Your Account Information:</div>
+        <div class="name">
+            {{ userProfile?.first_name }} {{ userProfile?.last_name }}
         </div>
         <div class="email">
             {{ userProfile?.email }}
