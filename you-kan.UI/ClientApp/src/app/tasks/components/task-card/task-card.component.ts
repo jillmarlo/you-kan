@@ -92,4 +92,16 @@ export class TaskCardComponent implements OnInit {
     return `${firstInitial}${lastInitial}`;
   }
 
+  private avatarColors = [
+    'rgba(5, 13, 149, 0.89)',  // dark blue/purple
+    'rgba(10, 60, 42, 0.89)',  // blue
+    'rgba(109, 7, 87, 0.89)',  // dark pinkish
+    'rgba(76, 9, 184, 0.89)'   // purple
+  ];
+
+  getAvatarColor(user_id: number): string {
+    const colorIndex = user_id % this.avatarColors.length;
+    return this.avatarColors[colorIndex];
+  }
+
 }

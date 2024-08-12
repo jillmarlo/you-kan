@@ -13,7 +13,7 @@
     </button>
     <button mat-button (click)="editDetail(task)">Details</button>
     <div *ngIf="this.task.assignee_user_id" style="padding-left: 50px;">
-      <div class="avatar">
+      <div [style.background-color]="getAvatarColor(task.assignee_user_id)" class="avatar">
         {{ assigneeInitials() }}
       </div>
     </div>
