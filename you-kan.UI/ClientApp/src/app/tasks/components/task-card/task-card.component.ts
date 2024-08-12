@@ -7,6 +7,7 @@ import { TaskDetailComponent } from '../task-detail/task-detail.component';
 import { User } from '../../../user-management/models/user.model';
 import { UserService } from '../../../user-management/services/user.service';
 import { Sprint } from '../../../sprints/models/sprint.model';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-task-card',
@@ -19,7 +20,6 @@ export class TaskCardComponent implements OnInit {
   private dialog = inject(MatDialog);
   private userService = inject(UserService)
   assignee = signal<User | any>({});
-  assigneeInitials = computed(() => this.assignee().first_name[0] + this.assignee().last_name[0])
 
   @Output() taskEdited = new EventEmitter<any>();
   @Output() taskDeleted = new EventEmitter<any>();
@@ -52,14 +52,25 @@ export class TaskCardComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      debugger;
       if (result) {
         let newTask = { ...editTask, ...result };
-        this.taskEdited.emit(newTask);
-        this.task = newTask;
+
+        if (newTask.assignee_user_id !== editTask.assignee_user_id) {
+          this.userService.getUser(newTask.assignee_user_id).pipe(
+            tap(user => {
+              this.task.assignee_user_id = newTask.assignee_user_id;
+              this.assignee.set(user);
+            })
+          ).subscribe(() => {
+            this.taskEdited.emit(newTask);
+            this.task = newTask;
+          })
+        }
       }
-    });
+    })
   }
+
+
 
   deleteTask(task: Task) {
     this.taskDeleted.emit(task);
@@ -69,9 +80,15 @@ export class TaskCardComponent implements OnInit {
     return this.task.task_type == "Bug"
   }
 
-  getUserInitials(user: any): string {
-    const firstInitial = user.first_name?.length > 0 ? user?.first_name[0]?.toUpperCase() : '';
-    const lastInitial = user.last_name?.length > 0 ? user?.last_name[0]?.toUpperCase() : '';
+  assigneeInitials(): string {
+    if (!this.task.assignee_user_id) return '';
+
+    const currentAssignee = this.assignee();
+    if (!currentAssignee) return '';
+
+    const firstInitial = currentAssignee.first_name ? currentAssignee.first_name[0].toUpperCase() : '';
+    const lastInitial = currentAssignee.last_name ? currentAssignee.last_name[0].toUpperCase() : '';
+
     return `${firstInitial}${lastInitial}`;
   }
 

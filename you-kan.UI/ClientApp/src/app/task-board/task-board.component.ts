@@ -123,8 +123,6 @@ export class TaskBoardComponent implements OnInit {
   }
 
   updateTask(task: any) {
-    debugger;
-    console.log(task)
     this.taskService.updateTask(task).subscribe((data: any) => {
       let updatedArray = this.allTasksForProject
         .filter((t) => t.task_id !== task.task_id)

@@ -112,7 +112,6 @@ export class TaskDetailComponent implements OnInit {
 
   submit(): void {
     if (this.taskForm.valid) {
-      debugger;
       let test = this.taskForm.value;
       this.dialogRef.close(this.taskForm.value);
     }
