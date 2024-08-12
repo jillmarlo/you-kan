@@ -41,7 +41,7 @@ export class TaskDetailComponent implements OnInit {
   taskTypes: string[] = ['Feature', 'Bug'];
   taskEfforts: number[] = [1, 2, 3, 4, 5]
   priorities: string[] = ['Low', 'Medium', 'High', 'Critical'];
-  taskStatuses: string[] = ['Backlog', 'Committed', 'Developing', 'Testing', 'Complete'];
+  taskStatuses: string[] = ['Backlog', 'Committed', 'Developing', 'Testing', 'Done'];
   sprintsForProject!: Sprint[];
   usersForProject!: User[];
   currentUserId: number = -1; 
