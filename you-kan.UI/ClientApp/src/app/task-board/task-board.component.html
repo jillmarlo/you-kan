@@ -12,7 +12,7 @@
                 <app-task-card 
                 [usersForProject]="currentProjectUsers"
                 [sprintsForProject]="currentProjectSprints" 
-                (taskEdited)="updateTask(task)" 
+                (taskEdited)="updateTask($event)" 
                 (taskDeleted)="deleteTask(task)" 
                 cdkDrag [task]="task">
             </app-task-card>
